@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-console */
 import React, { useReducer, useState } from 'react';
-import { firestore } from '../firebase';
+import { firestore, storage } from '../firebase';
 
 const initialState = {
   name: '',
@@ -20,7 +19,11 @@ const NewDish = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [validateName, setValidateName] = useState('');
   const [validateDescription, setValidateDescription] = useState('');
+  const [validateImage, setValidateImage] = useState('');
   const { name, description, price } = state;
+  const [photo, setPhoto] = useState('');
+  const imageInput = React.createRef();
+
   const prices = [
     1,
     2,
@@ -44,6 +47,16 @@ const NewDish = (props) => {
     20,
   ];
 
+  const handleImage = () => {
+    if (imageInput.current.files[0]) {
+      setValidateImage('');
+      setPhoto(imageInput.current.files[0].name);
+    } else {
+      setValidateImage('Please select a photo for the dish');
+      setPhoto('');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!name) {
@@ -53,20 +66,46 @@ const NewDish = (props) => {
       setValidateDescription('Please insert a description');
     }
 
-    if (name && description) {
+    if (!photo) {
+      setValidateImage('Please select a photo for the dish');
+    }
+
+    if (name && description && photo) {
+      let idDocument = '';
       const dish = {
         dishName: name,
         dishDescription: description,
+        dishPrice: price,
       };
       firestore
         .collection('dishes')
         .add(dish)
-        .then(() => {
-          // eslint-disable-next-line react/prop-types
+        .then((docRef) => {
+          idDocument = docRef.id;
           props.history.push('/dishes-list');
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
+        });
+
+      storage
+        .ref()
+        .child('dishes')
+        .child(name)
+        .child(photo)
+        .put(imageInput.current.files[0])
+        .then((response) => response.ref.getDownloadURL())
+        .then((photoURL) => {
+          firestore
+            .collection('dishes')
+            .doc(idDocument)
+            .update({
+              dishPhoto: photoURL,
+            })
+            .catch((error) => console.error('Error updating the photo', error));
+        })
+        .catch((error) => {
+          console.error('Error getting the imageURL: ', error);
         });
     }
   };
@@ -91,6 +130,7 @@ const NewDish = (props) => {
 
   return (
     <div className="NewDish">
+      <h3>New dish</h3>
       <form onSubmit={handleSubmit}>
         <div className="DishName">
           <input
@@ -125,6 +165,11 @@ const NewDish = (props) => {
             </select>
           </label>
         </div>
+        <div className="dishPrice">
+          <input type="file" ref={imageInput} onChange={handleImage} />
+        </div>
+        {validateImage && <div>{validateImage}</div>}
+
         <div className="UploadDish">
           <button type="submit">Upload Dish</button>
         </div>

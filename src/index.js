@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import App from './Components/App';
+import TodayMenuProvider from './providers/TodayMenuProvider';
+import App from './components/App';
 
 ReactDOM.render(
   <Router>
-    <App />
+    <TodayMenuProvider>
+      <App />
+    </TodayMenuProvider>
   </Router>,
   document.getElementById('root'),
 );
