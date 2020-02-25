@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { TodayMenuContext } from '../providers/TodayMenuProvider';
-import { firestore } from '../firebase';
+import { TodayMenuContext } from '../../providers/TodayMenuProvider';
+import { firestore } from '../../firebase';
 
 const TodayMenu = (props) => {
   const dishes = useContext(TodayMenuContext);

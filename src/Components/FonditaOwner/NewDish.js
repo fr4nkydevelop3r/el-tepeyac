@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useReducer, useState } from 'react';
-import { firestore, storage } from '../firebase';
+import { firestore, storage } from '../../firebase';
 
 const initialState = {
   name: '',

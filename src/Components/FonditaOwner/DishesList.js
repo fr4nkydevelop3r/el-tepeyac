@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useContext } from 'react';
 
-import collectIdsAndDocs from '../utilities';
+import collectIdsAndDocs from '../../utilities';
 
-import { firestore } from '../firebase';
+import { firestore } from '../../firebase';
 
-import { TodayMenuContext } from '../providers/TodayMenuProvider';
+import { TodayMenuContext } from '../../providers/TodayMenuProvider';
 
 const DishesList = (props) => {
   const [dishes, setDishes] = useState([]);
