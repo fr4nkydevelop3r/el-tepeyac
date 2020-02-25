@@ -1,4 +1,11 @@
-import { RECEIVE_PRODUCTS } from '../actions/products';
+import { omit } from 'lodash';
+
+import {
+  RECEIVE_PRODUCTS,
+  INCREMENT_PRODUCT,
+  DELETE_PRODUCT,
+  RESTART_PRODUCTS,
+} from '../actions/products';
 
 export default function products(state = {}, action) {
   switch (action.type) {
@@ -7,6 +14,19 @@ export default function products(state = {}, action) {
         ...state,
         ...action.products,
       };
+    case INCREMENT_PRODUCT:
+      return {
+        ...state,
+        [action.idProduct]: {
+          ...state[action.idProduct],
+          totalOrdered: state[action.idProduct].totalOrdered + 1,
+        },
+      };
+    case DELETE_PRODUCT:
+      return omit(state, action.idProduct);
+    case RESTART_PRODUCTS:
+      return null;
+
     default:
       return state;
   }
