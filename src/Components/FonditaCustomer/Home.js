@@ -7,12 +7,21 @@ import {
   receiveProducts,
   incrementProduct,
   restartProducts,
+  decrementProduct,
 } from '../../actions/products';
 import collectIdsAndDocs from '../../utilities';
 import { firestore } from '../../firebase';
+import useTotalOrder from './useTotalOrder';
 
-const Home = () => {
+const Home = (props) => {
   const dispatch = useDispatch();
+  const [totalOrder] = useTotalOrder();
+  const menu = useSelector((state) => state.products);
+  let dishesList = [];
+
+  if (!isEmpty(menu)) {
+    dishesList = Object.values(menu);
+  }
 
   useEffect(() => {
     const unsubscribeFromFirestore = firestore
@@ -25,52 +34,82 @@ const Home = () => {
           dishPrice: dish.dishPrice,
           totalOrdered: 0,
         }));
-        dishes = keyBy(dishes, 'dishID');
-        dispatch(restartProducts());
-        dispatch(receiveProducts(dishes));
+
+        if (dishesList.length !== dishes.length) {
+          dishes = keyBy(dishes, 'dishID');
+          dispatch(restartProducts());
+          dispatch(receiveProducts(dishes));
+        }
       });
     return function cleanup() {
       unsubscribeFromFirestore();
     };
-  }, [dispatch]);
+  }, [dishesList.length, dispatch]);
 
   const handleIncrement = (idDish) => {
     dispatch(incrementProduct(idDish));
   };
 
-  const dishes = useSelector((state) => state.products);
-
-  let dishesList = [];
-
-  if (!isEmpty(dishes)) {
-    dishesList = Object.values(dishes);
-  }
+  const handleDecrement = (idDish) => {
+    dispatch(decrementProduct(idDish));
+  };
 
   return (
-    <div className="TodayMenu">
-      {dishesList.length > 0 ? (
-        dishesList.map((dish) => (
-          <div key={dish.dishID} className="MenuItem">
-            <div className="DishName">{dish.dishName}</div>
-            <div className="Increment">
-              <button
-                type="button"
+    <div className="Home">
+      <div className="Shopping Cart">
+        <div className="TotalOrder">{totalOrder > 0 && totalOrder}</div>
+      </div>
+
+      <div className="TodayMenu">
+        {dishesList.length > 0 ? (
+          dishesList.map((dish) => (
+            <div key={dish.dishID} className="MenuItem">
+              <div className="DishName">{dish.dishName}</div>
+              <div className="Increment">
+                <button
+                  type="button"
+                  // eslint-disable-next-line react/jsx-closing-bracket-location
+                  onClick={() => handleIncrement(dish.dishID)}>
+                  +
+                </button>
+              </div>
+              <div className="Decrement">
+                <button
+                  type="button"
+                  // eslint-disable-next-line react/jsx-closing-bracket-location
+                  onClick={() => {
+                    if (dish.totalOrdered >= 1) {
+                      handleDecrement(dish.dishID);
+                    }
+                    // eslint-disable-next-line react/jsx-closing-bracket-location
+                  }}>
+                  -
+                </button>
+              </div>
+              <div className="TotalItems">
+                <div>{dish.totalOrdered}</div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div>Loading...</div>
+        )}
+      </div>
+
+      <div>
+        {totalOrder > 0 && (
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                props.history.push('view-order');
                 // eslint-disable-next-line react/jsx-closing-bracket-location
-                onClick={() => handleIncrement(dish.dishID)}>
-                +
-              </button>
-            </div>
-            <div className="Decrement">
-              <button type="button">-</button>
-            </div>
-            <div className="TotalItems">
-              <div>{dish.totalOrdered}</div>
-            </div>
+              }}>
+              View Order
+            </button>
           </div>
-        ))
-      ) : (
-        <div>Loading...</div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
