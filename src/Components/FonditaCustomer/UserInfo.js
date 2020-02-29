@@ -1,6 +1,10 @@
 /* eslint-disable object-curly-newline */
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { keyBy, isEmpty } from 'lodash';
+
 import 'react-phone-number-input/style.css';
+
 import PhoneInput, {
   isPossiblePhoneNumber,
 } from 'react-phone-number-input/input';
@@ -10,6 +14,9 @@ const UserInfo = (props) => {
   const { register, handleSubmit, errors } = useForm();
   const [phoneNumber, setPhoneNumber] = useState();
   const [validatePhoneNumber, setValidatePhoneNumber] = useState('');
+  const dispatch = useDispatch();
+  let products = useSelector((state) => state.products);
+  let dishesOrdered = [];
 
   // console.log(watch('exampleRequired')); // watch input value by passing the name of it
 
@@ -23,8 +30,15 @@ const UserInfo = (props) => {
 
   const onSubmit = (data) => {
     if (isPossiblePhoneNumber(phoneNumber)) {
-      console.log(data);
-      console.log(phoneNumber);
+      if (!isEmpty(products)) {
+        products = Object.values(products);
+        dishesOrdered = Object.values(products).filter(
+          (dish) => dish.totalOrdered >= 1,
+        );
+        console.log(dishesOrdered);
+        console.log(data);
+        console.log(phoneNumber);
+      }
     } else {
       console.log('We need all the data');
       setValidatePhoneNumber('Please put a phone number');

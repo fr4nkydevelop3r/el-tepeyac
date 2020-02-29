@@ -9,14 +9,16 @@ import {
   restartProducts,
   decrementProduct,
 } from '../../actions/products';
-import collectIdsAndDocs from '../../utilities';
-import { firestore } from '../../firebase';
+
 import useTotalOrder from './useTotalOrder';
+import useGetItems from './useGetItems';
 
 const Home = (props) => {
   const dispatch = useDispatch();
   const [totalOrder] = useTotalOrder();
   const menu = useSelector((state) => state.products);
+  const [dishes] = useGetItems();
+
   let dishesList = [];
 
   if (!isEmpty(menu)) {
@@ -24,27 +26,13 @@ const Home = (props) => {
   }
 
   useEffect(() => {
-    const unsubscribeFromFirestore = firestore
-      .collection('todaymenu')
-      .onSnapshot((snapshot) => {
-        let dishes = snapshot.docs.map(collectIdsAndDocs);
-        dishes = dishes.map((dish) => ({
-          dishID: dish.id,
-          dishName: dish.dishName,
-          dishPrice: dish.dishPrice,
-          totalOrdered: 0,
-        }));
-
-        if (dishesList.length !== dishes.length) {
-          dishes = keyBy(dishes, 'dishID');
-          dispatch(restartProducts());
-          dispatch(receiveProducts(dishes));
-        }
-      });
-    return function cleanup() {
-      unsubscribeFromFirestore();
-    };
-  }, [dishesList.length, dispatch]);
+    if (dishes) {
+      if (dishesList.length !== dishes.length) {
+        dispatch(restartProducts());
+        dispatch(receiveProducts(keyBy(dishes, 'dishID')));
+      }
+    }
+  }, [dishes, dishesList.length, dispatch]);
 
   const handleIncrement = (idDish) => {
     dispatch(incrementProduct(idDish));

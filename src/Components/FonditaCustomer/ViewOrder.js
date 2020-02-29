@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { keyBy, isEmpty } from 'lodash';
-
-import collectIdsAndDocs from '../../utilities';
-import { firestore } from '../../firebase';
 import { receiveProducts, restartProducts } from '../../actions/products';
+import useGetItems from './useGetItems';
 
 const ViewOrder = (props) => {
   const dispatch = useDispatch();
 
   let products = useSelector((state) => state.products);
+
+  const [dishes] = useGetItems();
 
   let dishesOrdered = [];
   if (!isEmpty(products)) {
@@ -20,27 +20,13 @@ const ViewOrder = (props) => {
   }
 
   useEffect(() => {
-    const unsubscribeFromFirestore = firestore
-      .collection('todaymenu')
-      .onSnapshot((snapshot) => {
-        let dishes = snapshot.docs.map(collectIdsAndDocs);
-        dishes = dishes.map((dish) => ({
-          dishID: dish.id,
-          dishName: dish.dishName,
-          dishPrice: dish.dishPrice,
-          totalOrdered: 0,
-        }));
-
-        if (products.length !== dishes.length) {
-          dishes = keyBy(dishes, 'dishID');
-          dispatch(restartProducts());
-          dispatch(receiveProducts(dishes));
-        }
-      });
-    return function cleanup() {
-      unsubscribeFromFirestore();
-    };
-  }, [dispatch, products.length]);
+    if (dishes) {
+      if (products.length !== dishes.length) {
+        dispatch(restartProducts());
+        dispatch(receiveProducts(keyBy(dishes, 'dishID')));
+      }
+    }
+  }, [dispatch, products.length, dishes]);
 
   return (
     <div className="ViewOrder">
