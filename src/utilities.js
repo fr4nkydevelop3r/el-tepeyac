@@ -1,8 +1,15 @@
+import moment from 'moment';
+
 export default function collectIdsAndDocs(doc) {
   return { id: doc.id, ...doc.data() };
 }
 
 export function getDay() {
-  const date = new Date().toJSON().slice(0, 10);
-  return date;
+  return moment().format('MM-DD-YYYY');
+}
+
+export function getHour() {
+  const today = new Date();
+  const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+  return time;
 }
