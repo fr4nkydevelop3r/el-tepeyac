@@ -7,6 +7,7 @@ import DishesList from './FonditaOwner/DishesList';
 import Home from './FonditaCustomer/Home';
 import ViewOrder from './FonditaCustomer/ViewOrder';
 import UserInfo from './FonditaCustomer/UserInfo';
+import Orders from './FonditaOwner/Orders';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route exact path="/today-menu" component={TodayMenu} />
         <Route exact path="/dishes-list" component={DishesList} />
         <Route exact path="/user-info" component={UserInfo} />
+        <Route exact path="/orders" component={Orders} />
       </Switch>
     </div>
   );
