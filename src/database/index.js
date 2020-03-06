@@ -3,16 +3,16 @@ import { v1 as uuidv1 } from 'uuid';
 import { firestore } from '../firebase';
 import { getDay } from '../utilities';
 
-export default function addOrder(order) {
+export default async function addOrder(order) {
   const idOrder = uuidv1();
 
   const docRef = firestore.collection('orders').doc(getDay());
-  docRef.get().then((doc) => {
+  await docRef.get().then((doc) => {
     if (!doc.exists) {
       firestore
         .collection('orders')
         .doc(getDay())
-        .set({})
+        .set({ totalOrders: 0 })
         .catch((error) => {
           console.error('Error writing document: ', error);
         });
@@ -32,6 +32,32 @@ export default function addOrder(order) {
     }))
     .catch((error) => {
       console.error('Error writing document: ', error);
+    });
+}
+
+export async function incrementTotalOrders() {
+  const docRef = firestore.collection('orders').doc(getDay());
+  let totalOrders = 0;
+  await docRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        totalOrders = doc.data().totalOrders;
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!');
+      }
+    })
+    .catch((error) => {
+      console.log('Error getting document:', error);
+    });
+  return docRef
+    .update({
+      totalOrders: totalOrders + 1,
+    })
+    .catch((error) => {
+      // The document probably doesn't exist.
+      console.error('Error updating document: ', error);
     });
 }
 

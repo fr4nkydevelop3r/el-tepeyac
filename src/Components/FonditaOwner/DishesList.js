@@ -16,6 +16,7 @@ const DishesList = (props) => {
     const unsubscribeFromFirestore = firestore
       .collection('dishes')
       .onSnapshot((snapshot) => {
+        alert('Si entra aqui en dishes list');
         const dishesList = snapshot.docs.map(collectIdsAndDocs);
         setDishes(dishesList);
       });
