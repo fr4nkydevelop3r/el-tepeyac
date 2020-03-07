@@ -1,6 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React, { useRef, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
+import setDirection from '../../actions/customer';
 import { firestore } from '../../firebase';
 
 const PlacesAutocomplete = (props) => {
@@ -21,6 +23,7 @@ const PlacesAutocomplete = (props) => {
   const [postCodeUser, setPostCodeUser] = useState('');
   const [validateDirection, setValidateDirection] = useState('');
   const [validPostCodes, setValidPostCodes] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     firestore
@@ -57,7 +60,7 @@ const PlacesAutocomplete = (props) => {
         setPostCodeUser(...zipCode);
       })
       .catch((error) => {
-        console.log('😱 Error: ', error);
+        console.log('Error: ', error);
       });
   };
 
@@ -84,10 +87,10 @@ const PlacesAutocomplete = (props) => {
   };
 
   const goodToGo = () => {
+    dispatch(setDirection(value));
     props.history.push('/today-menu');
   };
 
-  console.log(props);
   return (
     <div ref={ref}>
       <input
