@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
 import { firestore } from '../../firebase';
 
-const TodayMenu = (props) => {
+const TodayMenuOwner = (props) => {
   const dishes = useContext(TodayMenuContext);
 
   const deleteDish = (id) => {
@@ -44,4 +44,4 @@ const TodayMenu = (props) => {
   );
 };
 
-export default TodayMenu;
+export default TodayMenuOwner;

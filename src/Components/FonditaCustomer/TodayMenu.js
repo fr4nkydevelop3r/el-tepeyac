@@ -13,7 +13,7 @@ import {
 import useTotalOrder from './useTotalOrder';
 import useGetItems from './useGetItems';
 
-const Home = (props) => {
+const TodayMenu = (props) => {
   const dispatch = useDispatch();
   const [totalOrder] = useTotalOrder();
   const menu = useSelector((state) => state.products);
@@ -102,4 +102,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default TodayMenu;
