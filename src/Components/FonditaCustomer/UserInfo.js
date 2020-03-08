@@ -1,72 +1,57 @@
 /* eslint-disable object-curly-newline */
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { keyBy, isEmpty } from 'lodash';
 
-import 'react-phone-number-input/style.css';
-
-import PhoneInput, {
-  isPossiblePhoneNumber,
-} from 'react-phone-number-input/input';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import NumberFormat from 'react-number-format';
 
 import { getHour } from '../../utilities';
 import { handleCreateOrder } from '../../actions/orders';
 
 const UserInfo = (props) => {
-  const { register, handleSubmit, errors } = useForm();
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [validatePhoneNumber, setValidatePhoneNumber] = useState('');
+  const { register, handleSubmit, errors, control } = useForm();
   let products = useSelector((state) => state.products);
+  const address = useSelector((state) => state.customerAddress);
+
   let dishesOrdered = [];
   const dispatch = useDispatch();
 
   // console.log(watch('exampleRequired')); // watch input value by passing the name of it
 
-  const handlePhone = () => {
-    if (isPossiblePhoneNumber(phoneNumber)) {
-      setValidatePhoneNumber('');
-    } else {
-      setValidatePhoneNumber('Please put a phone number');
-    }
-  };
-
   const onSubmit = (data) => {
-    if (isPossiblePhoneNumber(phoneNumber)) {
-      if (!isEmpty(products)) {
-        products = Object.values(products);
-        dishesOrdered = Object.values(products)
-          .filter((dish) => dish.totalOrdered >= 1)
-          .map((dish) => {
-            const newDish = {
-              dishID: dish.dishID,
-              dishName: dish.dishName,
-              totalOrdered: dish.totalOrdered,
-            };
-            return newDish;
-          });
+    if (!isEmpty(products)) {
+      products = Object.values(products);
+      dishesOrdered = Object.values(products)
+        .filter((dish) => dish.totalOrdered >= 1)
+        .map((dish) => {
+          const newDish = {
+            dishID: dish.dishID,
+            dishName: dish.dishName,
+            totalOrdered: dish.totalOrdered,
+          };
+          return newDish;
+        });
 
-        dishesOrdered = keyBy(dishesOrdered, 'dishID');
-        const infoCustomer = {
-          customerName: data.name,
-          customerAddress: data.address,
-          customerPhoneNumber: phoneNumber,
-        };
+      dishesOrdered = keyBy(dishesOrdered, 'dishID');
+      const infoCustomer = {
+        customerName: data.name,
+        customerAddress: data.address,
+        customerofficeOrApt: data.officeOrApt,
+      };
 
-        const order = {
-          orderCompleted: false,
-          timeOrder: getHour(),
-          dishes: dishesOrdered,
-          infoCustomer,
-        };
+      const order = {
+        orderCompleted: false,
+        timeOrder: getHour(),
+        dishes: dishesOrdered,
+        infoCustomer,
+      };
 
-        dispatch(handleCreateOrder(order));
+      dispatch(handleCreateOrder(order));
 
-        // console.log(order);
-      }
+      // console.log(order);
     } else {
       console.log('We need all the data');
-      setValidatePhoneNumber('Please put a phone number');
     }
   };
 
@@ -92,18 +77,28 @@ const UserInfo = (props) => {
             name="address"
             ref={register({ required: true })}
             placeholder="Your address"
+            value={address}
+            readOnly
           />
-          {/* errors will return when field validation fails  */}
+
           {errors.address && <span>Your address is required</span>}
 
-          <PhoneInput
-            placeholder="Enter phone number"
-            value={phoneNumber}
-            onChange={setPhoneNumber}
-            country="US"
-            onMouseLeave={handlePhone}
+          <input
+            name="officeOrApt"
+            ref={register({ required: true })}
+            placeholder="Where you work?"
           />
-          <div>{validatePhoneNumber}</div>
+
+          {errors.officeOrApt && <span>Where you work is required</span>}
+
+          <Controller
+            as={<NumberFormat format="(###) ###-####" mask="_" />}
+            name="phone"
+            control={control}
+            placeholder="(___) ____-____"
+            rules={{ required: true }}
+          />
+          {errors.phone && <span>Your phone number is required</span>}
 
           <input type="submit" />
         </form>
