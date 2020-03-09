@@ -7,8 +7,9 @@ import DishesList from './FonditaOwner/DishesList';
 import TodayMenu from './FonditaCustomer/TodayMenu';
 import ViewOrder from './FonditaCustomer/ViewOrder';
 import UserInfo from './FonditaCustomer/UserInfo';
-import Orders from './FonditaOwner/Orders';
+import Dashboard from './FonditaOwner/Dashboard';
 import PlacesAutocomplete from './FonditaCustomer/PlacesAutoComplete';
+import SignIn from './FonditaOwner/SignIn';
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
         <Route exact path="/today-menu-owner" component={TodayMenuOwner} />
         <Route exact path="/dishes-list" component={DishesList} />
         <Route exact path="/user-info" component={UserInfo} />
-        <Route exact path="/orders" component={Orders} />
+        <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/today-menu" component={TodayMenu} />
+        <Route exact path="/sign-in" component={SignIn} />
       </Switch>
     </div>
   );
