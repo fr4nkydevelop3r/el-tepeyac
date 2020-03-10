@@ -27,9 +27,7 @@ exports.getOrders = functions.https.onCall(async (data, context) => {
     let docs = querySnapshot.docs;
     let docum = {};
     for (let doc of docs) {
-      docum = {
-        [doc.id]: { idOrder: doc.id, ...doc.data() },
-      };
+      docum = { idOrder: doc.id, ...doc.data() };
     }
     return docum;
   });

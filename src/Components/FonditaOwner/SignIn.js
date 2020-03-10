@@ -1,51 +1,46 @@
 /* eslint-disable no-console */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { keyBy } from 'lodash';
 
 import firebase, { firestore, auth } from '../../firebase';
-import { handleReceiveOrders } from '../../actions/orders';
+import { receiveOrders } from '../../actions/orders';
 import { getDay } from '../../utilities';
 
-const SignIn = () => {
+const SignIn = (props) => {
   const orders = useSelector((state) => state.orders);
   const dispatch = useDispatch();
   const { register, handleSubmit, errors, control } = useForm();
   const [invalidEmail, setInvalidEmail] = useState('');
   const [invalidPassword, setInvalidPassword] = useState('');
 
-  useEffect(() => {
-    const unsubscribeFromFirestore = firestore.collection('orders').onSnapshot(
-      () => {
-        // eslint-disable-next-line import/no-named-as-default-member
-        const getOrders = firebase.functions().httpsCallable('getOrders');
-        getOrders({ docPath: `orders/${getDay()}` })
-          .then((result) => {
-            console.log(orders);
-            console.log(result);
-          })
-          .catch((error) => {
-            // Getting the Error details.
-            const { code, message, details } = error;
-            console.log(code);
-            console.log(message);
-            console.log(details);
-            console.log(error);
-            // ...
-          });
-      },
-      (error) => console.log(error),
-    );
-    return function cleanup() {
-      unsubscribeFromFirestore();
-    };
-  }, []);
-
   const onSubmit = (data) => {
     auth
       .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
-        console.log('Yep you can use the app');
+        firestore.collection('orders').onSnapshot(
+          () => {
+            // eslint-disable-next-line import/no-named-as-default-member
+            const getOrders = firebase.functions().httpsCallable('getOrders');
+            getOrders({ docPath: `orders/${getDay()}` })
+              .then((result) => {
+                const listOrders = keyBy(result.data, 'idOrder');
+                dispatch(receiveOrders(listOrders));
+              })
+              .catch((error) => {
+                // Getting the Error details.
+                const { code, message, details } = error;
+                console.log(code);
+                console.log(message);
+                console.log(details);
+                console.log(error);
+                // ...
+              });
+          },
+          (error) => console.log(error),
+        );
+        props.history.push('dashboard');
       })
       .catch((error) => {
         const { code } = error;

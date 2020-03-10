@@ -45,9 +45,3 @@ export function handleCreateOrder(order) {
     });
   };
 }
-
-export function handleReceiveOrders() {
-  return (dispatch) => {
-    getOrders();
-  };
-}

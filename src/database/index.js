@@ -61,7 +61,7 @@ export async function incrementTotalOrders() {
     });
 }
 
-export function getOrders() {
+/* export function getOrders() {
   firestore
     .collection('orders')
     .doc(getDay())
@@ -74,4 +74,4 @@ export function getOrders() {
         console.log(`Found ${querySnapshot.size} documents.`);
       }
     });
-}
+} */
