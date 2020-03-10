@@ -1,4 +1,4 @@
-import { CREATE_ORDER } from '../actions/orders';
+import { CREATE_ORDER, RECEIVE_ORDERS } from '../actions/orders';
 
 export default function orders(state = {}, action) {
   switch (action.type) {
@@ -15,6 +15,11 @@ export default function orders(state = {}, action) {
             infoCustomer: action.order.infoCustomer,
           },
         },
+      };
+    case RECEIVE_ORDERS:
+      return {
+        ...state,
+        ...action.orders,
       };
     default:
       return state;
