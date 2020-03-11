@@ -27,7 +27,6 @@ const ViewOrder = (props) => {
       }
     }
   }, [dispatch, products.length, dishes]);
-
   return (
     <div className="ViewOrder">
       <button type="button" onClick={() => props.history.goBack()}>
