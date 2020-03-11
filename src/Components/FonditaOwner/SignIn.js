@@ -1,24 +1,26 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { keyBy } from 'lodash';
+import { keyBy, isEmpty } from 'lodash';
 
 import firebase, { firestore, auth } from '../../firebase';
 import { receiveOrders } from '../../actions/orders';
+import setUser, { logoutUser } from '../../actions/authedUser';
 import { getDay } from '../../utilities';
+import Dashboard from './Dashboard';
 
 const SignIn = (props) => {
-  const orders = useSelector((state) => state.orders);
+  const authedUser = useSelector((state) => state.authedUser);
+
   const dispatch = useDispatch();
-  const { register, handleSubmit, errors, control } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const [invalidEmail, setInvalidEmail] = useState('');
   const [invalidPassword, setInvalidPassword] = useState('');
 
-  const onSubmit = (data) => {
-    auth
-      .signInWithEmailAndPassword(data.email, data.password)
-      .then(() => {
+  useEffect(() => {
+    auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
         firestore.collection('orders').onSnapshot(
           () => {
             // eslint-disable-next-line import/no-named-as-default-member
@@ -40,7 +42,19 @@ const SignIn = (props) => {
           },
           (error) => console.log(error),
         );
-        props.history.push('dashboard');
+        if (!isEmpty(props)) {
+          props.history.push('/dashboard');
+        }
+      }
+      dispatch(setUser(userAuth));
+    });
+  }, [dispatch, props]);
+
+  const onSubmit = (data) => {
+    auth
+      .signInWithEmailAndPassword(data.email, data.password)
+      .then(() => {
+        props.history.push('/dashboard');
       })
       .catch((error) => {
         const { code } = error;
@@ -65,32 +79,39 @@ const SignIn = (props) => {
     }
   };
 
+  // console.log(authedUser);
   return (
     <div className="SignIn">
-      <div>Sign in</div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          name="email"
-          placeholder="Your email"
-          ref={register({
-            required: true,
-            pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-          })}
-          onChange={handleOnChange}
-        />
-        {errors.email && <span>Please put a valid email</span>}
-        <div>{invalidEmail}</div>
-        <input
-          name="password"
-          placeholder="Your password"
-          ref={register({ required: true })}
-          type="password"
-          onChange={handleOnChange}
-        />
-        {errors.password && <span>Please put your password</span>}
-        <div>{invalidPassword}</div>
-        <input type="submit" />
-      </form>
+      {isEmpty(authedUser) ? (
+        <div className="SignIn2">
+          <div>Sign in</div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              name="email"
+              placeholder="Your email"
+              ref={register({
+                required: true,
+                pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+              })}
+              onChange={handleOnChange}
+            />
+            {errors.email && <span>Please put a valid email</span>}
+            <div>{invalidEmail}</div>
+            <input
+              name="password"
+              placeholder="Your password"
+              ref={register({ required: true })}
+              type="password"
+              onChange={handleOnChange}
+            />
+            {errors.password && <span>Please put your password</span>}
+            <div>{invalidPassword}</div>
+            <input type="submit" />
+          </form>
+        </div>
+      ) : (
+        <Dashboard />
+      )}
     </div>
   );
 };

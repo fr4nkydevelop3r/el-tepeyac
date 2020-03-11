@@ -1,8 +1,9 @@
-import addOrder, { getOrders, incrementTotalOrders } from '../database';
+import addOrder, { incrementTotalOrders } from '../database';
 
 export const CREATE_ORDER = 'CREATE_ORDER';
 export const RECEIVE_ORDERS = 'RECEIVE_ORDERS';
 export const INCREMENT_TOTAL_ORDER = 'INCREMENT_TOTAL_ORDER';
+export const RESTART_ORDERS = 'RESTART_ORDERS';
 export default function createOrder(order) {
   return {
     type: CREATE_ORDER,
@@ -20,6 +21,12 @@ export function receiveOrders(orders) {
 export function incrementOrdersToday() {
   return {
     type: INCREMENT_TOTAL_ORDER,
+  };
+}
+
+export function restartOrders() {
+  return {
+    type: RESTART_ORDERS,
   };
 }
 
