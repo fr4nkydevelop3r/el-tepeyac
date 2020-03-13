@@ -7,6 +7,7 @@ import reducer from './reducers';
 import middleware from './middleware';
 import TodayMenuProvider from './providers/TodayMenuProvider';
 import App from './components/App';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(reducer, middleware);
 

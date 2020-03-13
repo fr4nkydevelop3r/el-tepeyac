@@ -2,10 +2,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
+import { Link } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { restartOrders } from '../../actions/orders';
 import { logoutUser } from '../../actions/authedUser';
 
+// eslint-disable-next-line import/no-cycle
 import SignIn from './SignIn';
 
 const Dashboard = (props) => {
@@ -13,7 +15,7 @@ const Dashboard = (props) => {
   const authedUser = useSelector((state) => state.authedUser);
   const dispatch = useDispatch();
 
-  const handleSignOut = (props) => {
+  const handleSignOut = () => {
     auth
       .signOut()
       .then(() => {
@@ -25,17 +27,22 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     //console.log(props);
-
     if (isEmpty(authedUser)) {
       props.history.push('/sign-in');
     }
   }, [authedUser, props]);
-  console.log(orders);
+  // console.log(orders);
   return (
     <div className="Orders">
       {!isEmpty(authedUser) ? (
         <div>
           <div>Dashboard!</div>
+          <ul>
+            <li>
+              {' '}
+              <Link to="/orders">Orders</Link>
+            </li>
+          </ul>
           <button type="button" onClick={handleSignOut}>
             Logout
           </button>
