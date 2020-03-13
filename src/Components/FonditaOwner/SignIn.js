@@ -6,8 +6,9 @@ import { keyBy, isEmpty } from 'lodash';
 
 import firebase, { firestore, auth } from '../../firebase';
 import { receiveOrders } from '../../actions/orders';
-import setUser, { logoutUser } from '../../actions/authedUser';
+import setUser from '../../actions/authedUser';
 import { getDay } from '../../utilities';
+// eslint-disable-next-line import/no-cycle
 import Dashboard from './Dashboard';
 
 const SignIn = (props) => {

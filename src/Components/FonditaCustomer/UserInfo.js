@@ -8,11 +8,13 @@ import NumberFormat from 'react-number-format';
 
 import { getHour } from '../../utilities';
 import { handleCreateOrder } from '../../actions/orders';
+import useTotalOrder from './useTotalOrder';
 
 const UserInfo = (props) => {
   const { register, handleSubmit, errors, control } = useForm();
   let products = useSelector((state) => state.products);
   const address = useSelector((state) => state.customerAddress);
+  const [totalOrder] = useTotalOrder();
 
   let dishesOrdered = [];
   const dispatch = useDispatch();
@@ -38,6 +40,7 @@ const UserInfo = (props) => {
         customerName: data.name,
         customerAddress: data.address,
         customerofficeOrApt: data.officeOrApt,
+        customerPhoneNumber: data.phone,
       };
 
       const order = {
@@ -45,6 +48,7 @@ const UserInfo = (props) => {
         timeOrder: getHour(),
         dishes: dishesOrdered,
         infoCustomer,
+        totalOrder,
       };
 
       dispatch(handleCreateOrder(order));
