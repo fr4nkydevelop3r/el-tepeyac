@@ -42,7 +42,7 @@ export function handleIncrementTotalOrders() {
 
 export function handleCreateOrder(order) {
   return (dispatch) => {
-    addOrder(order).then((data) => {
+    return addOrder(order).then((data) => {
       dispatch(createOrder(data));
       incrementTotalOrders()
         .then(() => dispatch(incrementOrdersToday()))

@@ -19,6 +19,7 @@ const UserInfo = (props) => {
   let dishesOrdered = [];
   const dispatch = useDispatch();
   const [errorMessageHour, setErrorMessageHour] = useState('');
+  const [errorMessageOrder, setErrorMessageOrder] = useState('');
 
   const [deliverPriority, setDeliverPriority] = useState(getDeliverPriority());
 
@@ -44,6 +45,8 @@ const UserInfo = (props) => {
         customerPhoneNumber: data.phone,
       };
 
+      console.log(deliverPriority);
+
       const order = {
         orderCompleted: false,
         timeOrder: getHour(),
@@ -56,7 +59,16 @@ const UserInfo = (props) => {
       if (deliverPriority < getDeliverPriority()) {
         setErrorMessageHour('Please update the hour');
       } else {
-        dispatch(handleCreateOrder(order));
+        dispatch(handleCreateOrder(order))
+          .then(() => {
+            props.history.push('/order-confirmation');
+          })
+          .catch((error) => {
+            console.error(error);
+            setErrorMessageOrder(
+              'Something went wrong with the order, could you try again?',
+            );
+          });
       }
     } else {
       console.log('We need all the data');
@@ -116,6 +128,8 @@ const UserInfo = (props) => {
           <span>What time would you like to get your order?</span>
           <DeliverPriority handlePriorityDeliver={handlePriorityDeliver} />
           <div>{errorMessageHour}</div>
+
+          <div>{errorMessageOrder}</div>
 
           <input type="submit" />
         </form>
