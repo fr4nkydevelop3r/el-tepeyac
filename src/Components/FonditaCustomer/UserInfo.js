@@ -1,25 +1,26 @@
 /* eslint-disable object-curly-newline */
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { keyBy, isEmpty } from 'lodash';
 
 import { useForm, Controller } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 
-import { getHour } from '../../utilities';
+import { getHour, getDeliverPriority } from '../../utilities';
 import { handleCreateOrder } from '../../actions/orders';
 import useTotalOrder from './useTotalOrder';
+import DeliverPriority from './DeliverPriority';
 
 const UserInfo = (props) => {
   const { register, handleSubmit, errors, control } = useForm();
   let products = useSelector((state) => state.products);
   const address = useSelector((state) => state.customerAddress);
   const [totalOrder] = useTotalOrder();
-
   let dishesOrdered = [];
   const dispatch = useDispatch();
+  const [errorMessageHour, setErrorMessageHour] = useState('');
 
-  // console.log(watch('exampleRequired')); // watch input value by passing the name of it
+  const [deliverPriority, setDeliverPriority] = useState(getDeliverPriority());
 
   const onSubmit = (data) => {
     if (!isEmpty(products)) {
@@ -49,14 +50,22 @@ const UserInfo = (props) => {
         dishes: dishesOrdered,
         infoCustomer,
         totalOrder,
+        deliverPriority,
       };
 
-      dispatch(handleCreateOrder(order));
-
-      // console.log(order);
+      if (deliverPriority < getDeliverPriority()) {
+        setErrorMessageHour('Please update the hour');
+      } else {
+        dispatch(handleCreateOrder(order));
+      }
     } else {
       console.log('We need all the data');
     }
+  };
+
+  const handlePriorityDeliver = (priority) => {
+    setDeliverPriority(priority);
+    setErrorMessageHour('');
   };
 
   return (
@@ -103,6 +112,10 @@ const UserInfo = (props) => {
             rules={{ required: true }}
           />
           {errors.phone && <span>Your phone number is required</span>}
+
+          <span>What time would you like to get your order?</span>
+          <DeliverPriority handlePriorityDeliver={handlePriorityDeliver} />
+          <div>{errorMessageHour}</div>
 
           <input type="submit" />
         </form>

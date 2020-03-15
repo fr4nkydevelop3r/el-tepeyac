@@ -24,6 +24,36 @@ const Order = (props) => {
 
   const handleChange = (event) => setOrderCompleted(event.target.value);
 
+  let deliverPriority = '';
+
+  switch (order.deliverPriority) {
+    case 1:
+      deliverPriority = '9 - 10 am';
+      break;
+    case 2:
+      deliverPriority = '10 - 11 am';
+      break;
+    case 3:
+      deliverPriority = '11 - 12 am';
+      break;
+
+    case 4:
+      deliverPriority = '12 - 1 pm';
+
+      break;
+
+    case 5:
+      deliverPriority = '1 - 2 pm';
+      break;
+
+    case 6:
+      deliverPriority = '2 - 3 pm';
+      break;
+    default:
+      deliverPriority = '3 - 4 pm';
+      break;
+  }
+
   return (
     <div className="Order">
       <div>
@@ -43,9 +73,9 @@ const Order = (props) => {
 
           <span>Total Dishes : {totalDishes}</span>
 
-          <span>Total Order: ${order.totalOrder}</span>
+          <span>Time: {order.timeOrder}</span>
 
-          <span>Time : {order.timeOrder}</span>
+          <span>Priority : {deliverPriority}</span>
         </Button>
         <Collapse isOpen={isOpen}>
           <Card>
