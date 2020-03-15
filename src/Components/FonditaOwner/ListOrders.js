@@ -4,6 +4,8 @@ import Order from './Order';
 const ListOrders = (props) => {
   let { orders } = props;
   orders = Object.values(orders);
+  orders = orders.sort((a, b) => a.deliverPriority - b.deliverPriority);
+
   return (
     <div className="ListOrders">
       Orders List!
