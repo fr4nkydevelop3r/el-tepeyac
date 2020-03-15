@@ -39,6 +39,6 @@ export function getDeliverPriority() {
     case 14:
       return 7;
     default:
-      return 0;
+      return 1;
   }
 }

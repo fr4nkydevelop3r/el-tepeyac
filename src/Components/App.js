@@ -11,6 +11,7 @@ import Dashboard from './FonditaOwner/Dashboard';
 import PlacesAutocomplete from './FonditaCustomer/PlacesAutoComplete';
 import SignIn from './FonditaOwner/SignIn';
 import Orders from './FonditaOwner/Orders';
+import OrderConfirmation from './FonditaCustomer/OrderConfirmation';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route exact path="/today-menu" component={TodayMenu} />
         <Route exact path="/sign-in" component={SignIn} />
         <Route exact path="/orders" component={Orders} />
+        <Route exact path="/order-confirmation" component={OrderConfirmation} />
       </Switch>
     </div>
   );
