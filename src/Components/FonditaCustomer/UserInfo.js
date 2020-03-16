@@ -45,8 +45,6 @@ const UserInfo = (props) => {
         customerPhoneNumber: data.phone,
       };
 
-      console.log(deliverPriority);
-
       const order = {
         orderCompleted: false,
         timeOrder: getHour(),
@@ -58,6 +56,7 @@ const UserInfo = (props) => {
 
       if (deliverPriority < getDeliverPriority()) {
         setErrorMessageHour('Please update the hour');
+        setDeliverPriority(getDeliverPriority());
       } else {
         dispatch(handleCreateOrder(order))
           .then(() => {
@@ -77,6 +76,10 @@ const UserInfo = (props) => {
 
   const handlePriorityDeliver = (priority) => {
     setDeliverPriority(priority);
+    setErrorMessageHour('');
+  };
+
+  const handleResetError = () => {
     setErrorMessageHour('');
   };
 
@@ -126,7 +129,10 @@ const UserInfo = (props) => {
           {errors.phone && <span>Your phone number is required</span>}
 
           <span>What time would you like to get your order?</span>
-          <DeliverPriority handlePriorityDeliver={handlePriorityDeliver} />
+          <DeliverPriority
+            handlePriorityDeliver={handlePriorityDeliver}
+            handleResetError={handleResetError}
+          />
           <div>{errorMessageHour}</div>
 
           <div>{errorMessageOrder}</div>

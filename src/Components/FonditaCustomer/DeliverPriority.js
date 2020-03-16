@@ -70,7 +70,10 @@ const DeliverPriority = (props) => {
   };
 
   return (
-    <select value={timeDeliver} onChange={handleChange}>
+    <select
+      value={timeDeliver}
+      onChange={handleChange}
+      onClick={() => props.handleResetError()}>
       {hoursAvailable.map((hour) => (
         <option value={`${hour} - ${hour + 1}`} key={hour}>
           {`${hour} - ${hour + 1}`}
