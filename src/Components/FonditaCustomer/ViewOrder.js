@@ -47,7 +47,7 @@ const ViewOrder = (props) => {
             <button
               type="button"
               // eslint-disable-next-line react/jsx-closing-bracket-location
-              onClick={() => props.history.push('/user-info')}>
+              onClick={() => props.history.push('/checkout')}>
               Place Order
             </button>
           </div>
