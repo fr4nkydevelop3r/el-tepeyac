@@ -41,36 +41,67 @@ const CheckoutForm = (props) => {
 
     setProcessingTo(true);
 
-    // llamad a la api
-    /* const { data: clientSecret } = await axios.post('api/payment_intents', {
-      amount: 15 * 100,
-    }); 
+    axios
+      .post(
+        'https://us-central1-mi-fondita-6a42e.cloudfunctions.net/getClientSecret',
+        {
+          amount: 100 * 15,
+        },
+      )
+      .catch((error) => {
+        setCheckoutError(error.message);
+        setProcessingTo(false);
+        console.log(error);
+      })
+      .then(async ({ data: clientSecret }) => {
+        const cardElement = elements.getElement(CardElement);
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: billingDetails,
+        });
 
-    // get a reference to the card
-    const cardElement = elements.getElement(CardElement);
+        if (error) {
+          setCheckoutError(error.message);
+          setProcessingTo(false);
+          console.log(error);
+        } else {
+          const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: paymentMethod.id,
+          });
 
+          if (result.error) {
+            // Show error to your customer (e.g., insufficient funds)
+            setProcessingTo(false);
+            setCheckoutError(result.error.message);
+            console.log(result.error.message);
+          } else {
+            // The payment has been processed!
+            // eslint-disable-next-line no-lonely-if
+            if (result.paymentIntent.status === 'succeeded') {
+              props.history.push('/order-confirmation');
+              // Show a success message to your customer
+              // There's a risk of the customer closing the window before callback
+              // execution. Set up a webhook or plugin to listen for the
+              // payment_intent.succeeded event that handles any business critical
+              // post-payment actions.
+            }
+          }
+        }
+      });
+
+    /* const cardElement = elements.getElement(CardElement);
     const paymentMethodReq = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
       billing_details: billingDetails,
     });
 
-    console.log(paymentMethodReq);
-
     const confirmedCardPayment = await stripe.confirmCardPayment(clientSecret, {
       payment_method: paymentMethodReq.paymentMethod.id,
-    }); */
+    });
 
-    // redirect compra exitosa
-
-    const { data: clientSecret } = await axios.post(
-      'https://us-central1-mi-fondita-6a42e.cloudfunctions.net/getClientSecret',
-      {
-        amount: 100 * 15,
-      },
-    );
-
-    console.log(clientSecret);
+    console.log(confirmedCardPayment); */
   };
 
   const cardElementOptions = {
@@ -98,10 +129,13 @@ const CheckoutForm = (props) => {
       </Row>
       <Row>
         <CardElementContainer>
-          <CardElement options={cardElementOptions} />
+          <CardElement
+            options={cardElementOptions}
+            onChange={() => setCheckoutError('')}
+          />
         </CardElementContainer>
       </Row>
-      {checkoutError && <CheckoutError>{checkoutError}</CheckoutError>}
+      {checkoutError}
       <Row>
         <SubmitButton disabled={isProcessing}>
           {isProcessing ? 'Processing...' : 'Pay $15'}
