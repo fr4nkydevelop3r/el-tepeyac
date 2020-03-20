@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const stripe = require('stripe')(process.env.REACT_APP_SECRET_KEY);
+const stripe = require('stripe')(functions.config().stripe.key);
 const cors = require('cors')({ origin: true });
 
 admin.initializeApp();
@@ -37,22 +37,33 @@ exports.getOrders = functions.https.onCall(async (data, context) => {
   return querysnapshots;
 });
 
+const calculateOrderAmount = (items) => {
+  console.log(items);
+  const amount = items.reduce(
+    (accumulator, currentValue) =>
+      accumulator +
+      parseInt(currentValue.totalOrdered) * parseInt(currentValue.dishPrice),
+    0,
+  );
+  console.log(amount * 100);
+  return amount * 100;
+};
+
 exports.getClientSecret = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     if (req.method === 'POST') {
       try {
-        const { amount } = req.body;
+        const { amount, dishesOrdered } = req.body;
 
         // todo: calculate amount here and not in the client
-
         const paymentIntent = await stripe.paymentIntents.create({
-          amount,
+          amount: calculateOrderAmount(dishesOrdered),
           currency: 'usd',
         });
-        console.log(paymentIntent);
 
         res.status(200).send(paymentIntent.client_secret);
       } catch (err) {
+        console.log(err);
         res.status(500).json({ statusCode: 500, message: err.message });
       }
     } else {
