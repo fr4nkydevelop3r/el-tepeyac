@@ -48,7 +48,6 @@ const UserInfo = (props) => {
   const [deliverPriority, setDeliverPriority] = useState(getDeliverPriority());
 
   const onSubmit = (data) => {
-    console.log(data);
     if (!isEmpty(products)) {
       products = Object.values(products);
       dishesOrdered = Object.values(products)
@@ -58,6 +57,7 @@ const UserInfo = (props) => {
             dishID: dish.dishID,
             dishName: dish.dishName,
             totalOrdered: dish.totalOrdered,
+            dishPrice: dish.dishPrice,
           };
           return newDish;
         });
@@ -100,7 +100,7 @@ const UserInfo = (props) => {
           .post(
             'https://us-central1-mi-fondita-6a42e.cloudfunctions.net/getClientSecret',
             {
-              amount: totalOrder * 100,
+              dishesOrdered: Object.values(dishesOrdered),
             },
           )
           .catch((error) => {
@@ -110,7 +110,6 @@ const UserInfo = (props) => {
           })
           .then(async ({ data: clientSecret }) => {
             const cardElement = elements.getElement(CardElement);
-            console.log(cardElement);
             const { error, paymentMethod } = await stripe.createPaymentMethod({
               type: 'card',
               card: cardElement,
