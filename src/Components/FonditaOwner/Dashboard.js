@@ -14,6 +14,7 @@ const Dashboard = (props) => {
   const orders = useSelector((state) => state.orders);
   const authedUser = useSelector((state) => state.authedUser);
   const dispatch = useDispatch();
+  console.log(orders);
 
   const handleSignOut = () => {
     auth

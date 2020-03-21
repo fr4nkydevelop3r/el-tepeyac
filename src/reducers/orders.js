@@ -2,6 +2,7 @@ import {
   CREATE_ORDER,
   RECEIVE_ORDERS,
   RESTART_ORDERS,
+  UPDATE_ORDER,
 } from '../actions/orders';
 
 export default function orders(state = {}, action) {
@@ -18,6 +19,14 @@ export default function orders(state = {}, action) {
             dishes: action.order.dishes,
             infoCustomer: action.order.infoCustomer,
           },
+        },
+      };
+    case UPDATE_ORDER:
+      return {
+        ...state,
+        [action.order.idOrder]: {
+          ...state[action.order.idOrder],
+          orderCompleted: !state[action.order.idOrder].orderCompleted,
         },
       };
     case RECEIVE_ORDERS:

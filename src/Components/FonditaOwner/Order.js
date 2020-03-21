@@ -1,13 +1,18 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState } from 'react';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
+import { useDispatch } from 'react-redux';
+
+import { handleUpdateOrder } from '../../actions/orders';
 
 const Order = (props) => {
+  const { order } = props;
+
   const [isOpen, setIsOpen] = useState(false);
-  const [orderCompleted, setOrderCompleted] = useState(false);
+  const [orderCompleted, setOrderCompleted] = useState(order.orderCompleted);
+  const dispatch = useDispatch();
 
   const toggle = () => setIsOpen(!isOpen);
-  const { order } = props;
 
   let totalDishes = Object.values(order.dishes);
   totalDishes = totalDishes.reduce(
@@ -22,7 +27,10 @@ const Order = (props) => {
 
   const dishes = Object.values(order.dishes);
 
-  const handleChange = (event) => setOrderCompleted(event.target.value);
+  const handleChange = (event) => {
+    setOrderCompleted(event.target.value);
+    dispatch(handleUpdateOrder(order.idOrder));
+  };
 
   let deliverPriority = '';
 
@@ -87,9 +95,11 @@ const Order = (props) => {
                 </div>
               ))}
               <span>Order complete?</span>
-              <select value={orderCompleted} onChange={handleChange}>
-                <option value="true">True</option>
-                <option value="false">False</option>
+              <select
+                value={orderCompleted ? 'True' : 'False'}
+                onChange={handleChange}>
+                <option>True</option>
+                <option>False</option>
               </select>
             </CardBody>
           </Card>
