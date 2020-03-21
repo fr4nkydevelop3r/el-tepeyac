@@ -140,6 +140,8 @@ const UserInfo = (props) => {
                     })
                     .catch((e) => {
                       console.error(e);
+                      setProcessingTo(false);
+
                       setErrorMessageOrder(
                         'Something went wrong with the order, could you try again?',
                       );
