@@ -1,9 +1,66 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
+import styled from 'styled-components';
 import setDirection from '../../actions/customer';
 import { firestore } from '../../firebase';
+import { colors } from '../../colors';
+import { Button, ErrorValidationContainer } from '../../styled-components';
+
+const AutocompleteContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  border: black;
+  height: 100vh;
+  background-color: ${colors.grayLight};
+`;
+
+const Header = styled.h5`
+  color: ${colors.grayStrong};
+  margin-top: 128px;
+`;
+
+const InputAutocomplete = styled.input`
+  width: 350px;
+  height: 30px;
+  border: none;
+  border-bottom: 2px solid #e32351;
+  background-color: #f2f3f2;
+  margin-top: 48px;
+  font-size: 20px;
+  color: ${colors.red};
+  text-align: center;
+  ::placeholder {
+    color: ${colors.grayMedium};
+    text-align: center;
+  }
+  :focus {
+    outline: none;
+  }
+`;
+
+const SuggestionsList = styled.ul`
+  list-style-type: none;
+  color: ${colors.grayStrong};
+  margin-top: 24px;
+  font-size: 20px;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 32px;
+`;
+
+const Sorry = styled.div`
+  margin-top: 48px;
+  font-size: 20px;
+  color: ${colors.red};
+`;
 
 const PlacesAutocomplete = (props) => {
   const {
@@ -65,19 +122,24 @@ const PlacesAutocomplete = (props) => {
   };
 
   const renderSuggestions = () =>
+    // eslint-disable-next-line implicit-arrow-linebreak
     data.map((suggestion) => {
       const {
         id,
-        structured_formatting: { main_text, secondary_text },
+        structured_formatting: {
+          main_text: mainText,
+          secondary_text: secondaryText,
+        },
       } = suggestion;
 
       return (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <li key={id} onClick={handleSelect(suggestion)}>
-          <strong>{main_text}</strong> <small>{secondary_text}</small>
+          <strong>{mainText}</strong>
+          <small> {secondaryText}</small>
         </li>
       );
     });
-
   const checkDirection = () => {
     if (status !== 'OK') {
       setValidateDirection('Please put a valid address');
@@ -92,30 +154,46 @@ const PlacesAutocomplete = (props) => {
   };
 
   return (
-    <div ref={ref}>
-      <input
+    <AutocompleteContainer ref={ref}>
+      <Header>
+        {' '}
+        <span>First, we need to know your address </span>
+        <span role="img" aria-label="building">
+          🏢
+        </span>
+      </Header>
+      <InputAutocomplete
         value={value}
         onChange={handleInput}
         disabled={!ready}
-        placeholder="Where are you going?"
+        placeholder="Delivery address"
         onBlur={checkDirection}
         onFocus={handleInput}
       />
       {/* We can use the "status" to decide whether we should display the dropdown or not */}
-      {status === 'OK' && <ul>{renderSuggestions()}</ul>}
-      {validateDirection && <div>{validateDirection}</div>}
+      {status === 'OK' && (
+        <SuggestionsList>{renderSuggestions()}</SuggestionsList>
+      )}
+      {validateDirection && (
+        <ErrorValidationContainer>{validateDirection}</ErrorValidationContainer>
+      )}
       {postCodeUser ? (
         validPostCodes.includes(postCodeUser) ? (
-          <div>
-            <button type="button" onClick={goodToGo}>
+          <ButtonContainer>
+            <Button type="button" onClick={goodToGo}>
               Good to go
-            </button>
-          </div>
+            </Button>
+          </ButtonContainer>
         ) : (
-          <div>Sorryyyyyyy</div>
+          <Sorry>
+            <span role="img" aria-label="sad">
+              Sorry 😔
+            </span>
+            <span> We don&apos;t deliver there yet. </span>
+          </Sorry>
         )
       ) : null}
-    </div>
+    </AutocompleteContainer>
   );
 };
 
