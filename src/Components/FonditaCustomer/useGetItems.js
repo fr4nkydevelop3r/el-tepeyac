@@ -15,6 +15,8 @@ const useGetItems = () => {
           dishName: dish.dishName,
           dishPrice: dish.dishPrice,
           totalOrdered: 0,
+          dishDescription: dish.dishDescription,
+          dishPhoto: dish.dishPhoto,
         }));
 
         setItems(dishes);
