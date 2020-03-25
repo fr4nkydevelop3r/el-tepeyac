@@ -11,6 +11,7 @@ import middleware from './middleware';
 import TodayMenuProvider from './providers/TodayMenuProvider';
 import App from './components/App';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { colors } from './colors';
 
 const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_KEY);
 
@@ -19,6 +20,7 @@ const store = createStore(reducer, middleware);
 const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Ubuntu Condensed', sans-serif;
+    background-color: ${colors.grayLight};
   }
 `;
 
