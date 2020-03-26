@@ -12,7 +12,6 @@ import SignIn from './FonditaOwner/SignIn';
 import Orders from './FonditaOwner/Orders';
 import OrderConfirmation from './FonditaCustomer/OrderConfirmation';
 import CheckoutForm from './FonditaCustomer/CheckoutForm';
-
 function App() {
   return (
     <div className="App">
