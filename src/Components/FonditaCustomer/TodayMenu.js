@@ -16,25 +16,11 @@ import useTotalOrder from './useTotalOrder';
 import useTotalItems from './useTotalItems';
 import useGetItems from './useGetItems';
 import { colors } from '../../colors';
+import { ShoppingCart } from '../../styled-components';
 
 const TodayMenuContainer = styled.div`
   background-color: ${colors.grayLight};
   height: 100vh;
-`;
-
-const ShoppingCart = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 16px;
-  color: ${colors.red};
-  i {
-    font-size: 20px;
-  }
-  span {
-    margin-top: -12px;
-    margin-left: 4px;
-  }
 `;
 
 const Title = styled.div`
@@ -56,6 +42,7 @@ const Menu = styled.div`
   flex-direction: column;
   padding: 8px;
   align-items: center;
+  margin-bottom: 32px;
 `;
 
 const Dish = styled.div`
@@ -126,11 +113,12 @@ const DishTotalAndImage = styled.div`
 
 const ViewOrder = styled.div`
   width: 100%;
-  position: fixed;
+  position: sticky;
   bottom: 0;
+  z-index: 300;
   button {
     width: 100%;
-    height: 50px;
+    height: 40px;
     background-color: ${colors.red};
     color: ${colors.grayLight};
     border: none;

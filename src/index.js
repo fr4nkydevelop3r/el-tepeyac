@@ -10,6 +10,7 @@ import reducer from './reducers';
 import middleware from './middleware';
 import TodayMenuProvider from './providers/TodayMenuProvider';
 import App from './components/App';
+import Footer from './components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { colors } from './colors';
 
@@ -31,6 +32,7 @@ ReactDOM.render(
         <Elements stripe={stripePromise}>
           <GlobalStyle />
           <App />
+          <Footer />
         </Elements>
       </TodayMenuProvider>
     </Router>
