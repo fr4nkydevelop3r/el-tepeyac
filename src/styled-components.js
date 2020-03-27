@@ -52,3 +52,36 @@ export const BehindButtonContainer = styled.div`
     }
   }
 `;
+
+export const InputContainer = styled.div`
+  display: flex;
+  margin-top: 16px;
+  label {
+    width: 30%;
+    text-align: center;
+  }
+  input {
+    height: 30px;
+
+    width: 70%;
+    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    border: 1px solid rgba(67, 41, 163, 0.2);
+    border-radius: 5px;
+    margin-right: 16px;
+    color: ${colors.grayStrong};
+    ::placeholder {
+      color: ${colors.grayStrong};
+      text-align: center;
+    }
+    :focus {
+      outline: none;
+    }
+  }
+  .Phone {
+    text-align: center;
+    ::placeholder {
+      color: ${colors.grayMedium};
+      text-align: center;
+    }
+  }
+`;

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable object-curly-newline */
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -15,6 +16,12 @@ import useTotalOrder from './useTotalOrder';
 import DeliverPriority from './DeliverPriority';
 import Row from './CheckoutForm/Row';
 import SubmitButton from './CheckoutForm/SubmitButton';
+import { BehindButtonContainer, InputContainer } from '../../styled-components';
+import { colors } from '../../colors';
+
+const FormUser = styled.div`
+  margin-top: 64px;
+`;
 
 const CardElementContainer = styled.div`
   height: 40px;
@@ -24,6 +31,25 @@ const CardElementContainer = styled.div`
   & .StripeElement {
     width: 100%;
     padding: 15px;
+  }
+`;
+
+const ErrorInput = styled.div`
+  display: flex;
+  justify-content: center;
+  span {
+    color: ${colors.red};
+  }
+`;
+
+const HourDeliveryContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  label {
+    color: ${colors.grayStrong};
+    margin-bottom: 0;
   }
 `;
 
@@ -202,56 +228,96 @@ const UserInfo = (props) => {
 
   return (
     <div className="UserInfo">
-      <button type="button" onClick={() => props.history.goBack()}>
-        Atras
-      </button>
-
-      <div className="FormUser">
+      <BehindButtonContainer>
+        <i
+          className="fas fa-arrow-left"
+          onClick={() => props.history.push('/view-order')}
+          onKeyDown={() => props.history.push('/view-order')}
+          role="button"
+          aria-label="Shopping cart"
+          tabIndex={0}
+        />
+      </BehindButtonContainer>
+      <FormUser>
         {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* register your input into the hook by invoking the "register" function */}
-          <input
-            name="name"
-            placeholder="Your name"
-            ref={register({ required: true })}
-          />
-          {errors.name && <span>Please put your name</span>}
+          <InputContainer>
+            <label htmlFor="name">Name</label>
 
-          {/* include validation with required or other standard HTML validation rules */}
-          <input
-            name="address"
-            ref={register({ required: true })}
-            placeholder="Your address"
-            value={address}
-            readOnly
-          />
+            <input
+              name="name"
+              ref={register({ required: true })}
+              placeholder="Your name"
+              type="text"
+            />
+          </InputContainer>
 
-          {errors.address && <span>Your address is required</span>}
+          {errors.name && (
+            <ErrorInput>
+              <span>Please put your name</span>
+            </ErrorInput>
+          )}
 
-          <input
-            name="officeOrApt"
-            ref={register({ required: true })}
-            placeholder="Where you work?"
-          />
+          <InputContainer>
+            <label htmlFor="address">Address</label>
 
-          {errors.officeOrApt && <span>Where you work is required</span>}
+            <input
+              name="address"
+              ref={register({ required: true })}
+              placeholder="Your address"
+              value={address}
+              readOnly
+            />
+          </InputContainer>
 
-          <Controller
-            as={<NumberFormat format="(###) ###-####" mask="_" />}
-            name="phone"
-            control={control}
-            placeholder="(___) ____-____"
-            rules={{ required: true }}
-          />
-          {errors.phone && <span>Your phone number is required</span>}
+          {errors.address && (
+            <ErrorInput>
+              <span>Your address is required</span>
+            </ErrorInput>
+          )}
+          <InputContainer>
+            <label htmlFor="officeOrApt">Office/Apt</label>
+            <input
+              name="officeOrApt"
+              ref={register({ required: true })}
+              placeholder="Where you work?"
+            />
+          </InputContainer>
 
-          <span>What time would you like to get your order?</span>
-          <DeliverPriority
-            handlePriorityDeliver={handlePriorityDeliver}
-            handleResetError={handleResetError}
-          />
+          {errors.officeOrApt && (
+            <ErrorInput>
+              <span>Where you work is required</span>
+            </ErrorInput>
+          )}
+
+          <InputContainer>
+            <label htmlFor="phone">Phone</label>
+            <Controller
+              as={<NumberFormat format="(###) ###-####" mask="_" />}
+              name="phone"
+              control={control}
+              placeholder="(___) ____-____"
+              rules={{ required: true }}
+              className="Phone"
+            />
+          </InputContainer>
+
+          {errors.phone && (
+            <ErrorInput>
+              <span>Your phone number is required</span>
+            </ErrorInput>
+          )}
+
+          <HourDeliveryContainer>
+            <label>What time you&apos;d like your order </label>
+            <DeliverPriority
+              handlePriorityDeliver={handlePriorityDeliver}
+              handleResetError={handleResetError}
+            />
+          </HourDeliveryContainer>
+
           <div>{errorMessageHour}</div>
-
           <div>{errorMessageOrder}</div>
 
           <Row>
@@ -270,7 +336,7 @@ const UserInfo = (props) => {
             </SubmitButton>
           </Row>
         </form>
-      </div>
+      </FormUser>
     </div>
   );
 };
