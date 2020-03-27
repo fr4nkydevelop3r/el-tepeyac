@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
-
+import styled from 'styled-components';
 import { getDeliverPriority } from '../../utilities';
+import { colors } from '../../colors';
+
+const DeliverPriorityContainer = styled.div`
+  margin-left: 8px;
+  select {
+    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    border: 1px solid rgba(67, 41, 163, 0.2);
+    color: ${colors.grayStrong};
+    text-align: center;
+    text-indent: 8px;
+    :focus {
+      outline: none;
+    }
+  }
+`;
 
 const DeliverPriority = (props) => {
   const deliverPriority = getDeliverPriority();
@@ -70,16 +85,18 @@ const DeliverPriority = (props) => {
   };
 
   return (
-    <select
-      value={timeDeliver}
-      onChange={handleChange}
-      onClick={() => props.handleResetError()}>
-      {hoursAvailable.map((hour) => (
-        <option value={`${hour} - ${hour + 1}`} key={hour}>
-          {`${hour} - ${hour + 1}`}
-        </option>
-      ))}
-    </select>
+    <DeliverPriorityContainer>
+      <select
+        value={timeDeliver}
+        onChange={handleChange}
+        onClick={() => props.handleResetError()}>
+        {hoursAvailable.map((hour) => (
+          <option value={`${hour} - ${hour + 1}`} key={hour}>
+            {`${hour} - ${hour + 1}`}
+          </option>
+        ))}
+      </select>
+    </DeliverPriorityContainer>
   );
 };
 
