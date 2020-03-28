@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { colors } from '../../../colors';
 const FormFieldContainer = styled.div`
   display: -ms-flexbox;
   display: flex;
@@ -35,7 +35,7 @@ const Input = styled.input`
   animation: 1ms void-animation-out;
 
   &::placeholder {
-    color: #87bbfd;
+    color: #fff;
   }
 `;
 

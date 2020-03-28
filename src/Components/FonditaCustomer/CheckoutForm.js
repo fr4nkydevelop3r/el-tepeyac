@@ -161,8 +161,8 @@ const UserInfo = (props) => {
                 // eslint-disable-next-line no-lonely-if
                 if (result.paymentIntent.status === 'succeeded') {
                   dispatch(handleCreateOrder(order))
-                    .then(() => {
-                      props.history.push('/order-confirmation');
+                    .then((orderCreated) => {
+                      props.history.push(`/order/${orderCreated.idOrder}`);
                     })
                     .catch((e) => {
                       console.error(e);
@@ -211,7 +211,7 @@ const UserInfo = (props) => {
         fontSize: '16px',
         color: '#fff',
         '::placeholder': {
-          color: '#87bbfd',
+          color: '#F2F3F2',
         },
       },
       invalid: {
@@ -328,13 +328,13 @@ const UserInfo = (props) => {
               />
             </CardElementContainer>
           </Row>
-          {checkoutError}
+          <ErrorInput>
+            <span>{checkoutError}</span>
+          </ErrorInput>
 
-          <Row>
-            <SubmitButton disabled={isProcessing}>
-              {isProcessing ? 'Processing...' : 'Pay $15'}
-            </SubmitButton>
-          </Row>
+          <SubmitButton disabled={isProcessing}>
+            {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
+          </SubmitButton>
         </form>
       </FormUser>
     </div>

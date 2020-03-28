@@ -26,7 +26,7 @@ function App() {
         <Route exact path="/sign-in" component={SignIn} />
         <Route exact path="/orders" component={Orders} />
         <Route exact path="/checkout" component={CheckoutForm} />
-        <Route exact path="/order-confirmation" component={OrderConfirmation} />
+        <Route exact path="/order/:id" component={OrderConfirmation} />
       </Switch>
     </div>
   );

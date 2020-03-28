@@ -52,14 +52,13 @@ export function handleCreateOrder(order) {
   return (dispatch) => {
     return addOrder(order)
       .then((data) => {
-        console.log('Data dentro del action');
-        console.log(data);
         dispatch(createOrder(data));
         incrementTotalOrders()
           .then(() => dispatch(incrementOrdersToday()))
           .catch((error) => {
             console.error('No se pudo actualizar!: ', error);
           });
+        return data;
       })
       .catch((error) => console.log(error));
   };
