@@ -10,7 +10,9 @@ const DeliverPriorityContainer = styled.div`
     border: 1px solid rgba(67, 41, 163, 0.2);
     color: ${colors.grayStrong};
     text-align: center;
-    text-indent: 8px;
+    text-indent: 12px;
+    width: 70px;
+    background: ${colors.grayLight};
     :focus {
       outline: none;
     }
