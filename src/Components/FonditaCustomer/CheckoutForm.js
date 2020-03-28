@@ -16,7 +16,11 @@ import useTotalOrder from './useTotalOrder';
 import DeliverPriority from './DeliverPriority';
 import Row from './CheckoutForm/Row';
 import SubmitButton from './CheckoutForm/SubmitButton';
-import { BehindButtonContainer, InputContainer } from '../../styled-components';
+import {
+  BehindButtonContainer,
+  ErrorInput,
+  InputContainer,
+} from '../../styled-components';
 import { colors } from '../../colors';
 
 const FormUser = styled.div`
@@ -31,14 +35,6 @@ const CardElementContainer = styled.div`
   & .StripeElement {
     width: 100%;
     padding: 15px;
-  }
-`;
-
-const ErrorInput = styled.div`
-  display: flex;
-  justify-content: center;
-  span {
-    color: ${colors.red};
   }
 `;
 
@@ -252,13 +248,11 @@ const UserInfo = (props) => {
               type="text"
             />
           </InputContainer>
-
           {errors.name && (
             <ErrorInput>
               <span>Please put your name</span>
             </ErrorInput>
           )}
-
           <InputContainer>
             <label htmlFor="address">Address</label>
 
@@ -270,7 +264,6 @@ const UserInfo = (props) => {
               readOnly
             />
           </InputContainer>
-
           {errors.address && (
             <ErrorInput>
               <span>Your address is required</span>
@@ -284,13 +277,11 @@ const UserInfo = (props) => {
               placeholder="Where you work?"
             />
           </InputContainer>
-
           {errors.officeOrApt && (
             <ErrorInput>
               <span>Where you work is required</span>
             </ErrorInput>
           )}
-
           <InputContainer>
             <label htmlFor="phone">Phone</label>
             <Controller
@@ -302,13 +293,11 @@ const UserInfo = (props) => {
               className="Phone"
             />
           </InputContainer>
-
           {errors.phone && (
             <ErrorInput>
               <span>Your phone number is required</span>
             </ErrorInput>
           )}
-
           <HourDeliveryContainer>
             <label>What time you&apos;d like your order </label>
             <DeliverPriority
@@ -316,10 +305,12 @@ const UserInfo = (props) => {
               handleResetError={handleResetError}
             />
           </HourDeliveryContainer>
-
-          <div>{errorMessageHour}</div>
-          <div>{errorMessageOrder}</div>
-
+          <ErrorInput>
+            <span>{errorMessageHour}</span>
+          </ErrorInput>
+          <ErrorInput>
+            <span>{errorMessageOrder}</span>
+          </ErrorInput>
           <Row>
             <CardElementContainer>
               <CardElement
@@ -331,7 +322,6 @@ const UserInfo = (props) => {
           <ErrorInput>
             <span>{checkoutError}</span>
           </ErrorInput>
-
           <SubmitButton disabled={isProcessing}>
             {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
           </SubmitButton>

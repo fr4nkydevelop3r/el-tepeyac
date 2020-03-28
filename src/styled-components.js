@@ -12,11 +12,23 @@ export const Button = styled.button`
   align-items: center;
   padding: 8px;
   border-radius: 5px;
+  :focus {
+    outline: none;
+  }
 `;
 
 export const ErrorValidationContainer = styled.div`
   margin-top: 16px;
   color: ${colors.red};
+`;
+
+export const ErrorInput = styled.div`
+  display: flex;
+  justify-content: center;
+  span {
+    color: ${colors.red};
+    text-align: center;
+  }
 `;
 
 export const ShoppingCart = styled.div`
