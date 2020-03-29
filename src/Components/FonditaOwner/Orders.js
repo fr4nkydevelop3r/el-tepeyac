@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-nested-ternary */
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
-import { Link } from 'react-router-dom';
 
 import { auth } from '../../firebase';
-
+import { restartOrders } from '../../actions/orders';
+import { logoutUser } from '../../actions/authedUser';
 import SignIn from './SignIn';
 import ListOrders from './ListOrders';
 
@@ -14,26 +15,30 @@ const Orders = (props) => {
   const orders = useSelector((state) => state.orders);
   const authedUser = useSelector((state) => state.authedUser);
 
-  useEffect(() => {
-    if (isEmpty(authedUser)) {
-      auth.onAuthStateChanged((user) => {
-        if (!user) {
-          props.history.push('/sign-in');
-        }
-      });
-    }
-  }, [dispatch, props, authedUser]);
-
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        props.history.push('/sign-in');
+        dispatch(restartOrders());
+        dispatch(logoutUser());
+      })
+      .catch(() => console.log('No se pudo salir'));
+  };
+  console.log(orders);
   return (
     <div className="Orders">
       {!isEmpty(authedUser) ? (
-        <div>
-          <div>Orders!</div>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
+        !isEmpty(orders) ? (
+          <div>
             <ListOrders orders={orders} />
-          </li>
-        </div>
+            <button type="button" onClick={handleSignOut}>
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div>Cargando...</div>
+        )
       ) : (
         <div>
           <SignIn />

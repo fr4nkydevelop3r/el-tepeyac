@@ -84,7 +84,7 @@ const SignIn = (props) => {
           (error) => console.log(error),
         );
         if (!isEmpty(props)) {
-          props.history.push('/dashboard');
+          props.history.push('/orders');
         }
       }
       dispatch(setUser(userAuth));
@@ -95,7 +95,7 @@ const SignIn = (props) => {
     auth
       .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
-        props.history.push('/dashboard');
+        props.history.push('/orders');
       })
       .catch((error) => {
         const { code } = error;
@@ -123,7 +123,6 @@ const SignIn = (props) => {
     }
   };
 
-  console.log(invalidPassword);
   return (
     <SignInContainer>
       {isEmpty(authedUser) ? (
