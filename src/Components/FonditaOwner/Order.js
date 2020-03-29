@@ -17,7 +17,6 @@ const OrderContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-around;
-    background: ${colors.red};
     border: none;
   }
 `;
@@ -147,8 +146,13 @@ const Order = (props) => {
       break;
   }
   return (
-    <OrderContainer>
-      <Button className="Order" onClick={toggle}>
+    <OrderContainer ontainer>
+      <Button
+        className="Order"
+        style={{
+          backgroundColor: orderCompleted ? '#3CB371' : colors.red,
+        }}
+        onClick={toggle}>
         <span>{address}</span>
 
         <span>Total Dishes : {totalDishes}</span>

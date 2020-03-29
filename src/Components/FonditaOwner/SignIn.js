@@ -11,9 +11,10 @@ import { receiveOrders } from '../../actions/orders';
 import setUser from '../../actions/authedUser';
 import { getDay } from '../../utilities';
 // eslint-disable-next-line import/no-cycle
-import Dashboard from './Dashboard';
+import Orders from './Orders';
 import { Button, InputContainer, ErrorInput } from '../../styled-components';
 import { colors } from '../../colors';
+import MenuOwner from './MenuOwner';
 
 const SignInContainer = styled.div`
   display: flex;
@@ -86,17 +87,14 @@ const SignIn = (props) => {
         if (!isEmpty(props)) {
           props.history.push('/orders');
         }
+        dispatch(setUser(userAuth));
       }
-      dispatch(setUser(userAuth));
     });
   }, [dispatch, props]);
 
   const onSubmit = (data) => {
     auth
       .signInWithEmailAndPassword(data.email, data.password)
-      .then(() => {
-        props.history.push('/orders');
-      })
       .catch((error) => {
         const { code } = error;
         if (code === 'auth/wrong-password') {
@@ -124,62 +122,64 @@ const SignIn = (props) => {
   };
 
   return (
-    <SignInContainer>
-      {isEmpty(authedUser) ? (
-        <SignInForm>
-          <h4 className="SignInTitle">Sign in</h4>
+    <>
+      <SignInContainer>
+        {isEmpty(authedUser) ? (
+          <SignInForm>
+            <h4 className="SignInTitle">Sign in</h4>
 
-          <div className="Form">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <InputContainer>
-                <label htmlFor="email">Email</label>
-                <input
-                  name="email"
-                  placeholder="Your email"
-                  ref={register({
-                    required: true,
-                    pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                  })}
-                  onChange={handleOnChange}
-                />
-              </InputContainer>
-              <ErrorInput>
-                <span>{invalidEmail}</span>
-              </ErrorInput>
-              {errors.email && (
+            <div className="Form">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <InputContainer>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    name="email"
+                    placeholder="Your email"
+                    ref={register({
+                      required: true,
+                      pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    })}
+                    onChange={handleOnChange}
+                  />
+                </InputContainer>
                 <ErrorInput>
-                  <span>Please put a valid email</span>
+                  <span>{invalidEmail}</span>
                 </ErrorInput>
-              )}
+                {errors.email && (
+                  <ErrorInput>
+                    <span>Please put a valid email</span>
+                  </ErrorInput>
+                )}
 
-              <InputContainer>
-                <label htmlFor="password">Password</label>
-                <input
-                  name="password"
-                  placeholder="Your password"
-                  ref={register({ required: true })}
-                  type="password"
-                  onChange={handleOnChange}
-                />
-              </InputContainer>
-              {errors.password && (
+                <InputContainer>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    name="password"
+                    placeholder="Your password"
+                    ref={register({ required: true })}
+                    type="password"
+                    onChange={handleOnChange}
+                  />
+                </InputContainer>
+                {errors.password && (
+                  <ErrorInput>
+                    <span>Please put your password</span>
+                  </ErrorInput>
+                )}
                 <ErrorInput>
-                  <span>Please put your password</span>
+                  <span>{invalidPassword}</span>
                 </ErrorInput>
-              )}
-              <ErrorInput>
-                <span>{invalidPassword}</span>
-              </ErrorInput>
-              <SubmitContainer>
-                <Button>Sign in</Button>
-              </SubmitContainer>
-            </form>
-          </div>
-        </SignInForm>
-      ) : (
-        <Dashboard />
-      )}
-    </SignInContainer>
+                <SubmitContainer>
+                  <Button>Sign in</Button>
+                </SubmitContainer>
+              </form>
+            </div>
+          </SignInForm>
+        ) : (
+          <Orders />
+        )}
+      </SignInContainer>
+    </>
   );
 };
 
