@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useReducer, useState } from 'react';
 import { firestore, storage } from '../../firebase';
+import MenuOwner from './MenuOwner';
 
 const initialState = {
   name: '',
@@ -129,52 +130,55 @@ const NewDish = (props) => {
   };
 
   return (
-    <div className="NewDish">
-      <h3>New dish</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="DishName">
-          <input
-            type="text"
-            name="name"
-            placeholder="Dish name"
-            value={name}
-            onChange={handleChange}
-          />
-        </div>
-        {validateName && <div>{validateName}</div>}
-        <div className="DishDescription">
-          <input
-            type="text"
-            name="description"
-            placeholder="Dish Description"
-            value={description}
-            onChange={handleChange}
-          />
-        </div>
-        {validateDescription && <div>{validateDescription}</div>}
+    <>
+      <MenuOwner />
+      <div className="NewDish">
+        <h3>New dish</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="DishName">
+            <input
+              type="text"
+              name="name"
+              placeholder="Dish name"
+              value={name}
+              onChange={handleChange}
+            />
+          </div>
+          {validateName && <div>{validateName}</div>}
+          <div className="DishDescription">
+            <input
+              type="text"
+              name="description"
+              placeholder="Dish Description"
+              value={description}
+              onChange={handleChange}
+            />
+          </div>
+          {validateDescription && <div>{validateDescription}</div>}
 
-        <div className="DishPrice">
-          <label>
-            Select a price for the dish
-            <select value={price} onChange={handleChange} name="price">
-              {prices.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="dishPrice">
-          <input type="file" ref={imageInput} onChange={handleImage} />
-        </div>
-        {validateImage && <div>{validateImage}</div>}
+          <div className="DishPrice">
+            <label>
+              Select a price for the dish
+              <select value={price} onChange={handleChange} name="price">
+                {prices.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="dishPrice">
+            <input type="file" ref={imageInput} onChange={handleImage} />
+          </div>
+          {validateImage && <div>{validateImage}</div>}
 
-        <div className="UploadDish">
-          <button type="submit">Upload Dish</button>
-        </div>
-      </form>
-    </div>
+          <div className="UploadDish">
+            <button type="submit">Upload Dish</button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 

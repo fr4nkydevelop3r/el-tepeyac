@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
 
@@ -8,12 +8,19 @@ import { restartOrders } from '../../actions/orders';
 import { logoutUser } from '../../actions/authedUser';
 import SignIn from './SignIn';
 import ListOrders from './ListOrders';
+import MenuOwner from './MenuOwner';
 
 const Orders = (props) => {
   const dispatch = useDispatch();
 
   const orders = useSelector((state) => state.orders);
   const authedUser = useSelector((state) => state.authedUser);
+
+  useEffect(() => {
+    if (isEmpty(authedUser)) {
+      props.history.push('/sign-in');
+    }
+  }, [authedUser]);
 
   const handleSignOut = () => {
     auth
@@ -25,26 +32,28 @@ const Orders = (props) => {
       })
       .catch(() => console.log('No se pudo salir'));
   };
-  console.log(orders);
   return (
-    <div className="Orders">
-      {!isEmpty(authedUser) ? (
-        !isEmpty(orders) ? (
-          <div>
-            <ListOrders orders={orders} />
-            <button type="button" onClick={handleSignOut}>
-              Logout
-            </button>
-          </div>
+    <>
+      <MenuOwner />
+      <div className="Orders">
+        {!isEmpty(authedUser) ? (
+          !isEmpty(orders) ? (
+            <div>
+              <ListOrders orders={orders} />
+              <button type="button" onClick={handleSignOut}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div>No orders today yet!</div>
+          )
         ) : (
-          <div>Cargando...</div>
-        )
-      ) : (
-        <div>
-          <SignIn />
-        </div>
-      )}
-    </div>
+          <div>
+            <SignIn />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

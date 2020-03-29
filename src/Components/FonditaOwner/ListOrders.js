@@ -7,12 +7,18 @@ const ListOrders = (props) => {
   orders = orders.sort((a, b) => a.deliverPriority - b.deliverPriority);
 
   return (
-    <div className="ListOrders">
-      Orders List!
-      {orders.map((order) => (
-        <Order key={order.idOrder} order={order} />
-      ))}
-    </div>
+    <>
+      <div className="ListOrders">
+        Orders List!
+        {orders.map((order) => (
+          <Order
+            key={order.idOrder}
+            order={order}
+            completed={order.orderCompleted}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

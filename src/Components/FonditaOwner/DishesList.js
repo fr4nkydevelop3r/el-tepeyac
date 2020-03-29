@@ -6,6 +6,7 @@ import collectIdsAndDocs from '../../utilities';
 import { firestore } from '../../firebase';
 
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
+import MenuOwner from './MenuOwner';
 
 const DishesList = (props) => {
   const [dishes, setDishes] = useState([]);
@@ -49,29 +50,32 @@ const DishesList = (props) => {
   );
 
   return (
-    <div>
-      <h3>Dishes list</h3>
-      {listDishes.length > 0 ? (
-        <div className="DishesList">
-          {listDishes.map((dish) => (
-            <div key={dish.id}>
-              <div>{dish.dishName}</div>
-              <button type="button" onClick={() => addToTodayMenu(dish)}>
-                Add
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>There aren&apos;t dishes yet.</div>
-      )}
+    <>
+      <MenuOwner />
+      <div>
+        <h3>Dishes list</h3>
+        {listDishes.length > 0 ? (
+          <div className="DishesList">
+            {listDishes.map((dish) => (
+              <div key={dish.id}>
+                <div>{dish.dishName}</div>
+                <button type="button" onClick={() => addToTodayMenu(dish)}>
+                  Add
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>There aren&apos;t dishes yet.</div>
+        )}
 
-      <div className="NewDish">
-        <button type="button" onClick={() => props.history.push('/new-dish')}>
-          New Dish
-        </button>
+        <div className="NewDish">
+          <button type="button" onClick={() => props.history.push('/new-dish')}>
+            New Dish
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
