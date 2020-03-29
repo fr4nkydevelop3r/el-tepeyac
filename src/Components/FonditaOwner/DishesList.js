@@ -6,24 +6,13 @@ import collectIdsAndDocs from '../../utilities';
 import { firestore } from '../../firebase';
 
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
+import { DishesListContext } from '../../providers/DishesListProvider';
 import MenuOwner from './MenuOwner';
 
 const DishesList = (props) => {
-  const [dishes, setDishes] = useState([]);
+  //const [dishes, setDishes] = useState([]);
   const todayDishes = useContext(TodayMenuContext);
-
-  useEffect(() => {
-    //  the callback will be called every time de db changes
-    const unsubscribeFromFirestore = firestore
-      .collection('dishes')
-      .onSnapshot((snapshot) => {
-        const dishesList = snapshot.docs.map(collectIdsAndDocs);
-        setDishes(dishesList);
-      });
-    return function cleanup() {
-      unsubscribeFromFirestore();
-    };
-  }, []);
+  const dishes = useContext(DishesListContext);
 
   const addToTodayMenu = (dish) => {
     firestore
