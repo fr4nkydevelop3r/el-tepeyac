@@ -74,7 +74,7 @@ const OrderConfirmation = () => {
       .catch((error) => {
         console.log('Error getting document:', error);
       });
-  }, []);
+  }, [id]);
 
   const getHourDelivery = (deliverPriority) => {
     switch (deliverPriority) {

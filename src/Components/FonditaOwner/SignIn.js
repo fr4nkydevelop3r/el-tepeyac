@@ -14,7 +14,6 @@ import { getDay } from '../../utilities';
 import Orders from './Orders';
 import { Button, InputContainer, ErrorInput } from '../../styled-components';
 import { colors } from '../../colors';
-import MenuOwner from './MenuOwner';
 
 const SignInContainer = styled.div`
   display: flex;
