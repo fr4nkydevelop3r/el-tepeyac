@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -6,6 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { handleUpdateOrder } from '../../actions/orders';
 import { colors } from '../../colors';
+import { Select } from '../../styled-components';
 
 const OrderContainer = styled.div`
   .Card {
@@ -66,22 +68,6 @@ const OrderCompleted = styled.div`
     background-repeat: no-repeat, repeat;
     background-position: right 0.7em top 50%, 0 0;
     background-size: 0.65em auto, 100%;
-  }
-  .select-css::-ms-expand {
-    display: none;
-  }
-  .select-css:hover {
-    border-color: #888;
-  }
-  .select-css:focus {
-    border-color: #aaa;
-    box-shadow: 0 0 1px 3px rgba(59, 153, 252, 0.7);
-    box-shadow: 0 0 0 3px -moz-mac-focusring;
-    color: #222;
-    outline: none;
-  }
-  .select-css option {
-    font-weight: normal;
   }
 `;
 
@@ -181,13 +167,13 @@ const Order = (props) => {
               <span>Time: {order.timeOrder}</span>
               <div>
                 <span>Order complete?</span>
-                <select
+                <Select
                   value={orderCompleted ? 'True' : 'False'}
                   onChange={handleChange}
                   className="Select">
                   <option>True</option>
                   <option>False</option>
-                </select>
+                </Select>
               </div>
             </OrderCompleted>
           </CardBody>

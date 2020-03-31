@@ -1,5 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
+
 import Order from './Order';
+import { colors } from '../../colors';
+
+const ListOrdersContainer = styled.div`
+  margin-top: 32px;
+  margin-bottom: 32px;
+  h4 {
+    color: ${colors.grayStrong};
+    text-align: center;
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+`;
 
 const ListOrders = (props) => {
   let { orders } = props;
@@ -8,8 +22,8 @@ const ListOrders = (props) => {
 
   return (
     <>
-      <div className="ListOrders">
-        Orders List!
+      <ListOrdersContainer>
+        <h4>List Orders today!</h4>
         {orders.map((order) => (
           <Order
             key={order.idOrder}
@@ -17,7 +31,7 @@ const ListOrders = (props) => {
             completed={order.orderCompleted}
           />
         ))}
-      </div>
+      </ListOrdersContainer>
     </>
   );
 };

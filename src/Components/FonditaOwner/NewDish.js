@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useReducer, useState } from 'react';
+import styled from 'styled-components';
 import { firestore, storage } from '../../firebase';
 import MenuOwner from './MenuOwner';
+import { colors } from '../../colors';
+import { ErrorInput, InputContainer, Select } from '../../styled-components';
 
 const initialState = {
   name: '',
@@ -15,6 +18,49 @@ function reducer(state, { field, value }) {
     [field]: value,
   };
 }
+
+const NewDishContainer = styled.div`
+  margin-top: 46px;
+  margin-bottom: 32px;
+  h4 {
+    color: ${colors.grayStrong};
+    text-align: center;
+  }
+  .NewDishForm {
+    margin-top: 46px;
+  }
+  .Price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  .SelectPrice {
+    margin: 0;
+  }
+`;
+
+const UploadDishContainer = styled.div`
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const UploadDishButton = styled.button`
+  background: ${colors.yellow};
+  width: 100px;
+  height: 50px;
+  color: ${colors.grayDark};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 5px;
+  :focus {
+    outline: none;
+  }
+`;
 
 const NewDish = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -132,10 +178,12 @@ const NewDish = (props) => {
   return (
     <>
       <MenuOwner />
-      <div className="NewDish">
-        <h3>New dish</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="DishName">
+      <NewDishContainer>
+        <h4>New dish</h4>
+        <form className="NewDishForm" onSubmit={handleSubmit}>
+          <InputContainer className="DishName">
+            <label htmlFor="name">Name</label>
+
             <input
               type="text"
               name="name"
@@ -143,9 +191,15 @@ const NewDish = (props) => {
               value={name}
               onChange={handleChange}
             />
-          </div>
-          {validateName && <div>{validateName}</div>}
-          <div className="DishDescription">
+          </InputContainer>
+          {validateName && (
+            <ErrorInput>
+              <span>{validateName}</span>
+            </ErrorInput>
+          )}
+          <InputContainer>
+            <label htmlFor="description">Description</label>
+
             <input
               type="text"
               name="description"
@@ -153,31 +207,43 @@ const NewDish = (props) => {
               value={description}
               onChange={handleChange}
             />
-          </div>
-          {validateDescription && <div>{validateDescription}</div>}
+          </InputContainer>
+          {validateDescription && (
+            <ErrorInput>
+              <span>{validateDescription}</span>
+            </ErrorInput>
+          )}
 
-          <div className="DishPrice">
-            <label>
-              Select a price for the dish
-              <select value={price} onChange={handleChange} name="price">
-                {prices.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div className="dishPrice">
+          <InputContainer>
+            <label className="Price"> Price </label>
+
+            <Select
+              value={price}
+              onChange={handleChange}
+              name="price"
+              className="SelectPrice">
+              {prices.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </Select>
+          </InputContainer>
+          <InputContainer>
+            <label htmlFor="dishPhoto">Dish photo</label>
             <input type="file" ref={imageInput} onChange={handleImage} />
-          </div>
-          {validateImage && <div>{validateImage}</div>}
+          </InputContainer>
+          {validateImage && (
+            <ErrorInput>
+              <span>{validateImage}</span>
+            </ErrorInput>
+          )}
 
-          <div className="UploadDish">
-            <button type="submit">Upload Dish</button>
-          </div>
+          <UploadDishContainer>
+            <UploadDishButton type="submit">Upload Dish</UploadDishButton>
+          </UploadDishContainer>
         </form>
-      </div>
+      </NewDishContainer>
     </>
   );
 };
