@@ -5,21 +5,50 @@ import { colors } from './colors';
 export const Button = styled.button`
   background: ${colors.red};
   width: 150px;
-  heighy: 100px;
+  height: 44px;
   color: ${colors.grayLight};
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px;
   border-radius: 5px;
+  border: none;
   :focus {
     outline: none;
+  }
+
+  @media (min-width: 768px) {
+    width: 260px;
+    height: 80px;
+    font-size: 26px;
+  }
+  @media (min-width: 992px) {
+    width: 300px;
+    height: 90px;
+    font-size: 32px;
+  }
+  @media (min-width: 1200px) {
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
   }
 `;
 
 export const ErrorValidationContainer = styled.div`
   margin-top: 16px;
   color: ${colors.red};
+
+  @media (min-width: 768px) {
+    margin-top: 20px;
+    font-size: 24px;
+  }
+  @media (min-width: 992px) {
+    margin-top: 24px;
+    font-size: 32px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 20px;
+  }
 `;
 
 export const ErrorInput = styled.div`

@@ -21,9 +21,37 @@ const AutocompleteContainer = styled.div`
   background-color: ${colors.grayLight};
 `;
 
-const Header = styled.h5`
+const Header = styled.div`
   color: ${colors.grayStrong};
-  margin-top: 128px;
+  margin-top: 200px;
+  .title {
+    display: inline;
+    font-size: 20px;
+  }
+  .icon {
+    font-size: 20px;
+  }
+  @media (min-width: 768px) {
+    margin-top: 186px;
+    .title,
+    .icon {
+      font-size: 36px;
+    }
+  }
+  @media (min-width: 992px) {
+    margin-top: 320px;
+    .title,
+    .icon {
+      font-size: 48px;
+    }
+  }
+  @media (min-width: 1200px) {
+    margin-top: 186px;
+    .title,
+    .icon {
+      font-size: 32px;
+    }
+  }
 `;
 
 const InputAutocomplete = styled.input`
@@ -43,6 +71,23 @@ const InputAutocomplete = styled.input`
   :focus {
     outline: none;
   }
+
+  @media (min-width: 768px) {
+    font-size: 36px;
+    height: 40px;
+    width: 550px;
+  }
+  @media (min-width: 992px) {
+    font-size: 42px;
+    height: 50px;
+    width: 650px;
+  }
+  @media (min-width: 1200px) {
+    width: 450px;
+
+    font-size: 28px;
+    height: 30px;
+  }
 `;
 
 const SuggestionsList = styled.ul`
@@ -50,16 +95,42 @@ const SuggestionsList = styled.ul`
   color: ${colors.grayStrong};
   margin-top: 24px;
   font-size: 20px;
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 38px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 20px;
+  }
 `;
 
 const ButtonContainer = styled.div`
   margin-top: 32px;
+  @media (min-width: 768px) {
+    margin-top: 42px;
+  }
+  @media (min-width: 992px) {
+    margin-top: 46px;
+  }
+  @media (min-width: 1200px) {
+  }
 `;
 
 const Sorry = styled.div`
   margin-top: 48px;
   font-size: 20px;
   color: ${colors.red};
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 36px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 22px;
+  }
 `;
 
 const PlacesAutocomplete = (props) => {
@@ -157,8 +228,8 @@ const PlacesAutocomplete = (props) => {
     <AutocompleteContainer ref={ref}>
       <Header>
         {' '}
-        <span>First, we need to know your address </span>
-        <span role="img" aria-label="building">
+        <h4 className="title">First, we need to know your address </h4>
+        <span className="icon" role="img" aria-label="building">
           🏢
         </span>
       </Header>
