@@ -29,10 +29,30 @@ const Title = styled.div`
   align-items: center;
   h4 {
     margin-bottom: 0;
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
+    @media (min-width: 992px) {
+      font-size: 42px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 24px;
+      z-index: 2000;
+    }
   }
   span {
     margin-left: 6px;
     font-size: 22px;
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
+    @media (min-width: 992px) {
+      font-size: 42px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 24px;
+      z-index: 2000;
+    }
   }
 `;
 
@@ -42,7 +62,18 @@ const Menu = styled.div`
   flex-direction: column;
   padding: 8px;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 64px;
+  @media (min-width: 768px) {
+  }
+  @media (min-width: 992px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 24px;
+  }
+  @media (min-width: 1200px) {
+    justify-content: space-around;
+  }
 `;
 
 const Dish = styled.div`
@@ -53,6 +84,18 @@ const Dish = styled.div`
   border: 1px solid rgba(67, 41, 163, 0.2);
   border-radius: 5px;
   display: flex;
+  @media (min-width: 768px) {
+    width: 60%;
+    height: 150px;
+  }
+  @media (min-width: 992px) {
+    height: 200px;
+    padding: 16px;
+  }
+  @media (min-width: 1200px) {
+    width: 400px;
+    margin-bottom: 32px;
+  }
 `;
 
 const DishInfo = styled.div`
@@ -64,10 +107,29 @@ const DishInfo = styled.div`
     color: ${colors.grayStrong};
     padding-left: 8px;
     padding-top: 12px;
+    @media (min-width: 768px) {
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 14px;
+      padding-right: 8px;
+    }
   }
   .DishName {
     padding-left: 8px;
     padding-top: 8px;
+    @media (min-width: 768px) {
+      font-size: 26px;
+    }
+    @media (min-width: 992px) {
+      font-size: 32px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -82,6 +144,14 @@ const DishTotalAndImage = styled.div`
     img {
       width: 115px;
       height: 95px;
+      @media (min-width: 768px) {
+        width: 135px;
+        height: 115px;
+      }
+      @media (min-width: 992px) {
+      }
+      @media (min-width: 1200px) {
+      }
     }
   }
   .IncrementDecrement {
@@ -93,6 +163,15 @@ const DishTotalAndImage = styled.div`
   .TotalItems {
     padding: 8px 0 8px 0;
     color: ${colors.grayStrong};
+    @media (min-width: 768px) {
+      font-size: 22px;
+    }
+    @media (min-width: 992px) {
+      font-size: 28px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 16px;
+    }
   }
   .MinusButton {
     :disabled {
@@ -101,10 +180,30 @@ const DishTotalAndImage = styled.div`
       }
     }
   }
+  .MinusButton,
+  .PlusButton {
+    @media (min-width: 1200px) {
+      border: none;
+      background: none;
+      :focus {
+        outline: none;
+      }
+    }
+  }
+
   .minus,
   .plus {
     color: ${colors.red};
     font-size: 12px;
+    @media (min-width: 768px) {
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 16px;
+    }
     :focus {
       outline: none;
     }
@@ -113,15 +212,27 @@ const DishTotalAndImage = styled.div`
 
 const ViewOrder = styled.div`
   width: 100%;
-  position: sticky;
+  position: fixed;
   bottom: 0;
   z-index: 300;
-  button {
+  .ViewOrderButton {
     width: 100%;
     height: 40px;
     background-color: ${colors.red};
     color: ${colors.grayLight};
     border: none;
+    @media (min-width: 768px) {
+      font-size: 24px;
+      height: 60px;
+    }
+    @media (min-width: 992px) {
+      height: 70px;
+      font-size: 32px;
+    }
+    @media (min-width: 1200px) {
+      height: 40px;
+      font-size: 16px;
+    }
   }
 `;
 
@@ -189,7 +300,8 @@ const TodayMenu = (props) => {
                   <div className="Increment">
                     <button
                       type="button"
-                      onClick={() => handleIncrement(dish.dishID)}>
+                      onClick={() => handleIncrement(dish.dishID)}
+                      className="PlusButton">
                       <i className="fas fa-plus plus" />
                     </button>
                   </div>
@@ -224,6 +336,7 @@ const TodayMenu = (props) => {
       <ViewOrder>
         {totalOrder > 0 && (
           <button
+            className="ViewOrderButton"
             type="button"
             onClick={() => {
               props.history.push('view-order');

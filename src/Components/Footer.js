@@ -18,7 +18,6 @@ const FooterContainer = styled.div`
 
   @media (min-width: 768px) {
     font-size: 28px;
-    margin-bottom: 8px;
   }
 
   @media (min-width: 1200px) {
