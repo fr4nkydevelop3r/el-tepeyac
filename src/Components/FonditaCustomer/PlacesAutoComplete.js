@@ -84,7 +84,6 @@ const InputAutocomplete = styled.input`
   }
   @media (min-width: 1200px) {
     width: 450px;
-
     font-size: 28px;
     height: 30px;
   }

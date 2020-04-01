@@ -70,15 +70,48 @@ export const ShoppingCart = styled.div`
   position: sticky;
   top: 0;
   color: ${colors.red};
+
+  @media (min-width: 768px) {
+    padding: 32px;
+  }
+
+  @media (min-width: 1200px) {
+    margin-bottom: 32px;
+  }
+
   i {
     font-size: 20px;
     :focus {
       outline: none;
     }
+    @media (min-width: 768px) {
+      font-size: 28px;
+      margin-top: 12px;
+      margin-right: 4px;
+    }
+    @media (min-width: 992px) {
+      font-size: 42px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 18px;
+    }
   }
   span {
     margin-top: -12px;
     margin-left: 4px;
+    @media (min-width: 768px) {
+      font-size: 28px;
+      margin-left: 0;
+      font-weight: bolder;
+    }
+    @media (min-width: 992px) {
+      margin-left: 4px;
+      font-size: 32px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 16px;
+      margin-left: 0;
+    }
   }
 `;
 
