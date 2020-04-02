@@ -118,11 +118,30 @@ export const ShoppingCart = styled.div`
 export const BehindButtonContainer = styled.div`
   color: ${colors.red};
   margin-top: 20px;
-  padding-left: 20px;
+  margin-left: 20px;
+
+  @media (min-width: 768px) {
+    margin-left: 40px;
+  }
+  @media (min-width: 992px) {
+    margin-left: 46px;
+  }
+  @media (min-width: 1200px) {
+    margin-left: 52px;
+  }
   i {
     font-size: 20px;
     :focus {
       outline: none;
+    }
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
+    @media (min-width: 992px) {
+      font-size: 38px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 24px;
     }
   }
 `;

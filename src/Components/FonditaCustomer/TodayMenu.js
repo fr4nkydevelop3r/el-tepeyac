@@ -210,6 +210,21 @@ const DishTotalAndImage = styled.div`
   }
 `;
 
+const EmptyMenu = styled.div`
+  margin-top: 124px;
+  font-size: 20px;
+  color: ${colors.red};
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 36px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 22px;
+  }
+`;
+
 const ViewOrder = styled.div`
   width: 100%;
   position: fixed;
@@ -329,7 +344,9 @@ const TodayMenu = (props) => {
             </Dish>
           ))
         ) : (
-          <div>Loading...</div>
+          <EmptyMenu>
+            <span>There aren&apos;t dishes in the menu</span>
+          </EmptyMenu>
         )}
       </Menu>
 

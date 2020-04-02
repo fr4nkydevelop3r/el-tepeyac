@@ -15,39 +15,96 @@ const DishesOrdered = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  @media (min-width: 768px) {
+    margin-top: 86px;
+    flex-direction: column;
+    align-items: center;
+  }
+  @media (min-width: 992px) {
+  }
+  @media (min-width: 1200px) {
+    margin-top: 32px;
+  }
 `;
 
 const OrdersHeader = styled.div`
   width: 70%;
   margin: 0 auto;
-  margin-top: 32px;
-  h4 {
+  margin-top: 64px;
+  @media (min-width: 768px) {
+    margin-top: 72px;
+  }
+  @media (min-width: 992px) {
+    margin-top: 96px;
+  }
+  @media (min-width: 1200px) {
+    margin-top: 64px;
+  }
+  .Title {
     font-size: 20px;
+    @media (min-width: 768px) {
+      font-size: 36px;
+    }
+    @media (min-width: 992px) {
+      font-size: 46px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 24px;
+    }
   }
 `;
 
 const OrderEmpty = styled.div`
-  margin-top: 64px;
+  margin-top: 124px;
+  font-size: 20px;
+  color: ${colors.red};
   display: flex;
   justify-content: center;
-  h4 {
-    font-size: 20px;
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 36px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 22px;
   }
 `;
 
 const Dish = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 70%;
   margin-bottom: 16px;
+  width: 70%;
+  @media (min-width: 768px) {
+    width: 400px;
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 38px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 18px;
+  }
 `;
 
 const TotalOrder = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 70%;
   margin: 0 auto;
   margin-top: 32px;
+  width: 70%;
+  margin-bottom: 64px;
+  @media (min-width: 768px) {
+    width: 400px;
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 38px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 18px;
+  }
   .Total {
     font-weight: bold;
   }
@@ -65,6 +122,18 @@ const PlaceOrder = styled.div`
     background-color: ${colors.red};
     color: ${colors.grayLight};
     border: none;
+    @media (min-width: 768px) {
+      font-size: 32px;
+      height: 60px;
+    }
+    @media (min-width: 992px) {
+      font-size: 36px;
+      height: 70px;
+    }
+    @media (min-width: 1200px) {
+      height: 40px;
+      font-size: 18px;
+    }
   }
 `;
 
@@ -121,7 +190,7 @@ const ViewOrder = (props) => {
       {dishesOrdered && dishesOrdered.length > 0 ? (
         <div>
           <OrdersHeader>
-            <h4>Your order is:</h4>
+            <h4 className="Title">Your order is:</h4>
           </OrdersHeader>
           <DishesOrdered>
             {dishesOrdered.map((dish) => (
@@ -148,7 +217,7 @@ const ViewOrder = (props) => {
         </div>
       ) : (
         <OrderEmpty>
-          <h4>You haven&apos;t selected any dish yet!</h4>
+          <span>You haven&apos;t selected any dish yet!</span>
         </OrderEmpty>
       )}
     </div>
