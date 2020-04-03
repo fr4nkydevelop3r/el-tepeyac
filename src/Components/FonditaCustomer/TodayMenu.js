@@ -20,7 +20,7 @@ import { ShoppingCart } from '../../styled-components';
 
 const TodayMenuContainer = styled.div`
   background-color: ${colors.grayLight};
-  height: 100vh;
+  height: auto;
 `;
 
 const Title = styled.div`
@@ -63,6 +63,7 @@ const Menu = styled.div`
   padding: 8px;
   align-items: center;
   margin-bottom: 64px;
+  height: auto;
   @media (min-width: 768px) {
   }
   @media (min-width: 992px) {
@@ -182,9 +183,9 @@ const DishTotalAndImage = styled.div`
   }
   .MinusButton,
   .PlusButton {
+    border: none;
+    background: none;
     @media (min-width: 1200px) {
-      border: none;
-      background: none;
       :focus {
         outline: none;
       }
@@ -281,6 +282,7 @@ const TodayMenu = (props) => {
   const handleDecrement = (idDish) => {
     dispatch(decrementProduct(idDish));
   };
+  console.log(dishesList);
 
   return (
     <TodayMenuContainer>
@@ -304,45 +306,47 @@ const TodayMenu = (props) => {
 
       <Menu>
         {dishesList.length > 0 ? (
-          dishesList.map((dish) => (
-            <Dish key={dish.dishID}>
-              <DishInfo>
-                <div className="DishName">{dish.dishName}</div>
-                <div className="DishDescription">{dish.dishDescription}</div>
-              </DishInfo>
-              <DishTotalAndImage>
-                <div className="IncrementDecrement">
-                  <div className="Increment">
-                    <button
-                      type="button"
-                      onClick={() => handleIncrement(dish.dishID)}
-                      className="PlusButton">
-                      <i className="fas fa-plus plus" />
-                    </button>
+          dishesList
+            .sort((a, b) => (a.dishName > b.dishName ? 1 : -1))
+            .map((dish) => (
+              <Dish key={dish.dishID}>
+                <DishInfo>
+                  <div className="DishName">{dish.dishName}</div>
+                  <div className="DishDescription">{dish.dishDescription}</div>
+                </DishInfo>
+                <DishTotalAndImage>
+                  <div className="IncrementDecrement">
+                    <div className="Increment">
+                      <button
+                        type="button"
+                        onClick={() => handleIncrement(dish.dishID)}
+                        className="PlusButton">
+                        <i className="fas fa-plus plus" />
+                      </button>
+                    </div>
+                    <div className="TotalItems">
+                      <div>{dish.totalOrdered > 0 && dish.totalOrdered}</div>
+                    </div>
+                    <div className="Decrement">
+                      <button
+                        type="button"
+                        className="MinusButton"
+                        onClick={() => {
+                          if (dish.totalOrdered >= 1) {
+                            handleDecrement(dish.dishID);
+                          }
+                        }}
+                        disabled={!dish.totalOrdered >= 1}>
+                        <i className="fas fa-minus minus" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="TotalItems">
-                    <div>{dish.totalOrdered > 0 && dish.totalOrdered}</div>
+                  <div className="DishImage">
+                    <img src={dish.dishPhoto} alt={dish.dishName} />
                   </div>
-                  <div className="Decrement">
-                    <button
-                      type="button"
-                      className="MinusButton"
-                      onClick={() => {
-                        if (dish.totalOrdered >= 1) {
-                          handleDecrement(dish.dishID);
-                        }
-                      }}
-                      disabled={!dish.totalOrdered >= 1}>
-                      <i className="fas fa-minus minus" />
-                    </button>
-                  </div>
-                </div>
-                <div className="DishImage">
-                  <img src={dish.dishPhoto} alt={dish.dishName} />
-                </div>
-              </DishTotalAndImage>
-            </Dish>
-          ))
+                </DishTotalAndImage>
+              </Dish>
+            ))
         ) : (
           <EmptyMenu>
             <span>There aren&apos;t dishes in the menu</span>

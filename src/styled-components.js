@@ -58,6 +58,15 @@ export const ErrorInput = styled.div`
     color: ${colors.red};
     text-align: center;
   }
+  @media (min-width: 768px) {
+    font-size: 24px;
+  }
+  @media (min-width: 992px) {
+    font-size: 32px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 18px;
+  }
 `;
 
 export const ShoppingCart = styled.div`
@@ -153,28 +162,35 @@ export const InputContainer = styled.div`
     width: 30%;
     text-align: center;
   }
-  input {
-    height: 30px;
 
+  .InputAndError {
     width: 70%;
-    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
-    border: 1px solid rgba(67, 41, 163, 0.2);
-    border-radius: 5px;
-    margin-right: 16px;
-    color: ${colors.grayStrong};
-    ::placeholder {
+    padding-right: 30px;
+    @media (min-width: 768px) {
+      padding-right: 0;
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+      border: 1px solid rgba(67, 41, 163, 0.2);
+      border-radius: 5px;
+      margin-right: 16px;
       color: ${colors.grayStrong};
-      text-align: center;
+      ::placeholder {
+        color: ${colors.grayStrong};
+        text-align: center;
+      }
+      :focus {
+        outline: none;
+      }
     }
-    :focus {
-      outline: none;
-    }
-  }
-  .Phone {
-    text-align: center;
-    ::placeholder {
-      color: ${colors.grayMedium};
-      text-align: center;
+    .Phone {
+      ::placeholder {
+        color: ${colors.grayMedium};
+        text-align: center;
+      }
     }
   }
 `;

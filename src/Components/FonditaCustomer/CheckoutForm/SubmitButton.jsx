@@ -13,6 +13,22 @@ const SubmitButton = styled.button`
   color: #fff;
   font-weight: 600;
   cursor: pointer;
+  focus: {
+    outline: none;
+  }
+  @media (min-width: 768px) {
+    font-size: 20px;
+    height: 50px;
+  }
+  @media (min-width: 992px) {
+    font-size: 24px;
+    height: 60px;
+  }
+  @media (min-width: 1200px) {
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+  }
 `;
 
 export default SubmitButton;

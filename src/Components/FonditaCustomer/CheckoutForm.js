@@ -25,12 +25,70 @@ import { colors } from '../../colors';
 
 const FormUser = styled.div`
   margin-top: 64px;
+  @media (min-width: 768px) {
+    margin-top: 86px;
+  }
+  @media (min-width: 992px) {
+    margin-top: 186px;
+  }
+  @media (min-width: 1200px) {
+    margin-top: 56px;
+    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    border: 1px solid rgba(67, 41, 163, 0.2);
+    border-radius: 5px;
+    width: 800px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+  .Form {
+    @media (min-width: 768px) {
+      width: 70%;
+      margin: 0 auto;
+    }
+    @media (min-width: 1200px) {
+      width: 700px;
+    }
+  }
+  .InputCheckout {
+    label {
+      @media (min-width: 768px) {
+        text-align: left;
+        font-size: 24px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+      }
+    }
+    input {
+      @media (min-width: 768px) {
+        font-size: 24px;
+        height: 40px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+        height: 50px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+        height: 30px;
+      }
+    }
+  }
 `;
 
 const CardElementContainer = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
+
+  .CardStyles {
+    font-size: 32px;
+  }
+
+  font-size: 32px;
 
   & .StripeElement {
     width: 100%;
@@ -46,7 +104,22 @@ const HourDeliveryContainer = styled.div`
   label {
     color: ${colors.grayStrong};
     margin-bottom: 0;
+    @media (min-width: 768px) {
+      font-size: 24px;
+    }
+    @media (min-width: 992px) {
+      font-size: 32px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 20px;
+    }
   }
+`;
+
+const SubmitButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const UserInfo = (props) => {
@@ -236,68 +309,80 @@ const UserInfo = (props) => {
       </BehindButtonContainer>
       <FormUser>
         {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="Form" onSubmit={handleSubmit(onSubmit)}>
           {/* register your input into the hook by invoking the "register" function */}
-          <InputContainer>
+          <InputContainer className="InputCheckout">
             <label htmlFor="name">Name</label>
 
-            <input
-              name="name"
-              ref={register({ required: true })}
-              placeholder="Your name"
-              type="text"
-            />
+            <div className="InputAndError">
+              <input
+                name="name"
+                ref={register({ required: true })}
+                placeholder="Your name"
+                type="text"
+              />
+              {errors.name && (
+                <ErrorInput>
+                  <span>Please put your name</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {errors.name && (
-            <ErrorInput>
-              <span>Please put your name</span>
-            </ErrorInput>
-          )}
-          <InputContainer>
+
+          <InputContainer className="InputCheckout">
             <label htmlFor="address">Address</label>
 
-            <input
-              name="address"
-              ref={register({ required: true })}
-              placeholder="Your address"
-              value={address}
-              readOnly
-            />
+            <div className="InputAndError">
+              <input
+                name="address"
+                ref={register({ required: true })}
+                placeholder="Your address"
+                value={address}
+                readOnly
+              />
+              {errors.address && (
+                <ErrorInput>
+                  <span>Your address is required</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {errors.address && (
-            <ErrorInput>
-              <span>Your address is required</span>
-            </ErrorInput>
-          )}
-          <InputContainer>
+
+          <InputContainer className="InputCheckout">
             <label htmlFor="officeOrApt">Office/Apt</label>
-            <input
-              name="officeOrApt"
-              ref={register({ required: true })}
-              placeholder="Where you work?"
-            />
+            <div className="InputAndError">
+              <input
+                name="officeOrApt"
+                ref={register({ required: true })}
+                placeholder="Where you work?"
+              />
+              {errors.officeOrApt && (
+                <ErrorInput>
+                  <span>Where you work is required</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {errors.officeOrApt && (
-            <ErrorInput>
-              <span>Where you work is required</span>
-            </ErrorInput>
-          )}
-          <InputContainer>
+
+          <InputContainer className="InputCheckout">
             <label htmlFor="phone">Phone</label>
-            <Controller
-              as={<NumberFormat format="(###) ###-####" mask="_" />}
-              name="phone"
-              control={control}
-              placeholder="(___) ____-____"
-              rules={{ required: true }}
-              className="Phone"
-            />
+            <div className="InputAndError">
+              <Controller
+                as={<NumberFormat format="(###) ###-####" mask="_" />}
+                name="phone"
+                control={control}
+                placeholder="(___) ____-____"
+                rules={{ required: true }}
+                className="Phone"
+              />
+              {errors.phone && (
+                <ErrorInput>
+                  <span>Your phone number is required</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {errors.phone && (
-            <ErrorInput>
-              <span>Your phone number is required</span>
-            </ErrorInput>
-          )}
+
           <HourDeliveryContainer>
             <label>What time you&apos;d like your order </label>
             <DeliverPriority
@@ -312,7 +397,7 @@ const UserInfo = (props) => {
             <span>{errorMessageOrder}</span>
           </ErrorInput>
           <Row>
-            <CardElementContainer>
+            <CardElementContainer className="CardStyles">
               <CardElement
                 options={cardElementOptions}
                 onChange={handleChangeCard}
@@ -322,9 +407,11 @@ const UserInfo = (props) => {
           <ErrorInput>
             <span>{checkoutError}</span>
           </ErrorInput>
-          <SubmitButton disabled={isProcessing}>
-            {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
-          </SubmitButton>
+          <SubmitButtonContainer>
+            <SubmitButton disabled={isProcessing}>
+              {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
+            </SubmitButton>
+          </SubmitButtonContainer>
         </form>
       </FormUser>
     </div>
