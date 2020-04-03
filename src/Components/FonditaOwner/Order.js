@@ -68,6 +68,9 @@ const OrderCompleted = styled.div`
     background-repeat: no-repeat, repeat;
     background-position: right 0.7em top 50%, 0 0;
     background-size: 0.65em auto, 100%;
+    :focus {
+      outline: none;
+    }
   }
 `;
 

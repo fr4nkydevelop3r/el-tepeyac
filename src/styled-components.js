@@ -196,7 +196,7 @@ export const InputContainer = styled.div`
 `;
 
 export const Menu = styled.ul`
-  margin-top: 16px;
+  margin-top: 32px;
   list-style: none;
   padding-left: 0;
   display: flex;
