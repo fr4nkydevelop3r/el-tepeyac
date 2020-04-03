@@ -9,6 +9,9 @@ const Row = styled.div`
   border-radius: 4px;
   background-color: ${colors.red};
   position: relative;
+  @media (min-width: 1200px) {
+    width: 400px;
+  }
 `;
 
 export default Row;

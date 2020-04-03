@@ -10,7 +10,7 @@ import { colors } from '../../colors';
 
 const OrderDetailsContainer = styled.div`
   display: flex;
-  flex-direction: vertical;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
@@ -25,11 +25,32 @@ const OrderDetailsContainer = styled.div`
     margin-top: 24px;
     color: ${colors.grayStrong};
     width: 80%;
+    @media (min-width: 768px) {
+      margin-top: 48px;
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      width: 60%;
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 20px;
+    }
   }
   .OrderDetails {
     margin-top: 16px;
     width: 80%;
     color: ${colors.grayStrong};
+    @media (min-width: 768px) {
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      width: 60%;
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 20px;
+    }
     ul {
       margin-top: 8px;
       list-style: none;
@@ -46,6 +67,16 @@ const OrderDetailsContainer = styled.div`
     margin-top: 16px;
     width: 80%;
     color: ${colors.grayStrong};
+    @media (min-width: 768px) {
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      width: 60%;
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 20px;
+    }
   }
 `;
 

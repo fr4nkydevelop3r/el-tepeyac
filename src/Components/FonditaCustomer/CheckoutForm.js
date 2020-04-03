@@ -88,8 +88,6 @@ const CardElementContainer = styled.div`
     font-size: 32px;
   }
 
-  font-size: 32px;
-
   & .StripeElement {
     width: 100%;
     padding: 15px;
