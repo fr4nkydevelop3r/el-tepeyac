@@ -12,9 +12,18 @@ import { MessageEmptyDishes } from '../../styled-components';
 const DishesListContainer = styled.div`
   margin-top: 46px;
   margin-bottom: 32px;
+  @media (min-width: 768px) {
+    margin-top: 96px;
+  }
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
+    @media (min-width: 768px) {
+      font-size: 28px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 24px;
+    }
   }
 `;
 
@@ -30,11 +39,23 @@ const Dish = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 16px;
+  @media (min-width: 768px) {
+    width: 55%;
+  }
+  @media (min-width: 1200px) {
+    width: 500px;
+  }
   .DishName {
     width: 60%;
     display: flex;
     align-items: center;
     text-align: center;
+    @media (min-width: 768px) {
+      font-size: 22px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -47,9 +68,15 @@ const NewDishButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 8px;
+  border: none;
   border-radius: 5px;
   :focus {
     outline: none;
+  }
+  @media (min-width: 1200px) {
+    width: 90px;
+    height: 40px;
+    font-size: 14px;
   }
 `;
 
@@ -69,9 +96,19 @@ const AddDishButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 8px;
+  border: none;
   border-radius: 5px;
   :focus {
     outline: none;
+  }
+  @media (min-width: 768px) {
+    width: 90px;
+    height: 50px;
+  }
+  @media (min-width: 1200px) {
+    width: 80px;
+    height: 40px;
+    font-size: 14px;
   }
 `;
 
