@@ -3,69 +3,36 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 const FooterContainer = styled.div`
-  position: fixed;
-  bottom: 0;
-  margin-top: 32px;
-  z-index: 100;
-  background-color: ${colors.grayLight};
-  color: ${colors.red};
+  background: ${colors.grayLight};
   width: 100%;
-  height: 40px;
-  padding: 16px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  position: fixed;
+  bottom: 0;
 
-  @media (min-width: 768px) {
-    font-size: 28px;
+  .made-by {
+    color: ${colors.red};
   }
-
-  @media (min-width: 1200px) {
-    font-size: 18px;
-  }
-
-  .LinkFooter {
+  .fr4nky {
     color: ${colors.red};
     text-decoration: none;
-    padding-left: 3px;
-    @media (min-width: 768px) {
-      padding-left: 6px;
-    }
-
-    @media (min-width: 1200px) {
-      padding-left: 4px;
-    }
-  }
-  .Heart {
-    padding-left: 3px;
-    @media (min-width: 768px) {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-    @media (min-width: 1200px) {
-      padding-left: 4px;
-      padding-right: 0;
-    }
   }
 `;
 
 const Footer = () => {
   return (
     <FooterContainer>
-      <div>
-        Made with
-        <span role="img" aria-label="heart" className="Heart">
-          ❤️
-        </span>
-        by
+      <span className="made-by" role="img" aria-label="love">
+        {' '}
+        Made with ❤️by{' '}
         <a
-          href="https://github.com/fr4nkydevelop3r"
           target="_blank"
           rel="noopener noreferrer"
-          className="LinkFooter">
+          className="fr4nky"
+          href="https://github.com/fr4nkydevelop3r">
           fr4nky
         </a>
-      </div>
+      </span>
     </FooterContainer>
   );
 };
