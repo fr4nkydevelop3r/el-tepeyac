@@ -12,6 +12,15 @@ const ListOrdersContainer = styled.div`
     text-align: center;
     margin-top: 24px;
     margin-bottom: 24px;
+    @media (min-width: 768px) {
+      margin-top: 36px;
+    }
+
+    @media (min-width: 992px) {
+      margin-top: 48px;
+    }
+    @media (min-width: 1200px) {
+    }
   }
 `;
 
@@ -23,7 +32,7 @@ const ListOrders = (props) => {
   return (
     <>
       <ListOrdersContainer>
-        <h4>List Orders today!</h4>
+        <h4>Today orders!</h4>
         {orders.map((order) => (
           <Order
             key={order.idOrder}
