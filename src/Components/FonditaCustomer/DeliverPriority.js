@@ -2,19 +2,27 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { getDeliverPriority } from '../../utilities';
 import { colors } from '../../colors';
+import { Select } from '../../styled-components';
 
 const DeliverPriorityContainer = styled.div`
   margin-left: 8px;
-  select {
-    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
-    border: 1px solid rgba(67, 41, 163, 0.2);
-    color: ${colors.grayStrong};
-    text-align: center;
-    text-indent: 12px;
-    width: 70px;
-    background: ${colors.grayLight};
-    :focus {
-      outline: none;
+  .SelectDelivery {
+    width: 80px;
+    font-size: 14px;
+    @media (min-width: 768px) {
+      font-size: 18px;
+      width: 100px;
+    }
+    @media (min-width: 992px) {
+      font-size: 20px;
+      width: 120px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 14px;
+      width: 80px;
+      :focus {
+        outline: none;
+      }
     }
   }
 `;
@@ -88,7 +96,8 @@ const DeliverPriority = (props) => {
 
   return (
     <DeliverPriorityContainer>
-      <select
+      <Select
+        className="SelectDelivery"
         value={timeDeliver}
         onChange={handleChange}
         onClick={() => props.handleResetError()}>
@@ -97,7 +106,7 @@ const DeliverPriority = (props) => {
             {`${hour} - ${hour + 1}`}
           </option>
         ))}
-      </select>
+      </Select>
     </DeliverPriorityContainer>
   );
 };
