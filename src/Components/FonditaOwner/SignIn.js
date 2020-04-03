@@ -20,6 +20,13 @@ const SignInContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  @media (min-width: 768px) {
+    align-items: flex-start;
+    margin-top: 200px;
+  }
+  @media (min-width: 1200px) {
+    margin-top: 100px;
+  }
 `;
 
 const SignInForm = styled.div`
@@ -30,18 +37,69 @@ const SignInForm = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  @media (min-width: 768px) {
+    width: 450px;
+    height: 500px;
+    justify-content: center;
+  }
+  @media (min-width: 992px) {
+    width: 650px;
+    height: 700px;
+  }
+  @media (min-width: 1200px) {
+    width: 450px;
+    height: 500px;
+  }
   .Form {
     width: 80%;
   }
   .SignInTitle {
     text-align: center;
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
   }
 
   @media (min-width: 768px) {
     box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
     border: 1px solid rgba(67, 41, 163, 0.2);
     border-radius: 5px;
-    justify-content: center;
+    padding: 32px;
+  }
+
+  .InputCheckout {
+    .InputAndError {
+      @media (min-width: 768px) {
+        margin-left: 16px;
+      }
+    }
+
+    label {
+      @media (min-width: 768px) {
+        text-align: left;
+        font-size: 24px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+      }
+    }
+    input {
+      @media (min-width: 768px) {
+        font-size: 24px;
+        height: 40px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+        height: 50px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+        height: 30px;
+      }
+    }
   }
 `;
 
@@ -129,45 +187,51 @@ const SignIn = (props) => {
 
             <div className="Form">
               <form onSubmit={handleSubmit(onSubmit)}>
-                <InputContainer>
+                <InputContainer className="InputCheckout">
                   <label htmlFor="email">Email</label>
-                  <input
-                    name="email"
-                    placeholder="Your email"
-                    ref={register({
-                      required: true,
-                      pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                    })}
-                    onChange={handleOnChange}
-                  />
-                </InputContainer>
-                <ErrorInput>
-                  <span>{invalidEmail}</span>
-                </ErrorInput>
-                {errors.email && (
-                  <ErrorInput>
-                    <span>Please put a valid email</span>
-                  </ErrorInput>
-                )}
 
-                <InputContainer>
-                  <label htmlFor="password">Password</label>
-                  <input
-                    name="password"
-                    placeholder="Your password"
-                    ref={register({ required: true })}
-                    type="password"
-                    onChange={handleOnChange}
-                  />
+                  <div className="InputAndError">
+                    <input
+                      name="email"
+                      placeholder="Your email"
+                      ref={register({
+                        required: true,
+                        pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                      })}
+                      onChange={handleOnChange}
+                    />
+                    <ErrorInput>
+                      <span>{invalidEmail}</span>
+                    </ErrorInput>
+                    {errors.email && (
+                      <ErrorInput>
+                        <span>Please put a valid email</span>
+                      </ErrorInput>
+                    )}
+                  </div>
                 </InputContainer>
-                {errors.password && (
-                  <ErrorInput>
-                    <span>Please put your password</span>
-                  </ErrorInput>
-                )}
-                <ErrorInput>
-                  <span>{invalidPassword}</span>
-                </ErrorInput>
+
+                <InputContainer className="InputCheckout">
+                  <label htmlFor="password">Password</label>
+                  <div className="InputAndError">
+                    <input
+                      name="password"
+                      placeholder="Your password"
+                      ref={register({ required: true })}
+                      type="password"
+                      onChange={handleOnChange}
+                    />
+                    {errors.password && (
+                      <ErrorInput>
+                        <span>Please put your password</span>
+                      </ErrorInput>
+                    )}
+                    <ErrorInput>
+                      <span>{invalidPassword}</span>
+                    </ErrorInput>
+                  </div>
+                </InputContainer>
+
                 <SubmitContainer>
                   <Button>Sign in</Button>
                 </SubmitContainer>
