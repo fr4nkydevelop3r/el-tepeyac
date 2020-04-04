@@ -22,21 +22,90 @@ function reducer(state, { field, value }) {
 const NewDishContainer = styled.div`
   margin-top: 46px;
   margin-bottom: 32px;
+  @media (min-width: 768px) {
+    margin-top: 86px;
+  }
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
   }
   .NewDishForm {
     margin-top: 46px;
+
+    border-radius: 5px;
+    @media (min-width: 768px) {
+      width: 70%;
+      margin: 0 auto;
+      margin-top: 56px;
+      padding: 32px;
+    }
+    @media (min-width: 1200px) {
+      width: 700px;
+      box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+      border: 1px solid rgba(67, 41, 163, 0.2);
+    }
   }
-  .Price {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
+  .InputCheckout {
+    label {
+      @media (min-width: 768px) {
+        text-align: left;
+        font-size: 24px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+      }
+    }
+    input {
+      @media (min-width: 768px) {
+        font-size: 24px;
+        height: 40px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+        height: 50px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+        height: 30px;
+      }
+    }
   }
+
+  .DishPhoto {
+    @media (min-width: 768px) {
+      .File {
+        font-size: 20px;
+      }
+    }
+    @media (min-width: 992px) {
+      .File {
+        font-size: 24px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .File {
+        font-size: 16px;
+      }
+    }
+  }
+
   .SelectPrice {
     margin: 0;
+    @media (min-width: 768px) {
+      font-size: 18px;
+      width: 100px;
+    }
+
+    @media (min-width: 1200px) {
+      font-size: 14px;
+      width: 60px;
+      :focus {
+        outline: none;
+      }
+    }
   }
 `;
 
@@ -56,9 +125,27 @@ const UploadDishButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 8px;
+  border: none;
   border-radius: 5px;
   :focus {
     outline: none;
+  }
+  @media (min-width: 768px) {
+    font-size: 18px;
+    width: 120px;
+    height: 60px;
+  }
+
+  @media (min-width: 992px) {
+    font-size: 20px;
+    width: 140px;
+    height: 80px;
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 16px;
+    width: 100px;
+    height: 60px;
   }
 `;
 
@@ -181,63 +268,75 @@ const NewDish = (props) => {
       <NewDishContainer>
         <h4>New dish</h4>
         <form className="NewDishForm" onSubmit={handleSubmit}>
-          <InputContainer className="DishName">
+          <InputContainer className="InputCheckout">
             <label htmlFor="name">Name</label>
-
-            <input
-              type="text"
-              name="name"
-              placeholder="Dish name"
-              value={name}
-              onChange={handleChange}
-            />
+            <div className="InputAndError">
+              <input
+                type="text"
+                name="name"
+                placeholder="Dish name"
+                value={name}
+                onChange={handleChange}
+              />
+              {validateName && (
+                <ErrorInput>
+                  <span>{validateName}</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {validateName && (
-            <ErrorInput>
-              <span>{validateName}</span>
-            </ErrorInput>
-          )}
-          <InputContainer>
+
+          <InputContainer className="InputCheckout">
             <label htmlFor="description">Description</label>
-
-            <input
-              type="text"
-              name="description"
-              placeholder="Dish Description"
-              value={description}
-              onChange={handleChange}
-            />
+            <div className="InputAndError">
+              <input
+                type="text"
+                name="description"
+                placeholder="Dish Description"
+                value={description}
+                onChange={handleChange}
+              />
+              {validateDescription && (
+                <ErrorInput>
+                  <span>{validateDescription}</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {validateDescription && (
-            <ErrorInput>
-              <span>{validateDescription}</span>
-            </ErrorInput>
-          )}
 
-          <InputContainer>
-            <label className="Price"> Price </label>
-
-            <Select
-              value={price}
-              onChange={handleChange}
-              name="price"
-              className="SelectPrice">
-              {prices.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </Select>
-          </InputContainer>
-          <InputContainer>
+          <InputContainer className="InputCheckout DishPhoto">
             <label htmlFor="dishPhoto">Dish photo</label>
-            <input type="file" ref={imageInput} onChange={handleImage} />
+            <div className="InputAndError">
+              <input
+                type="file"
+                ref={imageInput}
+                onChange={handleImage}
+                className="File"
+              />
+              {validateImage && (
+                <ErrorInput>
+                  <span>{validateImage}</span>
+                </ErrorInput>
+              )}
+            </div>
           </InputContainer>
-          {validateImage && (
-            <ErrorInput>
-              <span>{validateImage}</span>
-            </ErrorInput>
-          )}
+
+          <InputContainer className="InputCheckout">
+            <label className="Price"> Price </label>
+            <div className="InputAndError">
+              <Select
+                value={price}
+                onChange={handleChange}
+                name="price"
+                className="SelectPrice">
+                {prices.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          </InputContainer>
 
           <UploadDishContainer>
             <UploadDishButton type="submit">Upload Dish</UploadDishButton>
