@@ -186,6 +186,7 @@ export const InputContainer = styled.div`
         outline: none;
       }
     }
+
     .Phone {
       ::placeholder {
         color: ${colors.grayMedium};

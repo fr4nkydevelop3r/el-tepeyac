@@ -109,6 +109,59 @@ const NewDishContainer = styled.div`
   }
 `;
 
+const InputFileContainer = styled.div`
+display: flex;
+margin-top: 16px;
+label {
+  width: 30%;
+  text-align: center;
+}
+
+.InputAndError {
+  width: 70%;
+  padding-right: 30px;
+  @media (min-width: 768px) {
+    padding-right: 0;
+  }
+  .Custom-file-input::before {
+    content: 'Select Photo';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid ${colors.grayStrong};
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 14px;
+    :focus {
+      outline: none;
+    }
+    @media (min-width: 768px) {
+      font-size: 18px;
+    }
+    @media (min-width: 992px) {
+      font-size: 24px;
+      padding: 2px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 16px;
+    }
+  }
+  .Custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .Custom-file-input:hover::before {
+    border-color: ${colors.grayStrong}
+  }
+  .Custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
+`;
+
 const UploadDishContainer = styled.div`
   margin-top: 40px;
   display: flex;
@@ -303,15 +356,14 @@ const NewDish = (props) => {
               )}
             </div>
           </InputContainer>
-
-          <InputContainer className="InputCheckout DishPhoto">
+          <InputFileContainer className="InputCheckout">
             <label htmlFor="dishPhoto">Dish photo</label>
             <div className="InputAndError">
               <input
                 type="file"
                 ref={imageInput}
                 onChange={handleImage}
-                className="File"
+                className="Custom-file-input"
               />
               {validateImage && (
                 <ErrorInput>
@@ -319,7 +371,7 @@ const NewDish = (props) => {
                 </ErrorInput>
               )}
             </div>
-          </InputContainer>
+          </InputFileContainer>
 
           <InputContainer className="InputCheckout">
             <label className="Price"> Price </label>
