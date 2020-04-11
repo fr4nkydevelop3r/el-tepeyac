@@ -145,6 +145,7 @@ const DishTotalAndImage = styled.div`
     img {
       width: 115px;
       height: 95px;
+      border-radius: 10px;
       @media (min-width: 768px) {
         width: 135px;
         height: 115px;
