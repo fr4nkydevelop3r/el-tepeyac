@@ -13,13 +13,12 @@ import MenuOwner from './MenuOwner';
 const OrdersContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 96px;
   h5 {
     color: ${colors.red};
-  }
-
-  @media (min-width: 1200px) {
-    margin-top: 128px;
+    margin-top: 96px;
+    @media (min-width: 1200px) {
+      margin-top: 128px;
+    }
   }
 `;
 
@@ -39,9 +38,7 @@ const Orders = (props) => {
       <OrdersContainer>
         {!isEmpty(authedUser) ? (
           !isEmpty(orders) ? (
-            <div>
-              <ListOrders orders={orders} />
-            </div>
+            <ListOrders orders={orders} />
           ) : (
             <h5>No orders today yet!</h5>
           )

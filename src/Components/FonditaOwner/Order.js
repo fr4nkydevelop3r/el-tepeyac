@@ -25,19 +25,36 @@ const OrderContainer = styled.div`
 
 const OrderInfo = styled.div`
   display: flex;
+  @media (min-width: 768px) {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 992px) {
+  }
+  @media (min-width: 1200px) {
+  }
   .DishesInfo {
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 8px;
+    @media (min-width: 768px) {
+      align-items: center;
+    }
   }
   .CustomerInfo {
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 8px;
+    @media (min-width: 768px) {
+      align-items: center;
+    }
   }
 `;
 
@@ -158,27 +175,27 @@ const Order = (props) => {
                     {dish.totalOrdered} {dish.dishName}
                   </div>
                 ))}
+                <OrderCompleted>
+                  <div>
+                    <span>Order complete?</span>
+                    <Select
+                      value={orderCompleted ? 'True' : 'False'}
+                      onChange={handleChange}
+                      className="Select">
+                      <option>True</option>
+                      <option>False</option>
+                    </Select>
+                  </div>
+                </OrderCompleted>
               </div>
               <div className="CustomerInfo">
                 <div>{order.infoCustomer.customerName} </div>
                 <div>{address}</div>
                 <div>{order.infoCustomer.customerofficeOrApt}</div>
                 <div>{order.infoCustomer.customerPhoneNumber}</div>
+                <span>Time: {order.timeOrder}</span>
               </div>
             </OrderInfo>
-            <OrderCompleted>
-              <span>Time: {order.timeOrder}</span>
-              <div>
-                <span>Order complete?</span>
-                <Select
-                  value={orderCompleted ? 'True' : 'False'}
-                  onChange={handleChange}
-                  className="Select">
-                  <option>True</option>
-                  <option>False</option>
-                </Select>
-              </div>
-            </OrderCompleted>
           </CardBody>
         </Card>
       </Collapse>

@@ -7,6 +7,7 @@ import { colors } from '../../colors';
 const ListOrdersContainer = styled.div`
   margin-top: 32px;
   margin-bottom: 32px;
+  width: 100%;
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
