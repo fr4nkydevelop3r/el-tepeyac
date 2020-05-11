@@ -12,7 +12,7 @@ Home made food app with admin dashboard.
 
 ### 2. Change to the app directory
 
-`cd would-you-rather`
+`cd my-fondita`
 
 ### In the project directory, you can run
 
