@@ -24,14 +24,14 @@ const TodayMenuContainer = styled.div`
   }
 `;
 
-const Dishes = styled.div`
+const Products = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
   align-items: center;
 `;
 
-const Dish = styled.div`
+const Product = styled.div`
   width: 80%;
   display: flex;
   justify-content: space-around;
@@ -42,7 +42,7 @@ const Dish = styled.div`
   @media (min-width: 1200px) {
     width: 500px;
   }
-  .DishName {
+  .ProductName {
     width: 60%;
     display: flex;
     align-items: center;
@@ -81,14 +81,14 @@ const DeleteButton = styled.button`
   }
 `;
 
-const AddDishContainer = styled.div`
+const AddProductContainer = styled.div`
   margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const AddDishButton = styled.button`
+const AddProductButton = styled.button`
   background: ${colors.yellow};
   width: 100px;
   height: 50px;
@@ -110,9 +110,9 @@ const AddDishButton = styled.button`
 `;
 
 const TodayMenuOwner = (props) => {
-  const dishes = useContext(TodayMenuContext);
+  const products = useContext(TodayMenuContext);
 
-  const deleteDish = (id) => {
+  const deleteProduct = (id) => {
     firestore
       .collection('todaymenu')
       .doc(id)
@@ -120,8 +120,8 @@ const TodayMenuOwner = (props) => {
       .catch((error) => console.error('Error removing document: ', error));
   };
 
-  const addDish = () => {
-    props.history.push('/dishes-list');
+  const addProduct = () => {
+    props.history.push('/new-product');
   };
 
   return (
@@ -129,28 +129,30 @@ const TodayMenuOwner = (props) => {
       <MenuOwner />
       <TodayMenuContainer>
         <h4>Today&apos;s menu</h4>
-        {dishes.length > 0 ? (
-          <Dishes>
-            {dishes.map((dish) => (
-              <Dish key={dish.id}>
-                <div className="DishName">{dish.dishName}</div>
-                <DeleteButton type="button" onClick={() => deleteDish(dish.id)}>
+        {products.length > 0 ? (
+          <Products>
+            {products.map((product) => (
+              <Product key={product.id}>
+                <div className="ProductName">{product.productName}</div>
+                <DeleteButton
+                  type="button"
+                  onClick={() => deleteProduct(product.id)}>
                   Delete
                 </DeleteButton>
-              </Dish>
+              </Product>
             ))}
-          </Dishes>
+          </Products>
         ) : (
           <MessageEmptyDishes>
-            <h5>There aren&apos;t dishes uploaded today</h5>
+            <h5>There aren&apos;t products uploaded today</h5>
           </MessageEmptyDishes>
         )}
 
-        <AddDishContainer>
-          <AddDishButton type="button" onClick={addDish}>
-            Add dish
-          </AddDishButton>
-        </AddDishContainer>
+        <AddProductContainer>
+          <AddProductButton type="button" onClick={addProduct}>
+            Add product
+          </AddProductButton>
+        </AddProductContainer>
       </TodayMenuContainer>
     </>
   );

@@ -4,25 +4,25 @@ import { isEmpty } from 'lodash';
 
 const useTotalOrder = () => {
   const [total, setTotal] = useState(0);
-  const dishes = useSelector((state) => state.products);
+  const products = useSelector((state) => state.products);
 
   useEffect(() => {
-    let dishesList = [];
+    let productsList = [];
     let totalOrder = 0;
 
-    if (!isEmpty(dishes)) {
-      dishesList = Object.values(dishes);
-      totalOrder = dishesList
-        .filter((dish) => dish.totalOrdered >= 1)
+    if (!isEmpty(products)) {
+      productsList = Object.values(products);
+      totalOrder = productsList
+        .filter((product) => product.totalOrdered >= 1)
         .reduce(
           (acummulator, currentValue) =>
             // eslint-disable-next-line implicit-arrow-linebreak
-            acummulator + currentValue.totalOrdered * currentValue.dishPrice,
+            acummulator + currentValue.totalOrdered * currentValue.productPrice,
           0,
         );
       setTotal(totalOrder);
     }
-  }, [dishes]);
+  }, [products]);
 
   return [total];
 };

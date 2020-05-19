@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { colors } from './colors';
 
 export const Button = styled.button`
-  background: ${colors.red};
+  background: ${colors.green};
   width: 150px;
   height: 44px;
   color: ${colors.grayLight};
@@ -78,7 +78,7 @@ export const ShoppingCart = styled.div`
   background-color: ${colors.grayLight};
   position: sticky;
   top: 0;
-  color: ${colors.red};
+  color: ${colors.green};
 
   @media (min-width: 768px) {
     padding: 32px;
@@ -99,58 +99,28 @@ export const ShoppingCart = styled.div`
       margin-right: 4px;
     }
     @media (min-width: 992px) {
-      font-size: 42px;
+      font-size: 30px;
     }
     @media (min-width: 1200px) {
-      font-size: 18px;
+      font-size: 20px;
     }
   }
   span {
     margin-top: -12px;
     margin-left: 4px;
+    font-size: 1.1rem;
     @media (min-width: 768px) {
-      font-size: 28px;
+      font-size: 1.3rem;
       margin-left: 0;
       font-weight: bolder;
     }
     @media (min-width: 992px) {
       margin-left: 4px;
-      font-size: 32px;
+      font-size: 1.4rem;
     }
     @media (min-width: 1200px) {
-      font-size: 16px;
+      font-size: 18px;
       margin-left: 0;
-    }
-  }
-`;
-
-export const BehindButtonContainer = styled.div`
-  color: ${colors.red};
-  margin-top: 20px;
-  margin-left: 20px;
-
-  @media (min-width: 768px) {
-    margin-left: 40px;
-  }
-  @media (min-width: 992px) {
-    margin-left: 46px;
-  }
-  @media (min-width: 1200px) {
-    margin-left: 52px;
-  }
-  i {
-    font-size: 20px;
-    :focus {
-      outline: none;
-    }
-    @media (min-width: 768px) {
-      font-size: 32px;
-    }
-    @media (min-width: 992px) {
-      font-size: 38px;
-    }
-    @media (min-width: 1200px) {
-      font-size: 24px;
     }
   }
 `;
@@ -236,5 +206,29 @@ export const MessageEmptyDishes = styled.div`
   align-items: center;
   h5 {
     color: ${colors.red};
+  }
+`;
+
+export const TitleProductsCategory = styled.div`
+  margin-top: 1rem;
+  color: ${colors.green};
+  text-align: center;
+  .CategoryDescription {
+    padding: 0 1rem;
+  }
+`;
+
+export const BehindButtonContainer = styled.div`
+  padding: 0 1rem;
+  color: ${colors.green};
+  font-size: 1.2rem;
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    font-size: 38px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 24px;
   }
 `;

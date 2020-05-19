@@ -9,9 +9,9 @@ import { createGlobalStyle } from 'styled-components';
 import reducer from './reducers';
 import middleware from './middleware';
 import TodayMenuProvider from './providers/TodayMenuProvider';
-import DishesListProvider from './providers/DishesListProvider';
-import App from './components/App';
-import Footer from './components/Footer';
+import ProductsListProvider from './providers/ProductsListProvider';
+import App from './Components/App';
+import Footer from './Components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { colors } from './colors';
 
@@ -29,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <DishesListProvider>
+      <ProductsListProvider>
         <TodayMenuProvider>
           <Elements stripe={stripePromise}>
             <GlobalStyle />
@@ -37,7 +37,7 @@ ReactDOM.render(
             <Footer />
           </Elements>
         </TodayMenuProvider>
-      </DishesListProvider>
+      </ProductsListProvider>
     </Router>
   </Provider>,
 

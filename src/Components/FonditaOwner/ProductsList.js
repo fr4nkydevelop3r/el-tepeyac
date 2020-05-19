@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { firestore } from '../../firebase';
 
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
-import { DishesListContext } from '../../providers/DishesListProvider';
+import { ProductsListContext } from '../../providers/ProductsListProvider';
 import MenuOwner from './MenuOwner';
 import { colors } from '../../colors';
 import { MessageEmptyDishes } from '../../styled-components';
 
-const DishesListContainer = styled.div`
+const ProductsListContainer = styled.div`
   margin-top: 46px;
   margin-bottom: 32px;
   @media (min-width: 768px) {
@@ -27,14 +27,14 @@ const DishesListContainer = styled.div`
   }
 `;
 
-const Dishes = styled.div`
+const Products = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
   align-items: center;
 `;
 
-const Dish = styled.div`
+const Product = styled.div`
   width: 80%;
   display: flex;
   justify-content: space-around;
@@ -45,7 +45,7 @@ const Dish = styled.div`
   @media (min-width: 1200px) {
     width: 500px;
   }
-  .DishName {
+  .ProductName {
     width: 60%;
     display: flex;
     align-items: center;
@@ -59,7 +59,7 @@ const Dish = styled.div`
   }
 `;
 
-const NewDishButton = styled.button`
+const NewProductButton = styled.button`
   background: ${colors.yellow};
   width: 100px;
   height: 50px;
@@ -80,14 +80,14 @@ const NewDishButton = styled.button`
   }
 `;
 
-const NewDishContainer = styled.div`
+const NewProductContainer = styled.div`
   margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const AddDishButton = styled.button`
+const AddProductButton = styled.button`
   background: ${colors.yellow};
   width: 80px;
   height: 40px;
@@ -112,19 +112,21 @@ const AddDishButton = styled.button`
   }
 `;
 
-const DishesList = (props) => {
-  const todayDishes = useContext(TodayMenuContext);
-  const dishes = useContext(DishesListContext);
+const ProductsList = (props) => {
+  const todayProducts = useContext(TodayMenuContext);
+  const products = useContext(ProductsListContext);
+  console.log(products);
 
-  const addToTodayMenu = (dish) => {
+  const addToTodayMenu = (product) => {
     firestore
       .collection('todaymenu')
-      .doc(dish.id)
+      .doc(product.id)
       .set({
-        dishName: dish.dishName,
-        dishDescription: dish.dishDescription,
-        dishPrice: dish.dishPrice,
-        dishPhoto: dish.dishPhoto,
+        productName: product.productName,
+        productDescription: product.productDescription,
+        productPrice: product.productPrice,
+        productPhoto: product.productPhoto,
+        productCategory: product.productCategory,
       })
       .then(() => {
         console.log('Ok a la BD!');
@@ -134,46 +136,46 @@ const DishesList = (props) => {
       });
   };
 
-  const idsTodayDishes = Object.values(todayDishes).map((d) => d.id);
+  const idsTodayProducts = Object.values(todayProducts).map((d) => d.id);
 
-  const listDishes = dishes.filter(
-    (dish) => idsTodayDishes.indexOf(dish.id) < 0,
+  const listProducts = products.filter(
+    (dish) => idsTodayProducts.indexOf(dish.id) < 0,
   );
 
   return (
     <>
       <MenuOwner />
-      <DishesListContainer>
-        <h4>Dishes list</h4>
-        {listDishes.length > 0 ? (
-          <Dishes className="DishesList">
-            {listDishes.map((dish) => (
-              <Dish key={dish.id}>
-                <div className="DishName">{dish.dishName}</div>
-                <AddDishButton
+      <ProductsListContainer>
+        <h4>Products list</h4>
+        {listProducts.length > 0 ? (
+          <Products>
+            {listProducts.map((product) => (
+              <Product key={product.id}>
+                <div className="ProductName">{product.productName}</div>
+                <AddProductButton
                   type="button"
-                  onClick={() => addToTodayMenu(dish)}>
+                  onClick={() => addToTodayMenu(product)}>
                   Add
-                </AddDishButton>
-              </Dish>
+                </AddProductButton>
+              </Product>
             ))}
-          </Dishes>
+          </Products>
         ) : (
           <MessageEmptyDishes>
-            <h5>There aren&apos;t dishes yet.</h5>
+            <h5>There aren&apos;t products yet.</h5>
           </MessageEmptyDishes>
         )}
 
-        <NewDishContainer>
-          <NewDishButton
+        <NewProductContainer>
+          <NewProductButton
             type="button"
-            onClick={() => props.history.push('/new-dish')}>
-            New Dish
-          </NewDishButton>
-        </NewDishContainer>
-      </DishesListContainer>
+            onClick={() => props.history.push('/new-product')}>
+            New Product
+          </NewProductButton>
+        </NewProductContainer>
+      </ProductsListContainer>
     </>
   );
 };
 
-export default DishesList;
+export default ProductsList;
