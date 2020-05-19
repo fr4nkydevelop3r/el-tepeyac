@@ -2,27 +2,27 @@ import React, { createContext, useState, useEffect } from 'react';
 import { firestore } from '../firebase';
 import collectIdsAndDocs from '../utilities';
 
-export const DishesListContext = createContext();
+export const ProductsListContext = createContext();
 
-const DishesListProvider = (props) => {
-  const [dishesList, setDishesList] = useState([]);
+const ProductsListProvider = (props) => {
+  const [productsList, setProductsList] = useState([]);
   const { children } = props;
   useEffect(() => {
     const unsubscribeFromFirestore = firestore
-      .collection('dishes')
+      .collection('products')
       .onSnapshot((snapshot) => {
-        const dishes = snapshot.docs.map(collectIdsAndDocs);
-        setDishesList(dishes);
+        const products = snapshot.docs.map(collectIdsAndDocs);
+        setProductsList(products);
       });
     return function cleanup() {
       unsubscribeFromFirestore();
     };
   }, []);
   return (
-    <DishesListContext.Provider value={dishesList}>
+    <ProductsListContext.Provider value={productsList}>
       {children}
-    </DishesListContext.Provider>
+    </ProductsListContext.Provider>
   );
 };
 
-export default DishesListProvider;
+export default ProductsListProvider;

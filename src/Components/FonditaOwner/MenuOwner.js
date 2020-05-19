@@ -51,13 +51,13 @@ const MenuOwner = (props) => {
           </NavLink>
         </ItemMenu>
         <ItemMenu>
-          <NavLink to="/dishes-list" activeClassName="active">
-            Dishes List
+          <NavLink to="/products-list" activeClassName="active">
+            Products List
           </NavLink>
         </ItemMenu>
         <ItemMenu>
-          <NavLink to="/new-dish" activeClassName="active">
-            New dish
+          <NavLink to="/new-product" activeClassName="active">
+            New product
           </NavLink>
         </ItemMenu>
         <ItemMenu>

@@ -154,7 +154,7 @@ const PlacesAutocomplete = (props) => {
 
   useEffect(() => {
     firestore
-      .collection('upperEastSide')
+      .collection('upperEastSideAndHarlem')
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {

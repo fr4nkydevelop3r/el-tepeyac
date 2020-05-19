@@ -1,5 +1,8 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { keyBy, isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { receiveProducts, restartProducts } from '../../actions/products';
@@ -10,7 +13,7 @@ import { colors } from '../../colors';
 
 import { ShoppingCart, BehindButtonContainer } from '../../styled-components';
 
-const DishesOrdered = styled.div`
+const ProductsOrdered = styled.div`
   margin-top: 32px;
   display: flex;
   justify-content: center;
@@ -71,7 +74,7 @@ const OrderEmpty = styled.div`
   }
 `;
 
-const Dish = styled.div`
+const Product = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
@@ -142,27 +145,27 @@ const ViewOrder = (props) => {
 
   let products = useSelector((state) => state.products);
 
-  const [dishes] = useGetItems();
+  const [items] = useGetItems();
 
   const [totalItems] = useTotalItems();
   const [totalOrder] = useTotalOrder();
 
-  let dishesOrdered = [];
+  let productsOrdered = [];
   if (!isEmpty(products)) {
     products = Object.values(products);
-    dishesOrdered = Object.values(products).filter(
+    productsOrdered = Object.values(products).filter(
       (dish) => dish.totalOrdered >= 1,
     );
   }
 
   useEffect(() => {
-    if (dishes) {
-      if (products.length !== dishes.length) {
+    if (items) {
+      if (products.length !== items.length) {
         dispatch(restartProducts());
-        dispatch(receiveProducts(keyBy(dishes, 'dishID')));
+        dispatch(receiveProducts(keyBy(items, 'dishID')));
       }
     }
-  }, [dispatch, products.length, dishes]);
+  }, [dispatch, products.length, items]);
   return (
     <div className="ViewOrder">
       <ShoppingCart>
@@ -177,31 +180,29 @@ const ViewOrder = (props) => {
         <span>{totalItems > 0 && totalItems}</span>
       </ShoppingCart>
       <BehindButtonContainer>
-        <i
-          className="fas fa-arrow-left"
-          onClick={() => props.history.push('/today-menu')}
-          onKeyDown={() => props.history.push('/today-menu')}
-          role="button"
-          aria-label="Shopping cart"
-          tabIndex={0}
-        />
+        <BehindButtonContainer>
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            onClick={() => props.history.goBack()}
+          />
+        </BehindButtonContainer>
       </BehindButtonContainer>
 
-      {dishesOrdered && dishesOrdered.length > 0 ? (
+      {productsOrdered && productsOrdered.length > 0 ? (
         <div>
           <OrdersHeader>
             <h4 className="Title">Your order is:</h4>
           </OrdersHeader>
-          <DishesOrdered>
-            {dishesOrdered.map((dish) => (
-              <Dish key={dish.dishID}>
+          <ProductsOrdered>
+            {productsOrdered.map((product) => (
+              <Product key={product.productID}>
                 <div>
-                  {dish.totalOrdered} {dish.dishName}
+                  {product.totalOrdered} {product.productName}
                 </div>
-                <div>${dish.dishPrice * dish.totalOrdered}</div>
-              </Dish>
+                <div>${product.productPrice * product.totalOrdered}</div>
+              </Product>
             ))}
-          </DishesOrdered>
+          </ProductsOrdered>
           <TotalOrder>
             {' '}
             <span className="Total">Total Order ${totalOrder}</span>

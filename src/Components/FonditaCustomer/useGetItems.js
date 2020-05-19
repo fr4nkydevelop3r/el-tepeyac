@@ -9,17 +9,18 @@ const useGetItems = () => {
     const unsubscribeFromFirestore = firestore
       .collection('todaymenu')
       .onSnapshot((snapshot) => {
-        let dishes = snapshot.docs.map(collectIdsAndDocs);
-        dishes = dishes.map((dish) => ({
-          dishID: dish.id,
-          dishName: dish.dishName,
-          dishPrice: dish.dishPrice,
+        let products = snapshot.docs.map(collectIdsAndDocs);
+        products = products.map((product) => ({
+          productID: product.id,
+          productName: product.productName,
+          productPrice: product.productPrice,
           totalOrdered: 0,
-          dishDescription: dish.dishDescription,
-          dishPhoto: dish.dishPhoto,
+          productDescription: product.productDescription,
+          productPhoto: product.productPhoto,
+          productCategory: product.productCategory,
         }));
 
-        setItems(dishes);
+        setItems(products);
       });
     return function cleanup() {
       unsubscribeFromFirestore();

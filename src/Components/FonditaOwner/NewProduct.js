@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
@@ -5,6 +6,7 @@ import { firestore, storage } from '../../firebase';
 import MenuOwner from './MenuOwner';
 import { colors } from '../../colors';
 import { ErrorInput, InputContainer, Select } from '../../styled-components';
+import useGetCategories from './useGetCategories';
 
 const initialState = {
   name: '',
@@ -19,7 +21,7 @@ function reducer(state, { field, value }) {
   };
 }
 
-const NewDishContainer = styled.div`
+const NewProductContainer = styled.div`
   margin-top: 46px;
   margin-bottom: 32px;
   @media (min-width: 768px) {
@@ -29,7 +31,7 @@ const NewDishContainer = styled.div`
     color: ${colors.grayStrong};
     text-align: center;
   }
-  .NewDishForm {
+  .NewProductForm {
     margin-top: 46px;
 
     border-radius: 5px;
@@ -107,71 +109,76 @@ const NewDishContainer = styled.div`
       }
     }
   }
+  .SelectCategory {
+    margin: 0;
+    width: auto;
+  }
 `;
 
 const InputFileContainer = styled.div`
-display: flex;
-margin-top: 16px;
-label {
-  width: 30%;
-  text-align: center;
-}
+  display: flex;
+  margin-top: 16px;
+  label {
+    width: 30%;
+    text-align: center;
+  }
 
-.InputAndError {
-  width: 70%;
-  padding-right: 30px;
-  @media (min-width: 768px) {
-    padding-right: 0;
-  }
-  .Custom-file-input::before {
-    content: 'Select Photo';
-    display: inline-block;
-    background: linear-gradient(top, #f9f9f9, #e3e3e3);
-    border: 1px solid ${colors.grayStrong};
-    border-radius: 3px;
-    padding: 5px 8px;
-    outline: none;
-    white-space: nowrap;
-    -webkit-user-select: none;
-    cursor: pointer;
-    text-shadow: 1px 1px #fff;
-    font-weight: 700;
-    font-size: 14px;
-    :focus {
-      outline: none;
-    }
+  .InputAndError {
+    width: 70%;
+    padding-right: 30px;
     @media (min-width: 768px) {
-      font-size: 18px;
+      padding-right: 0;
     }
-    @media (min-width: 992px) {
-      font-size: 24px;
-      padding: 2px;
+    .Custom-file-input::before {
+      content: 'Select Photo';
+      display: inline-block;
+      background: linear-gradient(top, #f9f9f9, #e3e3e3);
+      border: 1px solid ${colors.grayStrong};
+      border-radius: 3px;
+      padding: 5px 8px;
+      outline: none;
+      white-space: nowrap;
+      -webkit-user-select: none;
+      cursor: pointer;
+      text-shadow: 1px 1px #fff;
+      font-weight: 700;
+      font-size: 14px;
+      :focus {
+        outline: none;
+      }
+      @media (min-width: 768px) {
+        font-size: 18px;
+      }
+      @media (min-width: 992px) {
+        font-size: 24px;
+        padding: 2px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 16px;
+      }
     }
-    @media (min-width: 1200px) {
-      font-size: 16px;
+    .Custom-file-input::-webkit-file-upload-button {
+      visibility: hidden;
     }
-  }
-  .Custom-file-input::-webkit-file-upload-button {
-    visibility: hidden;
-  }
-  .Custom-file-input:hover::before {
-    border-color: ${colors.grayStrong}
-  }
-  .Custom-file-input:active::before {
-    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    .Custom-file-input:hover::before {
+      border-color: ${colors.grayStrong};
+    }
+    .Custom-file-input:active::before {
+      background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
   }
 `;
 
-const UploadDishContainer = styled.div`
+const UploadProductContainer = styled.div`
   margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const UploadDishButton = styled.button`
+const UploadProductButton = styled.button`
   background: ${colors.yellow};
-  width: 100px;
+  width: 120px;
   height: 50px;
   color: ${colors.grayDark};
   display: flex;
@@ -202,36 +209,60 @@ const UploadDishButton = styled.button`
   }
 `;
 
-const NewDish = (props) => {
+const NewProduct = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [validateName, setValidateName] = useState('');
-  const [validateDescription, setValidateDescription] = useState('');
   const [validateImage, setValidateImage] = useState('');
   const { name, description, price } = state;
   const [photo, setPhoto] = useState('');
   const imageInput = React.createRef();
+  const [category, setCategory] = useState('Tacos');
+  const [idCategory, setIdCategory] = useState('');
+
+  const categories = useGetCategories();
 
   const prices = [
     1,
+    1.5,
     2,
+    2.5,
     3,
+    3.5,
     4,
+    4.5,
     5,
+    5.5,
     6,
+    6.5,
     7,
+    7.5,
     8,
+    8.5,
     9,
+    9.5,
     10,
+    10.5,
     11,
+    11.5,
     12,
+    12.5,
     13,
+    13.5,
     14,
+    14.5,
     15,
+    15.5,
     16,
+    16.5,
     17,
+    17.5,
     18,
+    18.5,
     19,
+    19.5,
     20,
+    20.5,
+    21,
   ];
 
   const handleImage = () => {
@@ -249,27 +280,30 @@ const NewDish = (props) => {
     if (!name) {
       setValidateName('Please insert a name');
     }
-    if (!description) {
-      setValidateDescription('Please insert a description');
-    }
 
     if (!photo) {
-      setValidateImage('Please select a photo for the dish');
+      setValidateImage('Please select a photo for the product');
     }
 
-    if (name && description && photo) {
+    if (name && photo && category) {
       let idDocument = '';
+      const categoryID = categories[0].filter(
+        (catSelected) => catSelected.categoryName === category,
+      );
+
       const dish = {
-        dishName: name,
-        dishDescription: description,
-        dishPrice: price,
+        productName: name,
+        productDescription: description,
+        productPrice: price,
+        // eslint-disable-next-line dot-notation
+        productCategory: categoryID[0]['categoryID'],
       };
       firestore
-        .collection('dishes')
+        .collection('products')
         .add(dish)
         .then((docRef) => {
           idDocument = docRef.id;
-          props.history.push('/dishes-list');
+          props.history.push('/products-list');
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
@@ -277,17 +311,17 @@ const NewDish = (props) => {
 
       storage
         .ref()
-        .child('dishes')
+        .child('products')
         .child(name)
         .child(photo)
         .put(imageInput.current.files[0])
         .then((response) => response.ref.getDownloadURL())
         .then((photoURL) => {
           firestore
-            .collection('dishes')
+            .collection('products')
             .doc(idDocument)
             .update({
-              dishPhoto: photoURL,
+              productPhoto: photoURL,
             })
             .catch((error) => console.error('Error updating the photo', error));
         })
@@ -301,33 +335,33 @@ const NewDish = (props) => {
       dispatch({ field: event.target.name, value: event.target.value });
       if (event.target.name === 'name') {
         setValidateName('');
-      } else if (event.target.name === 'description') {
-        setValidateDescription('');
       }
     }
     if (event.target.value.length === 0) {
       dispatch({ field: event.target.name, value: event.target.value });
       if (event.target.name === 'name') {
         setValidateName('Please insert a name');
-      } else if (event.target.name === 'description') {
-        setValidateDescription('Please insert a description');
       }
     }
+  };
+
+  const handleCategories = (event) => {
+    setCategory(event.target.value);
   };
 
   return (
     <>
       <MenuOwner />
-      <NewDishContainer>
-        <h4>New dish</h4>
-        <form className="NewDishForm" onSubmit={handleSubmit}>
+      <NewProductContainer>
+        <h4>New product</h4>
+        <form className="NewProductForm" onSubmit={handleSubmit}>
           <InputContainer className="InputCheckout">
             <label htmlFor="name">Name</label>
             <div className="InputAndError">
               <input
                 type="text"
                 name="name"
-                placeholder="Dish name"
+                placeholder="Product name"
                 value={name}
                 onChange={handleChange}
               />
@@ -338,26 +372,20 @@ const NewDish = (props) => {
               )}
             </div>
           </InputContainer>
-
           <InputContainer className="InputCheckout">
             <label htmlFor="description">Description</label>
             <div className="InputAndError">
               <input
                 type="text"
                 name="description"
-                placeholder="Dish Description"
+                placeholder="Product description"
                 value={description}
                 onChange={handleChange}
               />
-              {validateDescription && (
-                <ErrorInput>
-                  <span>{validateDescription}</span>
-                </ErrorInput>
-              )}
             </div>
           </InputContainer>
           <InputFileContainer className="InputCheckout">
-            <label htmlFor="dishPhoto">Dish photo</label>
+            <label htmlFor="dishPhoto">Product photo</label>
             <div className="InputAndError">
               <input
                 type="file"
@@ -372,7 +400,6 @@ const NewDish = (props) => {
               )}
             </div>
           </InputFileContainer>
-
           <InputContainer className="InputCheckout">
             <label className="Price"> Price </label>
             <div className="InputAndError">
@@ -389,14 +416,33 @@ const NewDish = (props) => {
               </Select>
             </div>
           </InputContainer>
-
-          <UploadDishContainer>
-            <UploadDishButton type="submit">Upload Dish</UploadDishButton>
-          </UploadDishContainer>
+          <InputContainer className="InputCheckout">
+            <label className="Price"> Category</label>
+            <div className="InputAndError">
+              <Select
+                className="SelectCategory"
+                value={category}
+                // eslint-disable-next-line react/jsx-closing-bracket-location
+                onChange={handleCategories}>
+                {categories[0] !== undefined &&
+                  categories[0].map((cat) => (
+                    <option value={cat.categoryName} key={cat.categoryID}>
+                      {cat.categoryName}
+                    </option>
+                  ))}
+              </Select>
+            </div>
+          </InputContainer>
+          )
+          <UploadProductContainer>
+            <UploadProductButton type="submit">
+              Upload Product
+            </UploadProductButton>
+          </UploadProductContainer>
         </form>
-      </NewDishContainer>
+      </NewProductContainer>
     </>
   );
 };
 
-export default NewDish;
+export default NewProduct;
