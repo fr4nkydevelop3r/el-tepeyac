@@ -13,6 +13,7 @@ const MenuItemButton = styled.button`
   position: relative;
   float: left;
   margin: 10px 0;
+  border: none;
   h4 {
     font-family: 'Roboto', sans-serif;
     font-weight: 600;

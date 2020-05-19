@@ -183,7 +183,7 @@ const ViewOrder = (props) => {
         <BehindButtonContainer>
           <FontAwesomeIcon
             icon={faArrowLeft}
-            onClick={() => props.history.goBack()}
+            onClick={() => props.history.push('/menu')}
           />
         </BehindButtonContainer>
       </BehindButtonContainer>

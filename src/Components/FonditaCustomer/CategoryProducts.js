@@ -9,7 +9,10 @@ import {
   BehindButtonContainer,
 } from '../../styled-components';
 import Header from './Header';
+import useTotalOrder from './useTotalOrder';
+
 import { colors } from '../../colors';
+import { ViewOrder } from '../../styled-components';
 
 const ProductsCategory = styled.div`
   margin-top: 32px;
@@ -41,8 +44,8 @@ const Product = styled.div`
   border-radius: 5px;
   display: flex;
   @media (min-width: 768px) {
+    padding: 0.5rem;
     width: 60%;
-    height: 150px;
   }
   @media (min-width: 992px) {
     height: 200px;
@@ -62,10 +65,10 @@ const ProductInfo = styled.div`
   padding: 1rem;
   .ProductName {
     @media (min-width: 768px) {
-      font-size: 26px;
+      font-size: 20px;
     }
     @media (min-width: 992px) {
-      font-size: 32px;
+      font-size: 26px;
     }
     @media (min-width: 1200px) {
       font-size: 18px;
@@ -89,6 +92,17 @@ const ProductInfo = styled.div`
   }
   .ProductPrice {
     text-align: right;
+    .Price {
+      @media (min-width: 768px) {
+        font-size: 20px;
+      }
+      @media (min-width: 992px) {
+        font-size: 22px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 16px;
+      }
+    }
   }
 `;
 
@@ -189,6 +203,7 @@ const CategoryProducts = ({ location, history }) => {
   const dispatch = useDispatch();
   const menu = useSelector((state) => state.products);
   const categories = useSelector((state) => state.categories);
+  const [totalOrder] = useTotalOrder();
   let productsCategory = [];
   let categoryID = '';
   let category = {};
@@ -230,7 +245,7 @@ const CategoryProducts = ({ location, history }) => {
       </BehindButtonContainer>
       {category.length > 0 && (
         <TitleProductsCategory>
-          <h3>{category[0].categoryName}</h3>
+          <h3 className="CategoryTitle">{category[0].categoryName}</h3>
           <p className="CategoryDescription">
             {category[0].categoryDescription}
           </p>
@@ -253,7 +268,7 @@ const CategoryProducts = ({ location, history }) => {
                     </div>
                   </div>
                   <div className="ProductPrice">
-                    <span>${product.productPrice}</span>
+                    <span className="Price">${product.productPrice}</span>
                   </div>
                 </ProductInfo>
                 <ProductTotalAndImage>
@@ -297,6 +312,19 @@ const CategoryProducts = ({ location, history }) => {
           </EmptyMenu>
         )}
       </ProductsCategory>
+      <ViewOrder>
+        {totalOrder > 0 && (
+          <button
+            className="ViewOrderButton"
+            type="button"
+            onClick={() => {
+              history.push('view-order');
+              // eslint-disable-next-line react/jsx-closing-bracket-location
+            }}>
+            View Order ${totalOrder}
+          </button>
+        )}
+      </ViewOrder>
     </>
   );
 };
