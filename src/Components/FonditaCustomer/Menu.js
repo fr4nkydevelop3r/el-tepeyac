@@ -11,6 +11,7 @@ import useTotalOrder from './useTotalOrder';
 import MenuItem from './MenuItem';
 import { colors } from '../../colors';
 import Header from './Header';
+import { ViewOrder } from '../../styled-components';
 
 const MenuContainer = styled.div`
   display: flex;
@@ -36,32 +37,6 @@ const TitleContainer = styled.div`
   }
   .icon {
     font-size: 22px;
-  }
-`;
-
-const ViewOrder = styled.div`
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  z-index: 300;
-  .ViewOrderButton {
-    width: 100%;
-    height: 40px;
-    background-color: ${colors.red};
-    color: ${colors.grayLight};
-    border: none;
-    @media (min-width: 768px) {
-      font-size: 24px;
-      height: 60px;
-    }
-    @media (min-width: 992px) {
-      height: 70px;
-      font-size: 32px;
-    }
-    @media (min-width: 1200px) {
-      height: 40px;
-      font-size: 16px;
-    }
   }
 `;
 

@@ -215,20 +215,73 @@ export const TitleProductsCategory = styled.div`
   text-align: center;
   .CategoryDescription {
     padding: 0 1rem;
+    @media (min-width: 768px) {
+      width: 60%;
+      margin: 0 auto;
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      font-size: 22px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 24px;
+      width: 40%;
+    }
+  }
+  .CategoryTitle {
+    @media (min-width: 768px) {
+      width: 60%;
+      margin: 0 auto;
+      font-size: 28px;
+    }
+    @media (min-width: 992px) {
+      font-size: 38px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 28px;
+    }
   }
 `;
 
 export const BehindButtonContainer = styled.div`
-  padding: 0 1rem;
+  padding: 0 0 0 1.5rem;
   color: ${colors.green};
   font-size: 1.2rem;
   @media (min-width: 768px) {
     font-size: 32px;
+    padding: 0 0 0 5rem;
   }
   @media (min-width: 992px) {
     font-size: 38px;
   }
   @media (min-width: 1200px) {
     font-size: 24px;
+    padding: 0 0 0 3rem;
+  }
+`;
+
+export const ViewOrder = styled.div`
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 300;
+  .ViewOrderButton {
+    width: 100%;
+    height: 40px;
+    background-color: ${colors.red};
+    color: ${colors.grayLight};
+    border: none;
+    @media (min-width: 768px) {
+      font-size: 24px;
+      height: 60px;
+    }
+    @media (min-width: 992px) {
+      height: 70px;
+      font-size: 32px;
+    }
+    @media (min-width: 1200px) {
+      height: 40px;
+      font-size: 16px;
+    }
   }
 `;
