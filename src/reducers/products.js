@@ -6,6 +6,7 @@ import {
   DECREMENT_PRODUCT,
   DELETE_PRODUCT,
   RESTART_PRODUCTS,
+  RESTART_PRODUCT,
 } from '../actions/products';
 
 export default function products(state = {}, action) {
@@ -29,6 +30,14 @@ export default function products(state = {}, action) {
         [action.idProduct]: {
           ...state[action.idProduct],
           totalOrdered: state[action.idProduct].totalOrdered - 1,
+        },
+      };
+    case RESTART_PRODUCT:
+      return {
+        ...state,
+        [action.idProduct]: {
+          ...state[action.idProduct],
+          totalOrdered: 0,
         },
       };
     case DELETE_PRODUCT:

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { getDeliverPriority } from '../../utilities';
-import { colors } from '../../colors';
 import { Select } from '../../styled-components';
 
 const DeliverPriorityContainer = styled.div`
@@ -100,6 +99,7 @@ const DeliverPriority = (props) => {
         className="SelectDelivery"
         value={timeDeliver}
         onChange={handleChange}
+        // eslint-disable-next-line react/jsx-closing-bracket-location
         onClick={() => props.handleResetError()}>
         {hoursAvailable.map((hour) => (
           <option value={`${hour} - ${hour + 1}`} key={hour}>

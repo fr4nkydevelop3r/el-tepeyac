@@ -5,6 +5,7 @@ import { keyBy, isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { receiveProducts, restartProducts } from '../../actions/products';
 import { receiveCategories } from '../../actions/categories';
+import { getTotalProductsNoTaxes } from '../../utilities';
 import useGetCategories from '../FonditaOwner/useGetCategories';
 import useGetItems from './useGetItems';
 import useTotalOrder from './useTotalOrder';
@@ -26,6 +27,10 @@ const MenuContainer = styled.div`
   }
   @media (min-width: 992px) {
     padding: 2rem;
+    margin-bottom: 5rem;
+  }
+  @media (min-width: 1200px) {
+    margin-bottom: 3rem;
   }
 `;
 
@@ -91,7 +96,7 @@ const Menu = ({ history }) => {
               history.push('view-order');
               // eslint-disable-next-line react/jsx-closing-bracket-location
             }}>
-            View Order ${totalOrder}
+            View Order ${getTotalProductsNoTaxes(menu).toFixed(2)}
           </button>
         )}
       </ViewOrder>

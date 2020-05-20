@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-closing-bracket-location */
+/* eslint-disable no-console */
 /* eslint-disable operator-linebreak */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useReducer, useState } from 'react';
@@ -217,7 +219,6 @@ const NewProduct = (props) => {
   const [photo, setPhoto] = useState('');
   const imageInput = React.createRef();
   const [category, setCategory] = useState('Tacos');
-  const [idCategory, setIdCategory] = useState('');
 
   const categories = useGetCategories();
 
@@ -294,7 +295,7 @@ const NewProduct = (props) => {
       const dish = {
         productName: name,
         productDescription: description,
-        productPrice: price,
+        productPrice: +parseFloat(price).toFixed(2),
         // eslint-disable-next-line dot-notation
         productCategory: categoryID[0]['categoryID'],
       };

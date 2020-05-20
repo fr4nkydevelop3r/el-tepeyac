@@ -1,6 +1,7 @@
 export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS';
 export const INCREMENT_PRODUCT = 'INCREMENT_PRODUCT';
 export const DECREMENT_PRODUCT = 'DECREMENT_PRODUCT';
+export const RESTART_PRODUCT = 'RESTART_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const RESTART_PRODUCTS = 'RESTART_PRODUCTS';
 
@@ -20,6 +21,13 @@ export function incrementProduct(idProduct) {
 export function decrementProduct(idProduct) {
   return {
     type: DECREMENT_PRODUCT,
+    idProduct,
+  };
+}
+
+export function restartProduct(idProduct) {
+  return {
+    type: RESTART_PRODUCT,
     idProduct,
   };
 }

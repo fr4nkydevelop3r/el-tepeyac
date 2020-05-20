@@ -42,3 +42,15 @@ export function getDeliverPriority() {
       return 1;
   }
 }
+
+export function getTotalProductsNoTaxes(menu) {
+  const totalOrderNoTaxes = Object.values(menu)
+    .filter((product) => product.totalOrdered >= 1)
+    .reduce(
+      (acummulator, currentValue) =>
+        // eslint-disable-next-line implicit-arrow-linebreak
+        acummulator + currentValue.totalOrdered * currentValue.productPrice,
+      0,
+    );
+  return totalOrderNoTaxes;
+}
