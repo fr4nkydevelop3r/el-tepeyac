@@ -184,10 +184,12 @@ const ViewOrder = (props) => {
     <>
       <Header />
       <BehindButtonContainer>
-        <FontAwesomeIcon
-          icon={faArrowLeft}
-          onClick={() => props.history.push('/menu')}
-        />
+        <button
+          type="button"
+          className="Behind"
+          onClick={() => props.history.push('/menu')}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
       </BehindButtonContainer>
 
       <ViewOrderContainer>

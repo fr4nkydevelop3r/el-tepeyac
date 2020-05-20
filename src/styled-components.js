@@ -79,20 +79,19 @@ export const ShoppingCart = styled.div`
   position: sticky;
   top: 0;
   color: ${colors.green};
+  cursor: pointer;
 
   @media (min-width: 768px) {
-    padding: 32px;
+    padding: 24px;
   }
 
   @media (min-width: 1200px) {
+    padding: 8px;
     margin-bottom: 32px;
   }
 
   i {
     font-size: 20px;
-    :focus {
-      outline: none;
-    }
     @media (min-width: 768px) {
       font-size: 28px;
       margin-top: 12px;
@@ -245,8 +244,19 @@ export const TitleProductsCategory = styled.div`
 
 export const BehindButtonContainer = styled.div`
   padding: 0 0 0 1.5rem;
-  color: ${colors.green};
   font-size: 1.2rem;
+  .Behind {
+    padding: 0.5rem;
+    color: ${colors.green};
+    background: none;
+    border: none;
+    @media (min-width: 768px) {
+    }
+    @media (min-width: 992px) {
+    }
+    @media (min-width: 1200px) {
+    }
+  }
   @media (min-width: 768px) {
     font-size: 32px;
     padding: 0 0 0 5rem;
