@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/jsx-closing-bracket-location */
+/* eslint-disable react/jsx-one-expression-per-line */
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,12 +9,13 @@ import { incrementProduct, decrementProduct } from '../../actions/products';
 import {
   TitleProductsCategory,
   BehindButtonContainer,
+  ViewOrder,
 } from '../../styled-components';
 import Header from './Header';
+import { getTotalProductsNoTaxes } from '../../utilities';
 import useTotalOrder from './useTotalOrder';
 
 import { colors } from '../../colors';
-import { ViewOrder } from '../../styled-components';
 
 const ProductsCategory = styled.div`
   margin-top: 32px;
@@ -20,9 +23,10 @@ const ProductsCategory = styled.div`
   flex-direction: column;
   padding: 8px;
   align-items: center;
-  margin-bottom: 64px;
+  margin-bottom: 4rem;
   height: auto;
   @media (min-width: 768px) {
+    margin-bottom: 6rem;
   }
   @media (min-width: 992px) {
     flex-direction: row;
@@ -31,6 +35,7 @@ const ProductsCategory = styled.div`
     padding: 24px;
   }
   @media (min-width: 1200px) {
+    margin-bottom: 4rem;
     justify-content: space-around;
   }
 `;
@@ -46,9 +51,9 @@ const Product = styled.div`
   @media (min-width: 768px) {
     padding: 0.5rem;
     width: 60%;
+    height: auto;
   }
   @media (min-width: 992px) {
-    height: 200px;
     padding: 16px;
   }
   @media (min-width: 1200px) {
@@ -119,12 +124,16 @@ const ProductTotalAndImage = styled.div`
       height: 95px;
       border-radius: 10px;
       @media (min-width: 768px) {
-        width: 135px;
-        height: 115px;
+        width: 155px;
+        height: 135px;
       }
       @media (min-width: 992px) {
+        width: 175px;
+        height: 155px;
       }
       @media (min-width: 1200px) {
+        width: 135px;
+        height: 115px;
       }
     }
   }
@@ -226,8 +235,8 @@ const CategoryProducts = ({ location, history }) => {
     }
   }, [menu, history]);
 
-  console.log(category);
-  console.log(productsCategory);
+  // console.log(category);
+  // console.log(productsCategory);
 
   const handleIncrement = (idProduct) => {
     dispatch(incrementProduct(idProduct));
@@ -268,7 +277,12 @@ const CategoryProducts = ({ location, history }) => {
                     </div>
                   </div>
                   <div className="ProductPrice">
-                    <span className="Price">${product.productPrice}</span>
+                    <span className="Price">
+                      $
+                      {Number.isInteger(product.productPrice)
+                        ? product.productPrice
+                        : product.productPrice.toFixed(2)}
+                    </span>
                   </div>
                 </ProductInfo>
                 <ProductTotalAndImage>
@@ -317,11 +331,8 @@ const CategoryProducts = ({ location, history }) => {
           <button
             className="ViewOrderButton"
             type="button"
-            onClick={() => {
-              history.push('view-order');
-              // eslint-disable-next-line react/jsx-closing-bracket-location
-            }}>
-            View Order ${totalOrder}
+            onClick={() => history.push('/view-order')}>
+            Order ${getTotalProductsNoTaxes(menu).toFixed(2)}
           </button>
         )}
       </ViewOrder>

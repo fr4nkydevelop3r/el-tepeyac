@@ -13,7 +13,7 @@ const useGetItems = () => {
         products = products.map((product) => ({
           productID: product.id,
           productName: product.productName,
-          productPrice: product.productPrice,
+          productPrice: parseFloat(product.productPrice),
           totalOrdered: 0,
           productDescription: product.productDescription,
           productPhoto: product.productPhoto,

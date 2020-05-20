@@ -20,6 +20,8 @@ const useTotalOrder = () => {
             acummulator + currentValue.totalOrdered * currentValue.productPrice,
           0,
         );
+      totalOrder += (totalOrder * 8.875) / 100;
+      totalOrder = +totalOrder.toFixed(2);
       setTotal(totalOrder);
     }
   }, [products]);
