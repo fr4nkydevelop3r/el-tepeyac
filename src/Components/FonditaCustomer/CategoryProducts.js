@@ -250,7 +250,12 @@ const CategoryProducts = ({ location, history }) => {
     <>
       <Header />
       <BehindButtonContainer>
-        <FontAwesomeIcon icon={faArrowLeft} onClick={() => history.goBack()} />
+        <button
+          type="button"
+          className="Behind"
+          onClick={() => history.push('/menu')}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
       </BehindButtonContainer>
       {category.length > 0 && (
         <TitleProductsCategory>
