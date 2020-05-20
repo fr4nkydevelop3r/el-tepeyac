@@ -78,6 +78,13 @@ const ProductDetail = styled.div`
     width: 25%;
     color: ${colors.red};
     text-align: center;
+    .DeleteButton {
+      padding: 0.2rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: ${colors.green};
+    }
   }
 `;
 
@@ -229,15 +236,17 @@ const ViewOrder = (props) => {
                   </div>
                   <div className="DeleteIcon">
                     {' '}
-                    <FontAwesomeIcon
-                      icon={faTrashAlt}
+                    <button
+                      type="button"
+                      className="DeleteButton"
                       onClick={
                         () =>
                           // eslint-disable-next-line implicit-arrow-linebreak
                           dispatch(restartProduct(productOrdered.productID))
                         // eslint-disable-next-line react/jsx-curly-newline
-                      }
-                    />
+                      }>
+                      <FontAwesomeIcon icon={faTrashAlt} />
+                    </button>
                   </div>
                 </ProductDetail>
               ))}
