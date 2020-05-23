@@ -295,3 +295,59 @@ export const ViewOrder = styled.div`
     }
   }
 `;
+
+export const FormUser = styled.div`
+  margin-top: 32px;
+  @media (min-width: 768px) {
+    margin-top: 86px;
+  }
+  @media (min-width: 992px) {
+    margin-top: 186px;
+  }
+  @media (min-width: 1200px) {
+    margin-top: 56px;
+    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    border: 1px solid rgba(67, 41, 163, 0.2);
+    border-radius: 5px;
+    width: 800px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+  .Form {
+    @media (min-width: 768px) {
+      width: 70%;
+      margin: 0 auto;
+    }
+    @media (min-width: 1200px) {
+      width: 700px;
+    }
+  }
+  .InputCheckout {
+    label {
+      @media (min-width: 768px) {
+        text-align: left;
+        font-size: 24px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+      }
+    }
+    input {
+      @media (min-width: 768px) {
+        font-size: 24px;
+        height: 40px;
+      }
+      @media (min-width: 992px) {
+        font-size: 32px;
+        height: 50px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+        height: 30px;
+      }
+    }
+  }
+`;

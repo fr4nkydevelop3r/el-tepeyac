@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import setDirection from '../../actions/customer';
 import { firestore } from '../../firebase';
 import { colors } from '../../colors';
-import { Button, ErrorValidationContainer } from '../../styled-components';
+import { ErrorValidationContainer } from '../../styled-components';
 
 const AutocompleteContainer = styled.div`
   display: flex;
@@ -17,41 +17,7 @@ const AutocompleteContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   border: black;
-  height: 100vh;
   background-color: ${colors.grayLight};
-`;
-
-const Header = styled.div`
-  color: ${colors.grayStrong};
-  margin-top: 200px;
-  .title {
-    display: inline;
-    font-size: 20px;
-  }
-  .icon {
-    font-size: 20px;
-  }
-  @media (min-width: 768px) {
-    margin-top: 186px;
-    .title,
-    .icon {
-      font-size: 36px;
-    }
-  }
-  @media (min-width: 992px) {
-    margin-top: 320px;
-    .title,
-    .icon {
-      font-size: 48px;
-    }
-  }
-  @media (min-width: 1200px) {
-    margin-top: 186px;
-    .title,
-    .icon {
-      font-size: 32px;
-    }
-  }
 `;
 
 const InputAutocomplete = styled.input`
@@ -59,9 +25,6 @@ const InputAutocomplete = styled.input`
   height: 30px;
   border: none;
   border-bottom: 2px solid #e32351;
-  background-color: #f2f3f2;
-  margin-top: 48px;
-  font-size: 20px;
   color: ${colors.red};
   text-align: center;
   ::placeholder {
@@ -94,6 +57,7 @@ const SuggestionsList = styled.ul`
   color: ${colors.grayStrong};
   margin-top: 24px;
   font-size: 20px;
+  padding-left: 0;
   @media (min-width: 768px) {
     font-size: 32px;
   }
@@ -105,21 +69,8 @@ const SuggestionsList = styled.ul`
   }
 `;
 
-const ButtonContainer = styled.div`
-  margin-top: 32px;
-  @media (min-width: 768px) {
-    margin-top: 42px;
-  }
-  @media (min-width: 992px) {
-    margin-top: 46px;
-  }
-  @media (min-width: 1200px) {
-  }
-`;
-
 const Sorry = styled.div`
-  margin-top: 48px;
-  font-size: 20px;
+  font-size: 16px;
   color: ${colors.red};
   @media (min-width: 768px) {
     font-size: 32px;
@@ -132,7 +83,7 @@ const Sorry = styled.div`
   }
 `;
 
-const PlacesAutocomplete = (props) => {
+const PlacesAutocomplete = ({ handleInvalidDirection }) => {
   const {
     ready,
     value,
@@ -218,20 +169,14 @@ const PlacesAutocomplete = (props) => {
     }
   };
 
-  const goodToGo = () => {
-    dispatch(setDirection(value));
-    props.history.push('/today-menu');
-  };
-
+  if (postCodeUser) {
+    if (!validPostCodes.includes(postCodeUser)) {
+      dispatch(setDirection('wRONG'));
+      setPostCodeUser(null);
+    }
+  }
   return (
     <AutocompleteContainer ref={ref}>
-      <Header>
-        {' '}
-        <h4 className="title">First, we need to know your address </h4>
-        <span className="icon" role="img" aria-label="building">
-          🏢
-        </span>
-      </Header>
       <InputAutocomplete
         value={value}
         onChange={handleInput}
@@ -249,17 +194,13 @@ const PlacesAutocomplete = (props) => {
       )}
       {postCodeUser ? (
         validPostCodes.includes(postCodeUser) ? (
-          <ButtonContainer>
-            <Button type="button" onClick={goodToGo}>
-              Good to go
-            </Button>
-          </ButtonContainer>
+          <></>
         ) : (
           <Sorry>
             <span role="img" aria-label="sad">
               Sorry 😔
             </span>
-            <span> We don&apos;t deliver there yet. </span>
+            <span> We don&apos;t deliver there yet </span>
           </Sorry>
         )
       ) : null}

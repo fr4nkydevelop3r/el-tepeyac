@@ -167,11 +167,6 @@ const ProductTotalAndImage = styled.div`
   .PlusButton {
     border: none;
     background: none;
-    @media (min-width: 1200px) {
-      :focus {
-        outline: none;
-      }
-    }
   }
 
   .minus,
@@ -186,9 +181,6 @@ const ProductTotalAndImage = styled.div`
     }
     @media (min-width: 1200px) {
       font-size: 16px;
-    }
-    :focus {
-      outline: none;
     }
   }
 `;

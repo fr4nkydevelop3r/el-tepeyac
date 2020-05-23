@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-closing-bracket-location */
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -182,8 +185,8 @@ const ViewOrder = (props) => {
     );
   }
 
-  console.log(productsOrdered);
-  console.log(totalOrder);
+  // console.log(productsOrdered);
+  // console.log(totalOrder);
 
   const getTaxes = (total) => ((total * 8.875) / 100).toFixed(2);
 
@@ -267,8 +270,9 @@ const ViewOrder = (props) => {
       <PlaceOrder>
         <button
           type="button"
-          // eslint-disable-next-line react/jsx-closing-bracket-location
-          onClick={() => props.history.push('/checkout')}>
+          onClick={() =>
+            props.history.push('/checkout', { service: 'delivery' })
+          }>
           Place Order
         </button>
       </PlaceOrder>
