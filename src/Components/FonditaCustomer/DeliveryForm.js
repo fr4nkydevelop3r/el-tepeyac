@@ -4,13 +4,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import {handleCreateOrder} from '../../actions/orders';
 import Input, {isPossiblePhoneNumber} from 'react-phone-number-input/input';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
 import styled from 'styled-components';
+import { getHour } from '../../utilities';
+import { keyBy, isEmpty } from 'lodash';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Row from './CheckoutForm/Row';
 import SubmitButton from './CheckoutForm/SubmitButton';
-import setDirection from '../../actions/customer';
 import { firestore } from '../../firebase';
 import { colors } from '../../colors';
 import useTotalOrder from './useTotalOrder';
@@ -19,8 +22,6 @@ import {
   FormUser,
   InputContainer,
   ErrorInput,
-  ErrorValidationContainer,
-  Button,
 } from '../../styled-components';
 
 // PLACES AUTOCOMPLETE
@@ -98,17 +99,7 @@ const Sorry = styled.div`
   }
 `;
 
-const ButtonContainer = styled.div`
-  margin-top: 32px;
-  @media (min-width: 768px) {
-    margin-top: 42px;
-  }
-  @media (min-width: 992px) {
-    margin-top: 46px;
-  }
-  @media (min-width: 1200px) {
-  }
-`;
+
 
 const CardElementContainer = styled.div`
   height: 40px;
@@ -169,7 +160,7 @@ const DeliveryForm = () => {
   const [validateApt, setValidateApt] = useState('');
   const [validatePhone, setValidatePhone] = useState('');
   const [validPostCode, setValidPostCode] = useState('');
-  const { name, apt, phone } = state;
+  const { name, apt } = state;
   const [phoneValue, setPhoneValue] = useState('');
 
   //STRIPE
@@ -178,14 +169,16 @@ const DeliveryForm = () => {
   const [checkoutError, setCheckoutError] = useState();
   const stripe = useStripe();
   const elements = useElements();
+  const [postalCode, setPostalCode] = useState('');
+
 
   //APP
     const [totalOrder] = useTotalOrder();
     let products = useSelector((state) => state.products);
-    let dishesOrdered = [];
-    const [errorMessageOrder, setErrorMessageOrder] = useState('');
+    let productsOrdered = [];
+    // const [errorMessageOrder, setErrorMessageOrder] = useState('error');
+    const dispatchRedux = useDispatch();
 
-    console.log(products); 
 
   useEffect(() => {
     firestore
@@ -280,7 +273,107 @@ const DeliveryForm = () => {
     }
 
     if (name && validPostCode && apt && isPossiblePhoneNumber(phoneValue)) {
-      alert('Ok!');
+          if (!isEmpty(products)) {
+            products = Object.values(products);
+            productsOrdered = Object.values(products)
+              .filter((product) => product.totalOrdered >= 1)
+              .map((product) => {
+                const newProduct = {
+                productID: product.productID,
+                productName: product.productName,
+                totalOrdered: product.totalOrdered,
+                productPrice: product.productPrice,
+                };
+              return newProduct;
+              });
+              productsOrdered = keyBy(productsOrdered, 'productID');
+              const infoCustomer = {
+                customerName: name,
+                customerAddress: value,
+                customerApt: apt,
+                customerPhoneNumber: phoneValue,
+              };
+
+              const order = {
+                orderCompleted: false,
+                timeOrder: getHour(),
+                products: productsOrdered,
+                infoCustomer,
+                totalOrder,
+              }
+
+              const billingDetails = {
+                name: infoCustomer.customerName,
+                phone: infoCustomer.customerPhoneNumber,
+                address: {
+                line1: infoCustomer.customerAddress,
+                postal_code: postalCode,
+                },
+              };
+
+              setProcessingTo(true);
+
+          axios
+          .post(
+            'https://us-central1-el-tepeyac-b5c7a.cloudfunctions.net/getClientSecret',
+            {
+              productsOrdered: Object.values(productsOrdered),
+            },
+          )
+          .catch((error) => {
+            setCheckoutError(error.message);
+            setProcessingTo(false);
+            console.log(error);
+          })
+          .then(async ({ data: clientSecret }) => {
+            const cardElement = elements.getElement(CardElement);
+            const { error, paymentMethod } = await stripe.createPaymentMethod({
+              type: 'card',
+              card: cardElement,
+              billing_details: billingDetails,
+            });
+
+            if (error) {
+              setCheckoutError(error.message);
+              setProcessingTo(false);
+              console.log(error);
+            } else {
+              const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: paymentMethod.id,
+              });
+
+              if (result.error) {
+                // Show error to your customer (e.g., insufficient funds)
+                setProcessingTo(false);
+                setCheckoutError(result.error.message);
+                console.log(result.error.message);
+              } else {
+                // The payment has been processed!
+                // eslint-disable-next-line no-lonely-if
+                if (result.paymentIntent.status === 'succeeded') {
+                  dispatchRedux(handleCreateOrder(order))
+                    .then((orderCreated) => {
+                      //props.history.push(`/order/${orderCreated.idOrder}`);
+                    })
+                    .catch((e) => {
+                      console.error(e);
+                      setProcessingTo(false);
+                      /*setErrorMessageOrder(
+                        'Something went wrong with the order, could you try again?',
+                      ); */
+                    });
+
+                  // Show a success message to your customer
+                  // There's a risk of the customer closing the window before callback
+                  // execution. Set up a webhook or plugin to listen for the
+                  // payment_intent.succeeded event that handles any business critical
+                  // post-payment actions.
+                }
+              }
+            }
+          });
+
+          } 
     }
   };
 
@@ -335,6 +428,8 @@ const DeliveryForm = () => {
 
  const handleChangeCard = (e) => {
     setCheckoutError('');
+    setPostalCode(e.value.postalCode);
+
   };
 
   // console.log(watch('example')); // you can watch individual input by pass the name of the input
@@ -416,7 +511,7 @@ const DeliveryForm = () => {
         <InputContainer className="InputCheckout">
           <label htmlFor="name">Phone number</label>
           <div className="InputAndError">
-            <Input country="US" value={phoneValue} name='phone'  placeholder="Your phone number" onChange={setPhoneValue} error={phoneValue ? (isPossiblePhoneNumber(phoneValue) ? undefined : 'Invalid phone number') : 'Phone number required'} />
+            <Input  defaultCountry="US" value={phoneValue} name='phone'  placeholder="Your phone number" onChange={setPhoneValue} error={phoneValue ? (isPossiblePhoneNumber(phoneValue) ? undefined : 'Invalid phone number') : 'Phone number required'} />
  {      (phoneValue || validatePhone) && (
               <ErrorInput>
               <span>{phoneValue ? (isPossiblePhoneNumber(phoneValue) ? undefined : 'Invalid phone number') : 'Please enter a phone number'} </span>
@@ -440,7 +535,8 @@ const DeliveryForm = () => {
             <SubmitButton disabled={isProcessing}>
               {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
             </SubmitButton>
-          </SubmitButtonContainer>      </form>
+          </SubmitButtonContainer>     
+          </form>
     </FormUser>
   );
 };

@@ -16,7 +16,7 @@ export default function orders(state = {}, action) {
             idOrder: action.order.idOrder,
             timeOrder: action.order.timeOrder,
             orderCompleted: action.order.orderCompleted,
-            dishes: action.order.dishes,
+            products: action.order.products,
             infoCustomer: action.order.infoCustomer,
           },
         },
