@@ -42,7 +42,7 @@ const calculateOrderAmount = (items) => {
   const amount = items.reduce(
     (accumulator, currentValue) =>
       accumulator +
-      parseInt(currentValue.totalOrdered) * parseInt(currentValue.dishPrice),
+      parseInt(currentValue.totalOrdered) * parseInt(currentValue.productPrice),
     0,
   );
   console.log(amount * 100);
@@ -53,10 +53,10 @@ exports.getClientSecret = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     if (req.method === 'POST') {
       try {
-        const { amount, dishesOrdered } = req.body;
+        const { amount, productsOrdered } = req.body;
 
         const paymentIntent = await stripe.paymentIntents.create({
-          amount: calculateOrderAmount(dishesOrdered),
+          amount: calculateOrderAmount(productsOrdered),
           currency: 'usd',
         });
 
