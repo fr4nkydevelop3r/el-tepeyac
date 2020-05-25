@@ -4,11 +4,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import {handleCreateOrder} from '../../actions/orders';
+import {restartProducts} from '../../actions/products';
 import Input, {isPossiblePhoneNumber} from 'react-phone-number-input/input';
 import styled from 'styled-components';
-import { getHour } from '../../utilities';
+import { getHour, getNumOrder } from '../../utilities';
 import { keyBy, isEmpty } from 'lodash';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Row from './CheckoutForm/Row';
@@ -56,7 +58,7 @@ function reducer(state, { field, value }) {
   };
 }
 
-const PickupForm = () => {
+const PickupForm = ({history}) => {
 
 
   //FORM
@@ -105,6 +107,7 @@ const PickupForm = () => {
 
     if (name && isPossiblePhoneNumber(phoneValue)) {
           if (!isEmpty(products)) {
+            const numOrder = getNumOrder(phoneValue[phoneValue.length - 1]);
             products = Object.values(products);
             productsOrdered = Object.values(products)
               .filter((product) => product.totalOrdered >= 1)
@@ -129,6 +132,7 @@ const PickupForm = () => {
                 products: productsOrdered,
                 infoCustomer,
                 totalOrder,
+                numOrder: numOrder,
               }
 
               const billingDetails = {
@@ -182,11 +186,15 @@ const PickupForm = () => {
                 if (result.paymentIntent.status === 'succeeded') {
                   dispatchRedux(handleCreateOrder(order))
                     .then((orderCreated) => {
-                      //props.history.push(`/order/${orderCreated.idOrder}`);
+                      history.push(`/order/${orderCreated.idOrder}`);
+                      dispatchRedux(restartProducts());
+
                     })
                     .catch((e) => {
                       console.error(e);
-                      setProcessingTo(false);
+                      history.push(`/order-confirmation`);
+                      dispatchRedux(restartProducts());
+                      // setProcessingTo(false);
                       /* setErrorMessageOrder(
                         'Something went wrong with the order, could you try again?',
                       ); */
@@ -253,6 +261,7 @@ const PickupForm = () => {
 
   };
 
+
   // console.log(watch('example')); // you can watch individual input by pass the name of the input
   return (
     <FormUser>
@@ -307,4 +316,4 @@ const PickupForm = () => {
   );
 };
 
-export default PickupForm;
+export default withRouter(PickupForm);

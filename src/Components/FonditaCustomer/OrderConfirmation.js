@@ -1,30 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+import useWindowSize from 'react-use/lib/useWindowSize'
+import logo from '../../img/logo2.png';
+import Confetti from 'react-confetti'
 import { isEmpty } from 'lodash';
-
 import { firestore } from '../../firebase';
 import { getDay } from '../../utilities';
+import { useParams } from 'react-router-dom';
 import { colors } from '../../colors';
 
-const OrderDetailsContainer = styled.div`
+
+const HeaderContainerConfirmation = styled.div`
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 1rem;
   align-items: center;
-  justify-content: center;
-  h4 {
-    margin-top: 64px;
-    color: ${colors.red};
+  .Logo {
+    width: 100px;
+    height: 100px;
   }
-  .Row {
-    margin-bottom: 8px;
+  .ButtonLogo {
+    border: none;
+    background: none;
   }
-  .Customer {
-    margin-top: 24px;
+  @media (min-width: 1200px) {
+    padding: 2rem;
+  }
+`;
+
+const TitleConfirmation = styled.div`
+  margin-top: 4rem;
+  text-align: center;
+  color: ${colors.green};
+  .icon{
+    font-size: 18px;
+  }
+`
+
+const Row = styled.div`
+  margin-bottom: 8px;
+`
+
+const Customer = styled.div`
     color: ${colors.grayStrong};
     width: 80%;
+    margin:0 auto;
+    
+    margin-top: 3rem;
+
     @media (min-width: 768px) {
       margin-top: 48px;
       font-size: 20px;
@@ -36,11 +60,13 @@ const OrderDetailsContainer = styled.div`
     @media (min-width: 1200px) {
       font-size: 20px;
     }
-  }
-  .OrderDetails {
-    margin-top: 16px;
+`
+
+const OrderDetails = styled.div`
     width: 80%;
+    margin: 0 auto;
     color: ${colors.grayStrong};
+    margin-top: 2rem;
     @media (min-width: 768px) {
       font-size: 20px;
     }
@@ -62,28 +88,21 @@ const OrderDetailsContainer = styled.div`
     .OrderDetailsTitle {
       padding-left: 0;
     }
-  }
-  .OtherInfoOrder {
-    margin-top: 16px;
-    width: 80%;
-    color: ${colors.grayStrong};
-    @media (min-width: 768px) {
-      font-size: 20px;
+    .NumOrder{
+      margin-top: 1rem;
     }
-    @media (min-width: 992px) {
-      width: 60%;
-      font-size: 24px;
-    }
-    @media (min-width: 1200px) {
-      font-size: 20px;
-    }
-  }
-`;
+`
 
-const OrderConfirmation = () => {
+
+
+
+
+const OrderConfirmation = ({history}) => {
   const { id } = useParams();
   const order = useSelector((state) => state.orders);
   const [orderDB, setOrder] = useState(order[id]);
+  const { width, height } = useWindowSize();
+  const [orderError, setOrderError] = useState('');
 
   useEffect(() => {
     const docRef = firestore
@@ -99,6 +118,7 @@ const OrderConfirmation = () => {
           setOrder(doc.data());
         } else {
           // doc.data() will be undefined in this case
+          setOrderError('Order not found!')
           console.log('No such document!');
         }
       })
@@ -107,86 +127,93 @@ const OrderConfirmation = () => {
       });
   }, [id]);
 
-  const getHourDelivery = (deliverPriority) => {
-    switch (deliverPriority) {
-      case 1:
-        return '9:00 - 10:00';
-      case 2:
-        return '10:00 - 11:00';
-      case 3:
-        return '11:00 - 12:00';
-      case 4:
-        return '12:00 - 13:00';
-      case 5:
-        return '13:00 - 14:00';
-      case 6:
-        return '14:00 - 15:00';
-      case 7:
-        return '15:00 - 16:00';
-      default:
-        return '';
-    }
-  };
-
   const getTimeOrder = (time) => {
     const re = /\d+:\d+/;
     return re.exec(time);
   };
 
   return (
-    <div>
-      {isEmpty(orderDB) ? (
-        <div>What would you like to get =) </div>
-      ) : (
-        <OrderDetailsContainer>
-          <h4>Order Details</h4>
-          <div className="Customer">
-            <div className="Row">
-              <span>Customer: {orderDB.infoCustomer.customerName}</span>
-            </div>
-            <div className="Row">
-              <span>Address: {orderDB.infoCustomer.customerAddress}</span>
-            </div>
-            <div className="Row">
-              <span>
-                Office or Apt: {orderDB.infoCustomer.customerofficeOrApt}
-              </span>
-            </div>
-            <div>
-              <span className="Row">
-                Phone Number: {orderDB.infoCustomer.customerPhoneNumber}
-              </span>
-            </div>
-          </div>
-          <div className="OrderDetails">
-            <span className="OrderDetailsTitle">Order details</span>
-            <ul>
-              {Object.values(orderDB.dishes).map((dish) => (
-                <li key={dish.dishID}>
-                  {dish.totalOrdered} {dish.dishName}
+    <>
+        <HeaderContainerConfirmation>
+      <div>
+        <button
+          className="ButtonLogo"
+          type="button"
+          onClick={() => history.push('/menu')}>
+          <img className="Logo" alt="logo" src={logo} />
+        </button>
+      </div>
+
+    </HeaderContainerConfirmation>
+    {!isEmpty(orderDB) ?
+    <>
+      <Confetti
+      width={width}
+      height={height}
+      numberOfPieces ={50} 
+      />
+      
+
+    <TitleConfirmation>
+      <h3>Thanks for ordering with us!   
+          <span className="icon" role="img" aria-label="hello">
+             {' '}👋
+          </span>
+    </h3>
+    </TitleConfirmation>
+
+    <Customer>
+     <Row>
+        <span>Customer: {orderDB.infoCustomer.customerName}</span>
+      </Row>
+      
+      {orderDB.infoCustomer.customerAddress && <Row>
+        <span>Address: {orderDB.infoCustomer.customerAddress}</span>
+      </Row>
+      }
+      {orderDB.infoCustomer.customerofficeOrApt && <Row>
+        <span>Apt: {orderDB.infoCustomer.customerofficeOrApt}</span>
+      </Row>
+      }
+      <Row>
+        <span>Phone Number: {orderDB.infoCustomer.customerPhoneNumber}</span>
+      </Row>
+    </Customer>
+
+    <OrderDetails>
+   
+      <span className="OrderDetailsTitle">Order details</span>
+      <Row className="NumOrder">
+        <span>
+          #Order: <strong> {orderDB.numOrder} </strong>
+        </span>
+      </Row>
+        <ul>
+          {Object.values(orderDB.products).map((product) => (
+                <li key={product.productID}>
+                  {product.totalOrdered} {product.productName}
                 </li>
               ))}
-            </ul>
-            <div className="Row">
-              <span>Total Order: ${orderDB.totalOrder}</span>
-            </div>
-          </div>
-          <div className="OtherInfoOrder">
-            <div className="Row">
-              <span>
-                Time order: {getTimeOrder(orderDB.timeOrder)}
-                {''}
-              </span>
-            </div>
-            <div>
-              <span>
-                Hour delivery: {getHourDelivery(orderDB.deliverPriority)}
-              </span>
-            </div>
-          </div>
-        </OrderDetailsContainer>
-      )}
-    </div>
+        </ul>
+         <Row>
+          <span>
+            Time order: {getTimeOrder(orderDB.timeOrder)}
+          </span>
+         </Row>  
+
+    </OrderDetails>
+    </> : 
+        <> {orderError && 
+            <TitleConfirmation>
+          <h3>{orderError}  
+          <span className="icon" role="img" aria-label="hello">
+             {' '}😔
+          </span>
+    </h3>
+    </TitleConfirmation>
+        } </>
+    }
+    </>
   );
 };
 

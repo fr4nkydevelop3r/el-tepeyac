@@ -14,6 +14,7 @@ import TodayMenuOwner from './FonditaOwner/TodayMenuOwner';
 import NewProduct from './FonditaOwner/NewProduct';
 import Menu from './FonditaCustomer/Menu';
 import CategoryProducts from './FonditaCustomer/CategoryProducts';
+import OrderError from './FonditaCustomer/OrderError'
 
 function App() {
   return (
@@ -31,6 +32,8 @@ function App() {
         <Route exact path="/new-product" component={NewProduct} />
         <Route exact path="/menu" component={Menu} />
         <Route exact path="/menu/:category" component={CategoryProducts} />
+        <Route exact path="/order-confirmation" component={OrderError} />
+
       </Switch>
     </div>
   );
