@@ -12,11 +12,26 @@ function minutesWithZeros(dt) {
   return (dt.getMinutes() < 10 ? '0' : '') + dt.getMinutes();
 }
 
+function randomNumber(min, max) {
+  let minimum = Math.ceil(min);
+  let maximum = Math.floor(max);
+  return (
+    Math.floor(Math.random() * (maximum - minimum + 1)) + minimum
+  ).toString();
+}
+
 export function getHour() {
   const today = new Date();
   const time = `${today.getHours()}:${minutesWithZeros(
     today,
   )}:${today.getSeconds()}`;
+  return time;
+}
+
+export function getNumOrder(n) {
+  const today = new Date();
+  const time =
+    today.getSeconds().toString() + randomNumber(1, 0) + n.toString();
   return time;
 }
 
