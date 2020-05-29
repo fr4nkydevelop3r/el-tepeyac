@@ -6,7 +6,7 @@ const MenuItemContainer = styled.div``;
 
 const MenuItemButton = styled.button`
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(https://firebasestorage.googleapis.com/v0/b/el-tepeyac-b5c7a.appspot.com/o/categories%2FTacos%2Ftacos-dorados.jpg?alt=media&token=9bff276e-6d2b-4a03-b0c2-ca1765e9f067);
+    url(${props => props.image});
   background-size: cover;
   width: 300px;
   height: 200px;
@@ -53,7 +53,7 @@ const MenuItem = ({ category, history }) => {
         </button>
       </div> */}
       <MenuItemContainer>
-        <MenuItemButton onClick={handleClick}>
+        <MenuItemButton onClick={handleClick} image={category.categoryPhoto}>
           <h4>{category.categoryName}</h4>
         </MenuItemButton>
       </MenuItemContainer>

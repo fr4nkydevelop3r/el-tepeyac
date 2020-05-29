@@ -34,7 +34,7 @@ const OrderInfo = styled.div`
   }
   @media (min-width: 1200px) {
   }
-  .DishesInfo {
+  .ProductsInfo {
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -97,21 +97,26 @@ const Order = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(order.orderCompleted);
   const dispatch = useDispatch();
+  let address = '';
 
   const toggle = () => setIsOpen(!isOpen);
 
-  let totalDishes = Object.values(order.dishes);
-  totalDishes = totalDishes.reduce(
+  let totalProducts = Object.values(order.products);
+  totalProducts = totalProducts.reduce(
     (accum, current) => accum + current.totalOrdered,
     0,
   );
 
-  const address = order.infoCustomer.customerAddress.slice(
+  if(order.infoCustomer.customerAddress){
+   address = order.infoCustomer.customerAddress.slice(
     order.infoCustomer.customerAddress,
     order.infoCustomer.customerAddress.indexOf(','),
   );
 
-  const dishes = Object.values(order.dishes);
+  }
+
+ 
+  const products = Object.values(order.products);
 
   const handleChange = (event) => {
     if (event.target.value === 'True') {
@@ -122,35 +127,6 @@ const Order = (props) => {
     dispatch(handleUpdateOrder(order.idOrder));
   };
 
-  let deliverPriority = '';
-
-  switch (order.deliverPriority) {
-    case 1:
-      deliverPriority = '9 - 10 am';
-      break;
-    case 2:
-      deliverPriority = '10 - 11 am';
-      break;
-    case 3:
-      deliverPriority = '11 - 12 am';
-      break;
-
-    case 4:
-      deliverPriority = '12 - 1 pm';
-
-      break;
-
-    case 5:
-      deliverPriority = '1 - 2 pm';
-      break;
-
-    case 6:
-      deliverPriority = '2 - 3 pm';
-      break;
-    default:
-      deliverPriority = '3 - 4 pm';
-      break;
-  }
   return (
     <OrderContainer ontainer>
       <Button
@@ -159,20 +135,19 @@ const Order = (props) => {
           backgroundColor: orderCompleted ? '#3CB371' : colors.red,
         }}
         onClick={toggle}>
-        <span>{address}</span>
+        <span>{address ? address : 'Pickup'}</span>
 
-        <span>Total Dishes : {totalDishes}</span>
-        <span>Priority : {deliverPriority}</span>
+        <span>Total products : {totalProducts}</span>
       </Button>
       <Collapse isOpen={isOpen}>
         <Card className="Card">
           <CardBody className="CardBody">
             <OrderInfo>
-              <div className="DishesInfo">
-                {dishes.map((dish) => (
-                  <div key={dish.dishID}>
+              <div className="ProductsInfo">
+                {products.map((product) => (
+                  <div key={product.productID}>
                     {' '}
-                    {dish.totalOrdered} {dish.dishName}
+                    {product.totalOrdered} {product.productName}
                   </div>
                 ))}
                 <OrderCompleted>
@@ -190,7 +165,7 @@ const Order = (props) => {
               </div>
               <div className="CustomerInfo">
                 <div>{order.infoCustomer.customerName} </div>
-                <div>{address}</div>
+                <div>{address && address}</div>
                 <div>{order.infoCustomer.customerofficeOrApt}</div>
                 <div>{order.infoCustomer.customerPhoneNumber}</div>
                 <span>Time: {order.timeOrder}</span>

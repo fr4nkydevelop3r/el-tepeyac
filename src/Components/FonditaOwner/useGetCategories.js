@@ -15,6 +15,7 @@ const useGetCategories = () => {
           categoryName: category.categoryName,
           categoryDescription: category.categoryDescription,
           categoryShowInMenuRank: category.showInMenuRank,
+          categoryPhoto: category.categoryPhoto,
         }));
         setItems(categories);
       });

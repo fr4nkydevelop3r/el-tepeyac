@@ -302,16 +302,17 @@ export const FormUser = styled.div`
     margin-top: 86px;
   }
   @media (min-width: 992px) {
-    margin-top: 186px;
+    margin-top: 5rem;
   }
   @media (min-width: 1200px) {
-    margin-top: 56px;
+    margin-top: 4px;
     box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
     border: 1px solid rgba(67, 41, 163, 0.2);
     border-radius: 5px;
     width: 800px;
     margin: 0 auto;
     padding: 32px;
+    margin-bottom: 4rem;
   }
   .Form {
     @media (min-width: 768px) {
@@ -326,10 +327,10 @@ export const FormUser = styled.div`
     label {
       @media (min-width: 768px) {
         text-align: left;
-        font-size: 24px;
+        font-size: 20px;
       }
       @media (min-width: 992px) {
-        font-size: 32px;
+        font-size: 24px;
       }
       @media (min-width: 1200px) {
         font-size: 18px;
@@ -337,11 +338,11 @@ export const FormUser = styled.div`
     }
     input {
       @media (min-width: 768px) {
-        font-size: 24px;
+        font-size: 20px;
         height: 40px;
       }
       @media (min-width: 992px) {
-        font-size: 32px;
+        font-size: 24px;
         height: 50px;
       }
       @media (min-width: 1200px) {
