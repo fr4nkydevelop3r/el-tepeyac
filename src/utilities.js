@@ -31,7 +31,7 @@ export function getHour() {
 export function getNumOrder(n) {
   const today = new Date();
   const time =
-    today.getSeconds().toString() + randomNumber(1, 0) + n.toString();
+    today.getSeconds().toString() + randomNumber(1, 10) + n.toString();
   return time;
 }
 

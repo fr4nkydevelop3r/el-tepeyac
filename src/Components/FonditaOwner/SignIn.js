@@ -111,15 +111,30 @@ const SubmitContainer = styled.div`
 
 const SignIn = (props) => {
   const authedUser = useSelector((state) => state.authedUser);
-
   const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm();
   const [invalidEmail, setInvalidEmail] = useState('');
   const [invalidPassword, setInvalidPassword] = useState('');
 
+
   useEffect(() => {
     auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
+
+        const docRef = firestore.collection('orders').doc(getDay());
+        await docRef.get().then((doc) => {
+          if (!doc.exists) {
+            firestore
+              .collection('orders')
+              .doc(getDay())
+              .set({ totalOrders: 0 })
+              .catch((error) => {
+                console.error('Error writing document: ', error);
+              });
+          }
+        });
+
+
         firestore.collection('orders').onSnapshot(
           () => {
             // eslint-disable-next-line import/no-named-as-default-member
@@ -138,9 +153,13 @@ const SignIn = (props) => {
                 console.log(error);
                 // ...
               });
+
           },
           (error) => console.log(error),
         );
+
+
+
         if (!isEmpty(props)) {
           props.history.push('/orders');
         }

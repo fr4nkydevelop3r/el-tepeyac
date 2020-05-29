@@ -4,7 +4,6 @@ import { Switch, Route } from 'react-router-dom';
 import ProductsList from './FonditaOwner/ProductsList';
 import TodayMenu from './FonditaCustomer/TodayMenu';
 import ViewOrder from './FonditaCustomer/ViewOrder';
-import PlacesAutocomplete from './FonditaCustomer/PlacesAutoComplete';
 import OrderConfirmation from './FonditaCustomer/OrderConfirmation';
 import CheckoutForm from './FonditaCustomer/CheckoutForm';
 
@@ -20,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route exact path="/" component={PlacesAutocomplete} />
+        <Route exact path="/" component={Menu} />
         <Route exact path="/view-order" component={ViewOrder} />
         <Route exact path="/products-list" component={ProductsList} />
         <Route exact path="/checkout" component={CheckoutForm} />

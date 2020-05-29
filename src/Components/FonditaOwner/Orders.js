@@ -9,6 +9,9 @@ import { colors } from '../../colors';
 import SignIn from './SignIn';
 import ListOrders from './ListOrders';
 import MenuOwner from './MenuOwner';
+import PendingOrders from './PendingOrders';
+import NewOrderNotification from './NewOrderNotification';
+
 
 const OrdersContainer = styled.div`
   display: flex;
@@ -25,6 +28,7 @@ const OrdersContainer = styled.div`
 const Orders = (props) => {
   const orders = useSelector((state) => state.orders);
   const authedUser = useSelector((state) => state.authedUser);
+  
 
   useEffect(() => {
     if (isEmpty(authedUser)) {
@@ -48,6 +52,8 @@ const Orders = (props) => {
           </div>
         )}
       </OrdersContainer>
+      <PendingOrders />
+      <NewOrderNotification />
     </>
   );
 };

@@ -30,12 +30,16 @@ const HeaderContainerConfirmation = styled.div`
 `;
 
 const TitleConfirmation = styled.div`
-  margin-top: 4rem;
+  margin-top: 3rem;
   text-align: center;
   color: ${colors.green};
+  @media (min-width: 1200px) {
+      margin-top: 1rem;
+  }
   .icon{
     font-size: 18px;
   }
+  
 `
 
 const Row = styled.div`
@@ -46,18 +50,20 @@ const Customer = styled.div`
     color: ${colors.grayStrong};
     width: 80%;
     margin:0 auto;
-    
     margin-top: 3rem;
 
     @media (min-width: 768px) {
-      margin-top: 48px;
+      margin-top: 5rem;
       font-size: 20px;
+      width: 60%;
+      text-align: center;
     }
     @media (min-width: 992px) {
       width: 60%;
-      font-size: 24px;
+      font-size: 26px;
     }
     @media (min-width: 1200px) {
+      margin-top: 2rem;
       font-size: 20px;
     }
 `
@@ -69,10 +75,12 @@ const OrderDetails = styled.div`
     margin-top: 2rem;
     @media (min-width: 768px) {
       font-size: 20px;
+      width: 60%;
+      text-align: center;
     }
     @media (min-width: 992px) {
       width: 60%;
-      font-size: 24px;
+      font-size: 26px;
     }
     @media (min-width: 1200px) {
       font-size: 20px;
@@ -81,9 +89,15 @@ const OrderDetails = styled.div`
       margin-top: 8px;
       list-style: none;
       margin-bottom: 8px;
+      @media (min-width: 768px) {
+        padding-left: 0;
+      }
     }
     span {
       padding-left: 40px;
+      @media (min-width: 768px) {
+        padding-left: 0;
+      }
     }
     .OrderDetailsTitle {
       padding-left: 0;
@@ -195,6 +209,11 @@ const OrderConfirmation = ({history}) => {
                 </li>
               ))}
         </ul>
+          <Row>
+          <span>
+            Total order: ${orderDB.totalOrder}
+          </span>
+         </Row>  
          <Row>
           <span>
             Time order: {getTimeOrder(orderDB.timeOrder)}
