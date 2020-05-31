@@ -3,6 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { keyBy, isEmpty } from 'lodash';
 import styled from 'styled-components';
 import {
@@ -254,11 +255,12 @@ const ViewOrder = styled.div`
   }
 `;
 
-const TodayMenu = (props) => {
+const TodayMenu = () => {
   const dispatch = useDispatch();
   const [totalOrder] = useTotalOrder();
   const [totalItems] = useTotalItems();
   const [categories] = useGetCagegories();
+  let history = useHistory();
 
   const menu = useSelector((state) => state.products);
   const [products] = useGetItems();
@@ -292,8 +294,8 @@ const TodayMenu = (props) => {
     <TodayMenuContainer>
       <ShoppingCart>
         <i
-          onClick={() => props.history.push('view-order')}
-          onKeyDown={() => props.history.push('view-order')}
+          onClick={() => history.push('view-order')}
+          onKeyDown={() => history.push('view-order')}
           className="fas fa-shopping-cart"
           role="button"
           aria-label="Shopping cart"
@@ -373,7 +375,7 @@ const TodayMenu = (props) => {
             className="ViewOrderButton"
             type="button"
             onClick={() => {
-              props.history.push('view-order');
+              history.push('view-order');
               // eslint-disable-next-line react/jsx-closing-bracket-location
             }}>
             View Order ${totalOrder}

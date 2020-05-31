@@ -4,11 +4,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import {handleCreateOrder} from '../../actions/orders';
-import {restartProducts} from '../../actions/products';
-import Input, {isPossiblePhoneNumber} from 'react-phone-number-input/input';
+import { handleCreateOrder } from '../../actions/orders';
+import { restartProducts } from '../../actions/products';
+import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
 import styled from 'styled-components';
 import { getHour, getNumOrder } from '../../utilities';
 import { keyBy, isEmpty } from 'lodash';
@@ -17,13 +17,7 @@ import Row from './CheckoutForm/Row';
 import SubmitButton from './CheckoutForm/SubmitButton';
 import useTotalOrder from './useTotalOrder';
 
-import {
-  FormUser,
-  InputContainer,
-  ErrorInput,
-} from '../../styled-components';
-
-
+import { FormUser, InputContainer, ErrorInput } from '../../styled-components';
 
 const CardElementContainer = styled.div`
   height: 40px;
@@ -58,9 +52,7 @@ function reducer(state, { field, value }) {
   };
 }
 
-const PickupForm = ({history}) => {
-
-
+const PickupForm = () => {
   //FORM
   const [state, dispatch] = useReducer(reducer, initialState);
   const [validateName, setValidateName] = useState('');
@@ -76,22 +68,13 @@ const PickupForm = ({history}) => {
   const elements = useElements();
   const [postalCode, setPostalCode] = useState('');
 
-
   //APP
-    const [totalOrder] = useTotalOrder();
-    let products = useSelector((state) => state.products);
-    let productsOrdered = [];
-    //const [errorMessageOrder, setErrorMessageOrder] = useState('');
-    const dispatchRedux = useDispatch();
-
-
-
-
-
-
-
-
-
+  const [totalOrder] = useTotalOrder();
+  let products = useSelector((state) => state.products);
+  let productsOrdered = [];
+  //const [errorMessageOrder, setErrorMessageOrder] = useState('');
+  const dispatchRedux = useDispatch();
+  let history = useHistory();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -100,53 +83,52 @@ const PickupForm = ({history}) => {
       setValidateName('Please enter your full name');
     }
 
-  
     if (!phoneValue) {
       setValidatePhone('Please enter a phone number');
     }
 
     if (name && isPossiblePhoneNumber(phoneValue)) {
-          if (!isEmpty(products)) {
-            const numOrder = getNumOrder(phoneValue[phoneValue.length - 1]);
-            products = Object.values(products);
-            productsOrdered = Object.values(products)
-              .filter((product) => product.totalOrdered >= 1)
-              .map((product) => {
-                const newProduct = {
-                productID: product.productID,
-                productName: product.productName,
-                totalOrdered: product.totalOrdered,
-                productPrice: product.productPrice,
-                };
-              return newProduct;
-              });
-              productsOrdered = keyBy(productsOrdered, 'productID');
-              const infoCustomer = {
-                customerName: name,
-                customerPhoneNumber: phoneValue,
-              };
+      if (!isEmpty(products)) {
+        const numOrder = getNumOrder(phoneValue[phoneValue.length - 1]);
+        products = Object.values(products);
+        productsOrdered = Object.values(products)
+          .filter((product) => product.totalOrdered >= 1)
+          .map((product) => {
+            const newProduct = {
+              productID: product.productID,
+              productName: product.productName,
+              totalOrdered: product.totalOrdered,
+              productPrice: product.productPrice,
+            };
+            return newProduct;
+          });
+        productsOrdered = keyBy(productsOrdered, 'productID');
+        const infoCustomer = {
+          customerName: name,
+          customerPhoneNumber: phoneValue,
+        };
 
-              const order = {
-                orderCompleted: false,
-                timeOrder: getHour(),
-                products: productsOrdered,
-                infoCustomer,
-                totalOrder,
-                numOrder: numOrder,
-              }
+        const order = {
+          orderCompleted: false,
+          timeOrder: getHour(),
+          products: productsOrdered,
+          infoCustomer,
+          totalOrder,
+          numOrder: numOrder,
+        };
 
-              const billingDetails = {
-                name: infoCustomer.customerName,
-                phone: infoCustomer.customerPhoneNumber,
-                address: {
-                line1: infoCustomer.customerAddress,
-                postal_code: postalCode,
-                },
-              };
+        const billingDetails = {
+          name: infoCustomer.customerName,
+          phone: infoCustomer.customerPhoneNumber,
+          address: {
+            line1: infoCustomer.customerAddress,
+            postal_code: postalCode,
+          },
+        };
 
-              setProcessingTo(true);
+        setProcessingTo(true);
 
-          axios
+        axios
           .post(
             'https://us-central1-el-tepeyac-b5c7a.cloudfunctions.net/getClientSecret',
             {
@@ -188,7 +170,6 @@ const PickupForm = ({history}) => {
                     .then((orderCreated) => {
                       history.push(`/order/${orderCreated.idOrder}`);
                       dispatchRedux(restartProducts());
-
                     })
                     .catch((e) => {
                       console.error(e);
@@ -209,8 +190,7 @@ const PickupForm = ({history}) => {
               }
             }
           });
-
-          } 
+      }
     }
   };
 
@@ -224,20 +204,16 @@ const PickupForm = ({history}) => {
           ? setValidateName('')
           : setValidateName('Please enter your full name');
       }
-
- 
     }
     if (event.target.value.length === 0) {
       dispatch({ field: event.target.name, value: event.target.value });
       if (event.target.name === 'name') {
         setValidateName('Please enter your full name');
       }
-   
-
     }
   };
 
-    const cardElementOptions = {
+  const cardElementOptions = {
     // a way to inject styles into that iframe
     style: {
       base: {
@@ -254,13 +230,10 @@ const PickupForm = ({history}) => {
     },
   };
 
-
- const handleChangeCard = (e) => {
+  const handleChangeCard = (e) => {
     setCheckoutError('');
     setPostalCode(e.value.postalCode);
-
   };
-
 
   // console.log(watch('example')); // you can watch individual input by pass the name of the input
   return (
@@ -283,37 +256,55 @@ const PickupForm = ({history}) => {
             )}
           </div>
         </InputContainer>
-
         <InputContainer className="InputCheckout">
           <label htmlFor="name">Phone number</label>
           <div className="InputAndError">
-            <Input  defaultCountry="US" value={phoneValue} name='phone'  placeholder="Your phone number" onChange={setPhoneValue} error={phoneValue ? (isPossiblePhoneNumber(phoneValue) ? undefined : 'Invalid phone number') : 'Phone number required'} />
- {      (phoneValue || validatePhone) && (
+            <Input
+              defaultCountry="US"
+              value={phoneValue}
+              name="phone"
+              placeholder="Your phone number"
+              onChange={setPhoneValue}
+              error={
+                phoneValue
+                  ? isPossiblePhoneNumber(phoneValue)
+                    ? undefined
+                    : 'Invalid phone number'
+                  : 'Phone number required'
+              }
+            />
+            {(phoneValue || validatePhone) && (
               <ErrorInput>
-              <span>{phoneValue ? (isPossiblePhoneNumber(phoneValue) ? undefined : 'Invalid phone number') : 'Please enter a phone number'} </span>
+                <span>
+                  {phoneValue
+                    ? isPossiblePhoneNumber(phoneValue)
+                      ? undefined
+                      : 'Invalid phone number'
+                    : 'Please enter a phone number'}{' '}
+                </span>
               </ErrorInput>
             )}
           </div>
         </InputContainer>
-        
-          <Row>
-            <CardElementContainer className="CardStyles">
-              <CardElement
-                options={cardElementOptions}
-                onChange={handleChangeCard}
-              />
-            </CardElementContainer>
-          </Row>
-          <ErrorInput>
-            <span>{checkoutError}</span>
-          </ErrorInput>
-          <SubmitButtonContainer>
-            <SubmitButton disabled={isProcessing}>
-              {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
-            </SubmitButton>
-          </SubmitButtonContainer>      </form>
+        <Row>
+          <CardElementContainer className="CardStyles">
+            <CardElement
+              options={cardElementOptions}
+              onChange={handleChangeCard}
+            />
+          </CardElementContainer>
+        </Row>
+        <ErrorInput>
+          <span>{checkoutError}</span>
+        </ErrorInput>
+        <SubmitButtonContainer>
+          <SubmitButton disabled={isProcessing}>
+            {isProcessing ? 'Processing...' : `Pay $${totalOrder}`}
+          </SubmitButton>
+        </SubmitButtonContainer>{' '}
+      </form>
     </FormUser>
   );
 };
 
-export default withRouter(PickupForm);
+export default PickupForm;

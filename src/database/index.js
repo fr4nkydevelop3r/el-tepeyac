@@ -94,17 +94,3 @@ export async function updateOrder(idOrder) {
     });
 }
 
-/* export function getOrders() {
-  firestore
-    .collection('orders')
-    .doc(getDay())
-    .collection('dbc9ace0-5c39-11ea-9e8b-87bc4b7df2a2')
-    .get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        console.log('No documents found.');
-      } else {
-        console.log(`Found ${querySnapshot.size} documents.`);
-      }
-    });
-} */

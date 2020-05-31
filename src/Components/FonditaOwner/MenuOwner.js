@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { auth } from '../../firebase';
@@ -23,14 +23,15 @@ const ItemMenu = styled.li`
   }
 `;
 
-const MenuOwner = (props) => {
+const MenuOwner = () => {
   const dispatch = useDispatch();
+  let history = useHistory();
 
   const handleLogOut = () => {
     auth
       .signOut()
       .then(() => {
-        props.history.push('/sign-in');
+        history.push('/sign-in');
         dispatch(restartOrders());
         dispatch(logoutUser());
       })

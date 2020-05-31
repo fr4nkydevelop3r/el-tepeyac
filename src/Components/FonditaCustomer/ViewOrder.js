@@ -4,6 +4,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
@@ -169,7 +170,7 @@ const PlaceOrder = styled.div`
   }
 `;
 
-const ViewOrder = (props) => {
+const ViewOrder = () => {
   const dispatch = useDispatch();
 
   let products = useSelector((state) => state.products);
@@ -177,6 +178,7 @@ const ViewOrder = (props) => {
   const [totalOrder] = useTotalOrder();
 
   let productsOrdered = [];
+  let history = useHistory();
 
   if (!isEmpty(products)) {
     products = Object.values(products);
@@ -197,7 +199,7 @@ const ViewOrder = (props) => {
         <button
           type="button"
           className="Behind"
-          onClick={() => props.history.push('/menu')}>
+          onClick={() => history.push('/menu')}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
       </BehindButtonContainer>
@@ -260,6 +262,15 @@ const ViewOrder = (props) => {
               </span>
               <span className="TotalOrder">Total Order ${totalOrder}</span>
             </TotalOrder>
+            <PlaceOrder>
+              <button
+                type="button"
+                onClick={() =>
+                  history.push('/checkout', { service: 'delivery' })
+                }>
+                Place Order
+              </button>
+            </PlaceOrder>
           </>
         ) : (
           <OrderEmpty>
@@ -267,15 +278,6 @@ const ViewOrder = (props) => {
           </OrderEmpty>
         )}
       </ViewOrderContainer>
-      <PlaceOrder>
-        <button
-          type="button"
-          onClick={() =>
-            props.history.push('/checkout', { service: 'delivery' })
-          }>
-          Place Order
-        </button>
-      </PlaceOrder>
     </>
   );
 };

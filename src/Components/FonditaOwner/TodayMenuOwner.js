@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
 import { firestore } from '../../firebase';
@@ -109,8 +110,9 @@ const AddProductButton = styled.button`
   }
 `;
 
-const TodayMenuOwner = (props) => {
+const TodayMenuOwner = () => {
   const products = useContext(TodayMenuContext);
+  let history = useHistory();
 
   const deleteProduct = (id) => {
     firestore
@@ -121,7 +123,7 @@ const TodayMenuOwner = (props) => {
   };
 
   const addProduct = () => {
-    props.history.push('/new-product');
+    history.push('/new-product');
   };
 
   return (

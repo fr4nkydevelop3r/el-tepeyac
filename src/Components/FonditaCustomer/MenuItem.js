@@ -1,12 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MenuItemContainer = styled.div``;
 
 const MenuItemButton = styled.button`
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${props => props.image});
+    url(${(props) => props.image});
   background-size: cover;
   width: 300px;
   height: 200px;
@@ -38,7 +38,9 @@ const formatURL = (categoryName) => {
   return url;
 };
 
-const MenuItem = ({ category, history }) => {
+const MenuItem = ({ category }) => {
+  let history = useHistory();
+
   const handleClick = () => {
     const catName = formatURL(category.categoryName);
     history.push(`/menu/${catName}`, {
@@ -61,4 +63,4 @@ const MenuItem = ({ category, history }) => {
   );
 };
 
-export default withRouter(MenuItem);
+export default MenuItem;

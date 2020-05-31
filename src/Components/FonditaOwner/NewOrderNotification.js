@@ -8,9 +8,10 @@ const NewOrderNotification = () => {
     
     const totalOrders = useGetTotalOrders();
 
+
   return ( 
     <>
-    {totalOrders >= 0 && <Test totalOrders={totalOrders}  />}
+    {totalOrders >= 0 && <Test totalOrders={totalOrders} />}
     </>
   )
 

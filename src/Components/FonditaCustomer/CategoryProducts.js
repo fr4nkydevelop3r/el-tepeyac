@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -200,7 +201,7 @@ const EmptyMenu = styled.div`
   }
 `;
 
-const CategoryProducts = ({ location, history }) => {
+const CategoryProducts = () => {
   const dispatch = useDispatch();
   const menu = useSelector((state) => state.products);
   const categories = useSelector((state) => state.categories);
@@ -208,6 +209,9 @@ const CategoryProducts = ({ location, history }) => {
   let productsCategory = [];
   let categoryID = '';
   let category = {};
+
+  let history = useHistory();
+  let location = useLocation();
 
   if (location.state) {
     categoryID = location.state.categoryID;

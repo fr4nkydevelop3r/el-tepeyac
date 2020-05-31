@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { keyBy, isEmpty } from 'lodash';
 
 import styled from 'styled-components';
@@ -45,12 +46,13 @@ const TitleContainer = styled.div`
   }
 `;
 
-const Menu = ({ history }) => {
+const Menu = () => {
   const dispatch = useDispatch();
   const menu = useSelector((state) => state.products);
   const [totalOrder] = useTotalOrder();
   const [categories] = useGetCategories();
   const [products] = useGetItems();
+  let history = useHistory();
 
   let productsList = [];
 

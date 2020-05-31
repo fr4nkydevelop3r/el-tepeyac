@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { firestore } from '../../firebase';
 
@@ -112,9 +113,11 @@ const AddProductButton = styled.button`
   }
 `;
 
-const ProductsList = (props) => {
+const ProductsList = () => {
   const todayProducts = useContext(TodayMenuContext);
   const products = useContext(ProductsListContext);
+  let history = useHistory();
+
   console.log(products);
 
   const addToTodayMenu = (product) => {
@@ -169,7 +172,7 @@ const ProductsList = (props) => {
         <NewProductContainer>
           <NewProductButton
             type="button"
-            onClick={() => props.history.push('/new-product')}>
+            onClick={() => history.push('/new-product')}>
             New Product
           </NewProductButton>
         </NewProductContainer>

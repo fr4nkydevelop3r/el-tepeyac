@@ -1,10 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import logo from '../../img/logo2.png';
-import { ShoppingCart } from '../../styled-components';
-import useTotalItems from './useTotalItems';
 
+import styled from 'styled-components';
+import logo from '../../img/logo2.png';
+import PendingOrders from './PendingOrders';
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -23,10 +22,8 @@ const HeaderContainer = styled.div`
   }
 `;
 
-const Header = () => {
+const HeaderOwner = () => {
   let history = useHistory();
-
-  const [totalItems] = useTotalItems();
 
   return (
     <HeaderContainer>
@@ -34,22 +31,14 @@ const Header = () => {
         <button
           className="ButtonLogo"
           type="button"
-          onClick={() => history.push('/menu')}>
+          onClick={() => history.push('/dashboard')}>
           <img className="Logo" alt="logo" src={logo} />
         </button>
       </div>
 
-      <ShoppingCart onClick={() => history.push('/view-order')}>
-        <i
-          className="fas fa-shopping-cart"
-          role="button"
-          aria-label="Shopping cart"
-          tabIndex={0}
-        />
-        <span>{totalItems > 0 && totalItems}</span>
-      </ShoppingCart>
+      <PendingOrders />
     </HeaderContainer>
   );
 };
 
-export default Header;
+export default HeaderOwner;

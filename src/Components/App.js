@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import ProductsList from './FonditaOwner/ProductsList';
 import TodayMenu from './FonditaCustomer/TodayMenu';
@@ -13,27 +13,74 @@ import TodayMenuOwner from './FonditaOwner/TodayMenuOwner';
 import NewProduct from './FonditaOwner/NewProduct';
 import Menu from './FonditaCustomer/Menu';
 import CategoryProducts from './FonditaCustomer/CategoryProducts';
-import OrderError from './FonditaCustomer/OrderError'
+import Dashboard from './FonditaOwner/Dashboard';
+import PrivateRoute from './FonditaOwner/PrivateRoute';
 
 function App() {
   return (
     <div className="App">
-      <Switch>
-        <Route exact path="/" component={Menu} />
-        <Route exact path="/view-order" component={ViewOrder} />
-        <Route exact path="/products-list" component={ProductsList} />
-        <Route exact path="/checkout" component={CheckoutForm} />
-        <Route exact path="/order/:id" component={OrderConfirmation} />
-        <Route exact path="/today-menu" component={TodayMenu} />
-        <Route exact path="/sign-in" component={SignIn} />
-        <Route exact path="/orders" component={Orders} />
-        <Route exact path="/today-menu-owner" component={TodayMenuOwner} />
-        <Route exact path="/new-product" component={NewProduct} />
-        <Route exact path="/menu" component={Menu} />
-        <Route exact path="/menu/:category" component={CategoryProducts} />
-        <Route exact path="/order-confirmation" component={OrderError} />
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Menu}>
+            {' '}
+            <Menu />{' '}
+          </Route>
+          <Route exact path="/view-order">
+            {' '}
+            <ViewOrder />{' '}
+          </Route>
 
-      </Switch>
+          <Route exact path="/checkout">
+            {' '}
+            <CheckoutForm />{' '}
+          </Route>
+          <Route exact path="/order/:id">
+            {' '}
+            <OrderConfirmation />{' '}
+          </Route>
+
+          <Route exact path="/today-menu">
+            {' '}
+            <TodayMenu />{' '}
+          </Route>
+
+          <Route exact path="/menu">
+            {' '}
+            <Menu />{' '}
+          </Route>
+
+          <Route exact path="/menu/:category">
+            <CategoryProducts />
+          </Route>
+
+          <Route exact path="/order-confirmation">
+            <OrderConfirmation />
+          </Route>
+
+          <Route exact path="/sign-in">
+            <SignIn />
+          </Route>
+
+          <PrivateRoute exact path="/dashboard">
+            <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute exact path="/orders">
+            <Orders />
+          </PrivateRoute>
+          <PrivateRoute exact path="/today-menu-owner">
+            {' '}
+            <TodayMenuOwner />{' '}
+          </PrivateRoute>
+          <PrivateRoute exact path="/products-list">
+            {' '}
+            <ProductsList />{' '}
+          </PrivateRoute>
+          <PrivateRoute exact path="/new-product">
+            {' '}
+            <NewProduct />{' '}
+          </PrivateRoute>
+        </Switch>
+      </Router>
     </div>
   );
 }

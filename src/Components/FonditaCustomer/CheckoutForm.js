@@ -3,6 +3,7 @@
 /* eslint-disable object-curly-newline */
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -78,12 +79,8 @@ const ButtonServicePickup = styled.button`
   background: none;
 `;
 
-const CheckOutForm = (props) => {
-  // PLACES AUTOCOMPLETE
-
-  //  STATE
-
-  /* CheckOutForm */
+const CheckOutForm = () => {
+  let history = useHistory();
 
   const [service, setService] = useState('delivery');
 
@@ -94,7 +91,7 @@ const CheckOutForm = (props) => {
         <button
           type="button"
           className="Behind"
-          onClick={() => props.history.push('/menu')}>
+          onClick={() => history.push('/menu')}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
       </BehindButtonContainer>
