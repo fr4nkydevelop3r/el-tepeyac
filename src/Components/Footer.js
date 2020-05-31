@@ -24,7 +24,7 @@ const Footer = () => {
     <FooterContainer>
       <span className="made-by" role="img" aria-label="love">
         {' '}
-        Made with ❤️by{' '}
+        Made with ❤️ by{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"

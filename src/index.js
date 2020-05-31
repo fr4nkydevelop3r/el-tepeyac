@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
@@ -28,17 +27,15 @@ const GlobalStyle = createGlobalStyle`
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
-      <ProductsListProvider>
-        <TodayMenuProvider>
-          <Elements stripe={stripePromise}>
-            <GlobalStyle />
-            <App />
-            <Footer />
-          </Elements>
-        </TodayMenuProvider>
-      </ProductsListProvider>
-    </Router>
+    <ProductsListProvider>
+      <TodayMenuProvider>
+        <Elements stripe={stripePromise}>
+          <GlobalStyle />
+          <App />
+          <Footer />
+        </Elements>
+      </TodayMenuProvider>
+    </ProductsListProvider>
   </Provider>,
 
   document.getElementById('root'),

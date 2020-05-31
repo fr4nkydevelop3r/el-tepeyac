@@ -2,16 +2,16 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { keyBy, isEmpty } from 'lodash';
+import { keyBy } from 'lodash';
 
 import firebase, { firestore, auth } from '../../firebase';
 import { receiveOrders } from '../../actions/orders';
 import setUser from '../../actions/authedUser';
 import { getDay } from '../../utilities';
 // eslint-disable-next-line import/no-cycle
-import Orders from './Orders';
 import { Button, InputContainer, ErrorInput } from '../../styled-components';
 import { colors } from '../../colors';
 
@@ -109,17 +109,24 @@ const SubmitContainer = styled.div`
   margin-top: 32px;
 `;
 
-const SignIn = (props) => {
-  const authedUser = useSelector((state) => state.authedUser);
+const SignIn = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm();
   const [invalidEmail, setInvalidEmail] = useState('');
   const [invalidPassword, setInvalidPassword] = useState('');
+  const [redirectedToReferrer, setRedirectedToReferrer] = useState(false);
 
+  let history = useHistory();
+  let location = useLocation();
+  let { from } = location.state || { from: { pathname: '/dashboard' } };
+  console.log(location);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
+        dispatch(setUser(userAuth));
+        setRedirectedToReferrer(true);
+        history.replace(from);
 
         const docRef = firestore.collection('orders').doc(getDay());
         await docRef.get().then((doc) => {
@@ -133,7 +140,6 @@ const SignIn = (props) => {
               });
           }
         });
-
 
         firestore.collection('orders').onSnapshot(
           () => {
@@ -153,20 +159,12 @@ const SignIn = (props) => {
                 console.log(error);
                 // ...
               });
-
           },
           (error) => console.log(error),
         );
-
-
-
-        if (!isEmpty(props)) {
-          props.history.push('/orders');
-        }
-        dispatch(setUser(userAuth));
       }
     });
-  }, [dispatch, props]);
+  }, [dispatch, from, history]);
 
   const onSubmit = (data) => {
     auth
@@ -197,69 +195,71 @@ const SignIn = (props) => {
     }
   };
 
+  if (redirectedToReferrer === true) {
+    return <Redirect to={from} />;
+  }
+
+  console.log(from);
+
   return (
     <>
       <SignInContainer>
-        {isEmpty(authedUser) ? (
-          <SignInForm>
-            <h4 className="SignInTitle">Sign in</h4>
+        <SignInForm>
+          <h4 className="SignInTitle">Sign in</h4>
 
-            <div className="Form">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <InputContainer className="InputCheckout">
-                  <label htmlFor="email">Email</label>
+          <div className="Form">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <InputContainer className="InputCheckout">
+                <label htmlFor="email">Email</label>
 
-                  <div className="InputAndError">
-                    <input
-                      name="email"
-                      placeholder="Your email"
-                      ref={register({
-                        required: true,
-                        pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                      })}
-                      onChange={handleOnChange}
-                    />
+                <div className="InputAndError">
+                  <input
+                    name="email"
+                    placeholder="Your email"
+                    ref={register({
+                      required: true,
+                      pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    })}
+                    onChange={handleOnChange}
+                  />
+                  <ErrorInput>
+                    <span>{invalidEmail}</span>
+                  </ErrorInput>
+                  {errors.email && (
                     <ErrorInput>
-                      <span>{invalidEmail}</span>
+                      <span>Please put a valid email</span>
                     </ErrorInput>
-                    {errors.email && (
-                      <ErrorInput>
-                        <span>Please put a valid email</span>
-                      </ErrorInput>
-                    )}
-                  </div>
-                </InputContainer>
+                  )}
+                </div>
+              </InputContainer>
 
-                <InputContainer className="InputCheckout">
-                  <label htmlFor="password">Password</label>
-                  <div className="InputAndError">
-                    <input
-                      name="password"
-                      placeholder="Your password"
-                      ref={register({ required: true })}
-                      type="password"
-                      onChange={handleOnChange}
-                    />
-                    {errors.password && (
-                      <ErrorInput>
-                        <span>Please put your password</span>
-                      </ErrorInput>
-                    )}
+              <InputContainer className="InputCheckout">
+                <label htmlFor="password">Password</label>
+                <div className="InputAndError">
+                  <input
+                    name="password"
+                    placeholder="Your password"
+                    ref={register({ required: true })}
+                    type="password"
+                    onChange={handleOnChange}
+                  />
+                  {errors.password && (
                     <ErrorInput>
-                      <span>{invalidPassword}</span>
+                      <span>Please put your password</span>
                     </ErrorInput>
-                  </div>
-                </InputContainer>
+                  )}
+                  <ErrorInput>
+                    <span>{invalidPassword}</span>
+                  </ErrorInput>
+                </div>
+              </InputContainer>
 
-                <SubmitContainer>
-                  <Button>Sign in</Button>
-                </SubmitContainer>
-              </form>
-            </div>
-          </SignInForm>
-        ) : (
-          <Orders />
-        )}
+              <SubmitContainer>
+                <Button>Sign in</Button>
+              </SubmitContainer>
+            </form>
+          </div>
+        </SignInForm>
       </SignInContainer>
     </>
   );
