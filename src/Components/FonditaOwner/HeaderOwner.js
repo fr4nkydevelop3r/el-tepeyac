@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
 import logo from '../../img/logo2.png';
-import PendingOrders from './PendingOrders';
+import PendingOrdersCounter from './PendingOrdersCounter';
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -36,7 +36,7 @@ const HeaderOwner = () => {
         </button>
       </div>
 
-      <PendingOrders />
+      <PendingOrdersCounter />
     </HeaderContainer>
   );
 };

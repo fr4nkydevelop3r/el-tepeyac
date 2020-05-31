@@ -5,14 +5,12 @@ import Order from './Order';
 import { colors } from '../../colors';
 
 const ListOrdersContainer = styled.div`
-  margin-top: 32px;
-  margin-bottom: 32px;
   width: 100%;
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     @media (min-width: 768px) {
       margin-top: 36px;
     }
@@ -25,15 +23,17 @@ const ListOrdersContainer = styled.div`
   }
 `;
 
-const ListOrders = (props) => {
-  let { orders } = props;
+const ListOrders = ({ orders, status }) => {
   orders = Object.values(orders);
-  orders = orders.sort((a, b) => a.deliverPriority - b.deliverPriority);
 
   return (
     <>
       <ListOrdersContainer>
-        <h4>Today orders!</h4>
+        {status === 'pending' ? (
+          <h4>Pending Orders! </h4>
+        ) : (
+          <h4>Completed Orders!</h4>
+        )}
         {orders.map((order) => (
           <Order
             key={order.idOrder}

@@ -119,15 +119,12 @@ const SignIn = () => {
   let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: '/dashboard' } };
-  console.log(location);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         dispatch(setUser(userAuth));
         setRedirectedToReferrer(true);
-        history.replace(from);
-
         const docRef = firestore.collection('orders').doc(getDay());
         await docRef.get().then((doc) => {
           if (!doc.exists) {
@@ -198,8 +195,6 @@ const SignIn = () => {
   if (redirectedToReferrer === true) {
     return <Redirect to={from} />;
   }
-
-  console.log(from);
 
   return (
     <>

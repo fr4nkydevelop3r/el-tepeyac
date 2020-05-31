@@ -1,24 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { isEmpty } from 'lodash';
+import ListOrders from './ListOrders';
 
-
-const PendingOrders = () => {
-    const orders = useSelector((state) => state.orders);
-    let pendingOrders = 0;
-
-    if(!isEmpty(orders)){
-        pendingOrders = Object.values(orders).filter(order => !order.orderCompleted).length;
-    }
-
-    
-    return (
-        <>
-            <div>
-                {pendingOrders}
-            </div>
-        </>
-    )
-}
+const PendingOrders = ({ orders }) => {
+  return (
+    <>
+      <ListOrders orders={orders} status="pending" />
+    </>
+  );
+};
 
 export default PendingOrders;
