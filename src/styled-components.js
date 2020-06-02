@@ -250,12 +250,6 @@ export const BehindButtonContainer = styled.div`
     color: ${colors.green};
     background: none;
     border: none;
-    @media (min-width: 768px) {
-    }
-    @media (min-width: 992px) {
-    }
-    @media (min-width: 1200px) {
-    }
   }
   @media (min-width: 768px) {
     font-size: 32px;
