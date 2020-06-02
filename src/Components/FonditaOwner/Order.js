@@ -41,16 +41,13 @@ const OrderInfo = styled.div`
     justify-content: center;
     align-items: flex-start;
     padding: 8px;
-    @media (min-width: 768px) {
-      align-items: center;
-    }
   }
   .CustomerInfo {
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding: 8px;
     @media (min-width: 768px) {
       align-items: center;
@@ -91,13 +88,17 @@ const OrderCompleted = styled.div`
   }
 `;
 
-const Order = (props) => {
-  const { order } = props;
-
+const Order = ({ order }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(order.orderCompleted);
   const dispatch = useDispatch();
   let address = '';
+
+  let categories = Object.values(order.products).map(
+    (product) => product.productCategory,
+  );
+
+  categories = [...new Set(categories)];
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -107,15 +108,13 @@ const Order = (props) => {
     0,
   );
 
-  if(order.infoCustomer.customerAddress){
-   address = order.infoCustomer.customerAddress.slice(
-    order.infoCustomer.customerAddress,
-    order.infoCustomer.customerAddress.indexOf(','),
-  );
-
+  if (order.infoCustomer.customerAddress) {
+    address = order.infoCustomer.customerAddress.slice(
+      order.infoCustomer.customerAddress,
+      order.infoCustomer.customerAddress.indexOf(','),
+    );
   }
 
- 
   const products = Object.values(order.products);
 
   const handleChange = (event) => {
@@ -144,13 +143,13 @@ const Order = (props) => {
           <CardBody className="CardBody">
             <OrderInfo>
               <div className="ProductsInfo">
-                {products.map((product) => (
+                {/*products.map((product) => (
                   <div key={product.productID}>
                     {' '}
                     {product.totalOrdered} {product.productName}
                   </div>
-                ))}
-                <OrderCompleted>
+                ))*/}
+                {/*<OrderCompleted>
                   <div>
                     <span>Order complete?</span>
                     <Select
@@ -161,16 +160,44 @@ const Order = (props) => {
                       <option>False</option>
                     </Select>
                   </div>
-                </OrderCompleted>
+                </OrderCompleted> */}
+                {categories.map((category) => {
+                  return (
+                    <div key={category}>
+                      <div key={category}>{category}</div>
+                      {products
+                        .filter(
+                          (product) => product.productCategory === category,
+                        )
+                        .map((product) => (
+                          <div key={product.productID}>
+                            {product.totalOrdered} - {product.productName}
+                          </div>
+                        ))}
+                    </div>
+                  );
+                })}
               </div>
               <div className="CustomerInfo">
                 <div>{order.infoCustomer.customerName} </div>
                 <div>{address && address}</div>
-                <div>{order.infoCustomer.customerofficeOrApt}</div>
+                <div> {address && order.infoCustomer.customerApt}</div>
                 <div>{order.infoCustomer.customerPhoneNumber}</div>
                 <span>Time: {order.timeOrder}</span>
               </div>
             </OrderInfo>
+            <OrderCompleted>
+              <div>
+                <span>Order complete?</span>
+                <Select
+                  value={orderCompleted ? 'True' : 'False'}
+                  onChange={handleChange}
+                  className="Select">
+                  <option>True</option>
+                  <option>False</option>
+                </Select>
+              </div>
+            </OrderCompleted>
           </CardBody>
         </Card>
       </Collapse>

@@ -30,9 +30,9 @@ const ListOrders = ({ orders, status }) => {
     <>
       <ListOrdersContainer>
         {status === 'pending' ? (
-          <h4>Pending Orders! </h4>
+          <h4>Pending Orders </h4>
         ) : (
-          <h4>Completed Orders!</h4>
+          <h4>Completed Orders</h4>
         )}
         {orders.map((order) => (
           <Order

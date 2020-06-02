@@ -175,6 +175,9 @@ const DeliveryForm = () => {
   // const [errorMessageOrder, setErrorMessageOrder] = useState('error');
   const dispatchRedux = useDispatch();
 
+  let categories = useSelector((state) => state.categories);
+  categories = Object.values(categories);
+
   useEffect(() => {
     firestore
       .collection('upperEastSideAndHarlem')
@@ -279,6 +282,9 @@ const DeliveryForm = () => {
               productName: product.productName,
               totalOrdered: product.totalOrdered,
               productPrice: product.productPrice,
+              productCategory: categories.filter(
+                (category) => category.categoryID === product.productCategory,
+              )[0]['categoryName'],
             };
             return newProduct;
           });

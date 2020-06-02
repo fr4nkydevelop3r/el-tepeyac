@@ -61,7 +61,7 @@ const SignInForm = styled.div`
   }
 
   @media (min-width: 768px) {
-    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    box-shadow: 0 0 0 1px #35dc74b8, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
     border: 1px solid rgba(67, 41, 163, 0.2);
     border-radius: 5px;
     padding: 32px;
@@ -205,7 +205,7 @@ const SignIn = () => {
     <>
       <SignInContainer>
         <SignInForm>
-          <h4 className="SignInTitle">Sign in</h4>
+          <h4 className="SignInTitle">Login</h4>
 
           <div className="Form">
             <form onSubmit={handleSubmit(onSubmit)}>

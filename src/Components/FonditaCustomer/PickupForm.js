@@ -76,6 +76,9 @@ const PickupForm = () => {
   const dispatchRedux = useDispatch();
   let history = useHistory();
 
+  let categories = useSelector((state) => state.categories);
+  categories = Object.values(categories);
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -99,6 +102,9 @@ const PickupForm = () => {
               productName: product.productName,
               totalOrdered: product.totalOrdered,
               productPrice: product.productPrice,
+              productCategory: categories.filter(
+                (category) => category.categoryID === product.productCategory,
+              )[0]['categoryName'],
             };
             return newProduct;
           });

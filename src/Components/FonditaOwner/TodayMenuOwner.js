@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
 import { firestore } from '../../firebase';
-import MenuOwner from './MenuOwner';
+import { BehindButtonContainer } from '../../styled-components';
 import { colors } from '../../colors';
+import HeaderOwner from './HeaderOwner';
 import { MessageEmptyDishes } from '../../styled-components';
 
 const TodayMenuContainer = styled.div`
-  margin-top: 46px;
-  margin-bottom: 32px;
-  @media (min-width: 768px) {
-    margin-top: 96px;
-  }
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
@@ -47,7 +48,7 @@ const Product = styled.div`
     width: 60%;
     display: flex;
     align-items: center;
-    text-align: center;
+    text-align: left;
     @media (min-width: 768px) {
       font-size: 22px;
     }
@@ -123,19 +124,29 @@ const TodayMenuOwner = () => {
   };
 
   const addProduct = () => {
-    history.push('/new-product');
+    history.push('/products-list');
   };
 
   return (
     <>
-      <MenuOwner />
+      <HeaderOwner />
+      <BehindButtonContainer>
+        <button
+          type="button"
+          className="Behind"
+          onClick={() => history.push('/dashboard')}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+      </BehindButtonContainer>{' '}
       <TodayMenuContainer>
         <h4>Today&apos;s menu</h4>
         {products.length > 0 ? (
           <Products>
             {products.map((product) => (
               <Product key={product.id}>
-                <div className="ProductName">{product.productName}</div>
+                <div className="ProductName">
+                  <span>{product.productName}</span>
+                </div>
                 <DeleteButton
                   type="button"
                   onClick={() => deleteProduct(product.id)}>

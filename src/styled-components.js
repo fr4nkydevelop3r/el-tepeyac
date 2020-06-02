@@ -142,7 +142,7 @@ export const InputContainer = styled.div`
     input {
       width: 100%;
       height: 30px;
-      box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+      box-shadow: 0 0 0 1px #35dc74b8, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
       border: 1px solid rgba(67, 41, 163, 0.2);
       border-radius: 5px;
       margin-right: 16px;
@@ -300,7 +300,7 @@ export const FormUser = styled.div`
   }
   @media (min-width: 1200px) {
     margin-top: 4px;
-    box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    box-shadow: 0 0 0 1px #35dc74b8, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
     border: 1px solid rgba(67, 41, 163, 0.2);
     border-radius: 5px;
     width: 800px;
