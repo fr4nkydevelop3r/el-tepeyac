@@ -3,12 +3,16 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useReducer, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { firestore, storage } from '../../firebase';
-import MenuOwner from './MenuOwner';
 import { colors } from '../../colors';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { ErrorInput, InputContainer, Select } from '../../styled-components';
 import useGetCategories from './useGetCategories';
+import { BehindButtonContainer } from '../../styled-components';
+import HeaderOwner from './HeaderOwner';
 
 const initialState = {
   name: '',
@@ -24,11 +28,9 @@ function reducer(state, { field, value }) {
 }
 
 const NewProductContainer = styled.div`
-  margin-top: 46px;
-  margin-bottom: 32px;
-  @media (min-width: 768px) {
-    margin-top: 86px;
-  }
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
@@ -45,7 +47,7 @@ const NewProductContainer = styled.div`
     }
     @media (min-width: 1200px) {
       width: 700px;
-      box-shadow: 0 0 0 1px #dc35351c, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+      box-shadow: 0 0 0 1px #35dc74b8, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
       border: 1px solid rgba(67, 41, 163, 0.2);
     }
   }
@@ -211,7 +213,9 @@ const UploadProductButton = styled.button`
   }
 `;
 
-const NewProduct = (props) => {
+const NewProduct = () => {
+  let history = useHistory();
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [validateName, setValidateName] = useState('');
   const [validateImage, setValidateImage] = useState('');
@@ -304,7 +308,7 @@ const NewProduct = (props) => {
         .add(dish)
         .then((docRef) => {
           idDocument = docRef.id;
-          props.history.push('/products-list');
+          history.push('/products-list');
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
@@ -352,7 +356,15 @@ const NewProduct = (props) => {
 
   return (
     <>
-      <MenuOwner />
+      <HeaderOwner />
+      <BehindButtonContainer>
+        <button
+          type="button"
+          className="Behind"
+          onClick={() => history.push('/dashboard')}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+      </BehindButtonContainer>{' '}
       <NewProductContainer>
         <h4>New product</h4>
         <form className="NewProductForm" onSubmit={handleSubmit}>
@@ -434,7 +446,7 @@ const NewProduct = (props) => {
               </Select>
             </div>
           </InputContainer>
-          )
+
           <UploadProductContainer>
             <UploadProductButton type="submit">
               Upload Product

@@ -23,6 +23,21 @@ const ButtonsContainer = styled.div`
   width: 70%;
   margin: 0 auto;
   margin-top: 3rem;
+
+  @media (min-width: 768px) {
+    margin-top: 8rem;
+  }
+  @media (min-width: 992px) {
+    margin-top: 12rem;
+  }
+
+  @media (min-width: 1200px) {
+    width: 50%;
+      margin-top: 5rem;
+    }
+
+  }
+
 `;
 
 const Button = styled.div`
@@ -38,6 +53,20 @@ const Button = styled.div`
   span {
     color: ${colors.grayStrong};
     text-align: center;
+    @media (min-width: 768px) {
+      font-size: 22px;
+    }
+    @media (min-width: 992px) {
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 20px;
+      background: none;
+      border: none;
+      :hover {
+        text-decoration: none;
+      }
+    }
   }
 `;
 
@@ -77,30 +106,30 @@ const Dashboard = () => {
           </Link>
         </Button>
         <Button>
-          <Link to="/orders">
+          <Link to="/today-menu-owner">
             {' '}
             <FontAwesomeIcon icon={faPepperHot} />
           </Link>
-          <Link to="/orders">
+          <Link to="/today-menu-owner">
             <span>Today Menu</span>
           </Link>
         </Button>
         <Button>
-          <Link to="/orders">
+          <Link to="/products-list">
             {' '}
             <FontAwesomeIcon icon={faList} />
           </Link>
-          <Link to="/orders">
+          <Link to="/products-list">
             <span>Products List</span>
           </Link>
         </Button>
 
         <Button>
-          <Link to="/orders">
+          <Link to="/new-product">
             {' '}
             <FontAwesomeIcon icon={faPlus} />
           </Link>
-          <Link to="/orders">
+          <Link to="/new-product">
             <span>New Product</span>
           </Link>
         </Button>
@@ -110,7 +139,7 @@ const Dashboard = () => {
             {' '}
             <FontAwesomeIcon icon={faPowerOff} />
           </button>
-          <button onClick={handleLogOut}>
+          <button onClick={handleLogOut} className="Logout">
             <span>Logout</span>
           </button>
         </Button>

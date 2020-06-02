@@ -3,19 +3,19 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { firestore } from '../../firebase';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { TodayMenuContext } from '../../providers/TodayMenuProvider';
 import { ProductsListContext } from '../../providers/ProductsListProvider';
-import MenuOwner from './MenuOwner';
 import { colors } from '../../colors';
+import { BehindButtonContainer } from '../../styled-components';
+import HeaderOwner from './HeaderOwner';
 import { MessageEmptyDishes } from '../../styled-components';
 
 const ProductsListContainer = styled.div`
-  margin-top: 46px;
-  margin-bottom: 32px;
-  @media (min-width: 768px) {
-    margin-top: 96px;
-  }
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
@@ -33,6 +33,7 @@ const Products = styled.div`
   flex-direction: column;
   margin-top: 32px;
   align-items: center;
+  justify-content: flex-start;
 `;
 
 const Product = styled.div`
@@ -50,7 +51,7 @@ const Product = styled.div`
     width: 60%;
     display: flex;
     align-items: center;
-    text-align: center;
+    text-align: left;
     @media (min-width: 768px) {
       font-size: 22px;
     }
@@ -89,10 +90,10 @@ const NewProductContainer = styled.div`
 `;
 
 const AddProductButton = styled.button`
-  background: ${colors.yellow};
+  background: ${colors.green};
   width: 80px;
   height: 40px;
-  color: ${colors.grayDark};
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,8 +118,6 @@ const ProductsList = () => {
   const todayProducts = useContext(TodayMenuContext);
   const products = useContext(ProductsListContext);
   let history = useHistory();
-
-  console.log(products);
 
   const addToTodayMenu = (product) => {
     firestore
@@ -147,14 +146,24 @@ const ProductsList = () => {
 
   return (
     <>
-      <MenuOwner />
+      <HeaderOwner />
+      <BehindButtonContainer>
+        <button
+          type="button"
+          className="Behind"
+          onClick={() => history.push('/dashboard')}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+      </BehindButtonContainer>{' '}
       <ProductsListContainer>
         <h4>Products list</h4>
         {listProducts.length > 0 ? (
           <Products>
             {listProducts.map((product) => (
               <Product key={product.id}>
-                <div className="ProductName">{product.productName}</div>
+                <div className="ProductName">
+                  <span>{product.productName}</span>
+                </div>
                 <AddProductButton
                   type="button"
                   onClick={() => addToTodayMenu(product)}>

@@ -19,6 +19,7 @@ import CompletedOrders from './CompletedOrders';
 const OrdersContainer = styled.div`
   display: flex;
   justify-content: center;
+  margin-bottom: 2rem;
   h5 {
     color: ${colors.red};
   }
