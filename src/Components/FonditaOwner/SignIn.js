@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { keyBy } from 'lodash';
 
@@ -116,52 +116,57 @@ const SignIn = () => {
   const [invalidPassword, setInvalidPassword] = useState('');
   const [redirectedToReferrer, setRedirectedToReferrer] = useState(false);
 
-  let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: '/dashboard' } };
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (userAuth) => {
-      if (userAuth) {
-        dispatch(setUser(userAuth));
-        setRedirectedToReferrer(true);
-        const docRef = firestore.collection('orders').doc(getDay());
-        await docRef.get().then((doc) => {
-          if (!doc.exists) {
-            firestore
-              .collection('orders')
-              .doc(getDay())
-              .set({ totalOrders: 0 })
-              .catch((error) => {
-                console.error('Error writing document: ', error);
-              });
-          }
-        });
+    const unsubscribeFromFirestore = auth.onAuthStateChanged(
+      async (userAuth) => {
+        if (userAuth) {
+          dispatch(setUser(userAuth));
+          setRedirectedToReferrer(true);
+          const docRef = firestore.collection('orders').doc(getDay());
+          await docRef.get().then((doc) => {
+            if (!doc.exists) {
+              firestore
+                .collection('orders')
+                .doc(getDay())
+                .set({ totalOrders: 0 })
+                .catch((error) => {
+                  console.error('Error writing document: ', error);
+                });
+            }
+          });
 
-        firestore.collection('orders').onSnapshot(
-          () => {
-            // eslint-disable-next-line import/no-named-as-default-member
-            const getOrders = firebase.functions().httpsCallable('getOrders');
-            getOrders({ docPath: `orders/${getDay()}` })
-              .then((result) => {
-                const listOrders = keyBy(result.data, 'idOrder');
-                dispatch(receiveOrders(listOrders));
-              })
-              .catch((error) => {
-                // Getting the Error details.
-                const { code, message, details } = error;
-                console.log(code);
-                console.log(message);
-                console.log(details);
-                console.log(error);
-                // ...
-              });
-          },
-          (error) => console.log(error),
-        );
-      }
-    });
-  }, [dispatch, from, history]);
+          firestore.collection('orders').onSnapshot(
+            () => {
+              // eslint-disable-next-line import/no-named-as-default-member
+              const getOrders = firebase.functions().httpsCallable('getOrders');
+              getOrders({ docPath: `orders/${getDay()}` })
+                .then((result) => {
+                  const listOrders = keyBy(result.data, 'idOrder');
+                  dispatch(receiveOrders(listOrders));
+                })
+                .catch((error) => {
+                  // Getting the Error details.
+                  const { code, message, details } = error;
+                  console.log(code);
+                  console.log(message);
+                  console.log(details);
+                  console.log(error);
+                  // ...
+                });
+            },
+            (error) => console.log(error),
+          );
+        }
+      },
+    );
+
+    return function cleanup() {
+      unsubscribeFromFirestore();
+    };
+  }, [dispatch]);
 
   const onSubmit = (data) => {
     auth

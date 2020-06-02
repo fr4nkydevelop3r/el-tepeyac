@@ -72,11 +72,11 @@ exports.getClientSecret = functions.https.onRequest((req, res) => {
   });
 });
 
-
-exports.getNewOrderAlert = functions.database.ref('/orders/{day}/')
-    .onCreate((snapshot, context) => {
-      // Grab the current value of what was written to the Realtime Database.
-      console.log(snapshot);
-      console.log(context);
-      return snapshot.ref;
-    });
+exports.getNewOrderAlert = functions.database
+  .ref('/orders/{day}/')
+  .onCreate((snapshot, context) => {
+    // Grab the current value of what was written to the Realtime Database.
+    console.log(snapshot);
+    console.log(context);
+    return snapshot.ref;
+  });

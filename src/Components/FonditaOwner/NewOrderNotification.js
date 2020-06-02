@@ -1,20 +1,13 @@
-import React  from 'react';
+import React from 'react';
 import useGetTotalOrders from './useGetTotalOrders';
-import Test from './Test'
-
-
+import OrderNotification from './OrderNotification';
 
 const NewOrderNotification = () => {
-    
-    const totalOrders = useGetTotalOrders();
+  const totalOrders = useGetTotalOrders();
 
-
-  return ( 
-    <>
-    {totalOrders >= 0 && <Test totalOrders={totalOrders} />}
-    </>
-  )
-
-}
+  return (
+    <>{totalOrders >= 0 && <OrderNotification totalOrders={totalOrders} />}</>
+  );
+};
 
 export default NewOrderNotification;
