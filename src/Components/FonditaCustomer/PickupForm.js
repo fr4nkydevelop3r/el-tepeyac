@@ -10,7 +10,7 @@ import { handleCreateOrder } from '../../actions/orders';
 import { restartProducts } from '../../actions/products';
 import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
 import styled from 'styled-components';
-import { getHour, getNumOrder } from '../../utilities';
+import { getHour, getNumOrder, isValidHour } from '../../utilities';
 import { keyBy, isEmpty } from 'lodash';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Row from './CheckoutForm/Row';
@@ -88,6 +88,9 @@ const PickupForm = () => {
 
     if (!phoneValue) {
       setValidatePhone('Please enter a phone number');
+    }
+    if (!isValidHour()) {
+      history.push('/menu');
     }
 
     if (name && isPossiblePhoneNumber(phoneValue)) {
