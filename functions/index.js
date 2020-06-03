@@ -7,8 +7,8 @@ const stripe = require('stripe')(functions.config().stripe.key);
 const cors = require('cors')({ origin: true });
 
 const client = require('twilio')(
-  functions.config.twilio.accountsid,
-  functions.config.twilio.authtoken,
+  functions.config().twilio.accountsid,
+  functions.config().twilio.authtoken,
 );
 
 admin.initializeApp();
