@@ -1,7 +1,14 @@
 const functions = require('firebase-functions');
+
 const admin = require('firebase-admin');
+
 const stripe = require('stripe')(functions.config().stripe.key);
+
 const cors = require('cors')({ origin: true });
+
+const accountSid = 'ACc40807ad78083c6fbb6a6a15a09805ef';
+const authToken = 'dba23f1c179bc11ac96d1c74deba8c80';
+const client = require('twilio')(accountSid, authToken);
 
 admin.initializeApp();
 
@@ -72,11 +79,14 @@ exports.getClientSecret = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.getNewOrderAlert = functions.database
-  .ref('/orders/{day}/')
-  .onCreate((snapshot, context) => {
-    // Grab the current value of what was written to the Realtime Database.
-    console.log(snapshot);
-    console.log(context);
-    return snapshot.ref;
+exports.sendSMS = functions.firestore
+  .document('orders/{day}/{idOrder}/{order}')
+  .onCreate((change, context) => {
+    return client.messages
+      .create({
+        body: 'Hola El tepeyac, llego una orden de comida!',
+        from: '+12027953374',
+        to: '+13476830875',
+      })
+      .then((message) => console.log(message.sid));
   });

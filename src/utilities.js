@@ -69,3 +69,17 @@ export function getTotalProductsNoTaxes(menu) {
     );
   return totalOrderNoTaxes;
 }
+
+export function isValidHour() {
+  let format = 'hh:mm:ss';
+
+  let time = moment();
+  let afterTime = moment('12:00:00', format);
+  let beforeTime = moment('23:45:00', format);
+
+  if (time.isBetween(afterTime, beforeTime)) {
+    return true;
+  }
+
+  return false;
+}

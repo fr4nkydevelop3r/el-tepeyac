@@ -6,13 +6,14 @@ import { keyBy, isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { receiveProducts, restartProducts } from '../../actions/products';
 import { receiveCategories } from '../../actions/categories';
-import { getTotalProductsNoTaxes } from '../../utilities';
+import { getTotalProductsNoTaxes, isValidHour } from '../../utilities';
 import useGetCategories from '../FonditaOwner/useGetCategories';
 import useGetItems from './useGetItems';
 import useTotalOrder from './useTotalOrder';
 import MenuItem from './MenuItem';
 import { colors } from '../../colors';
 import Header from './Header';
+import InvalidHour from './InvalidHour';
 import { ViewOrder } from '../../styled-components';
 
 const MenuContainer = styled.div`
@@ -72,36 +73,44 @@ const Menu = () => {
 
   return (
     <>
-      <Header />
-      <TitleContainer>
-        <h3>
-          The best Mexican food in East Harlem &quot;El barrio&quot;{' '}
-          <span className="icon" role="img" aria-label="taco">
-            🌮
-          </span>
-        </h3>
-      </TitleContainer>
-      <MenuContainer>
-        {categories &&
-          categories
-            .sort((a, b) => a.categoryShowInMenuRank - b.categoryShowInMenuRank)
-            .map((category) => (
-              <MenuItem key={category.categoryID} category={category} />
-            ))}
-      </MenuContainer>
-      <ViewOrder>
-        {totalOrder > 0 && (
-          <button
-            className="ViewOrderButton"
-            type="button"
-            onClick={() => {
-              history.push('view-order');
-              // eslint-disable-next-line react/jsx-closing-bracket-location
-            }}>
-            View Order ${getTotalProductsNoTaxes(menu).toFixed(2)}
-          </button>
-        )}
-      </ViewOrder>
+      {isValidHour() ? (
+        <>
+          <Header />
+          <TitleContainer>
+            <h3>
+              The best Mexican food in East Harlem &quot;El barrio&quot;{' '}
+              <span className="icon" role="img" aria-label="taco">
+                🌮
+              </span>
+            </h3>
+          </TitleContainer>
+          <MenuContainer>
+            {categories &&
+              categories
+                .sort(
+                  (a, b) => a.categoryShowInMenuRank - b.categoryShowInMenuRank,
+                )
+                .map((category) => (
+                  <MenuItem key={category.categoryID} category={category} />
+                ))}
+          </MenuContainer>
+          <ViewOrder>
+            {totalOrder > 0 && (
+              <button
+                className="ViewOrderButton"
+                type="button"
+                onClick={() => {
+                  history.push('view-order');
+                  // eslint-disable-next-line react/jsx-closing-bracket-location
+                }}>
+                View Order ${getTotalProductsNoTaxes(menu).toFixed(2)}
+              </button>
+            )}
+          </ViewOrder>{' '}
+        </>
+      ) : (
+        <InvalidHour />
+      )}
     </>
   );
 };
