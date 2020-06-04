@@ -15,6 +15,7 @@ import Menu from './FonditaCustomer/Menu';
 import CategoryProducts from './FonditaCustomer/CategoryProducts';
 import Dashboard from './FonditaOwner/Dashboard';
 import PrivateRoute from './FonditaOwner/PrivateRoute';
+import NotFound from './FonditaCustomer/NotFound';
 
 function App() {
   return (
@@ -79,6 +80,9 @@ function App() {
             {' '}
             <NewProduct />{' '}
           </PrivateRoute>
+          <Route path="*">
+            <NotFound />
+          </Route>
         </Switch>
       </Router>
     </div>

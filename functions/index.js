@@ -85,9 +85,9 @@ exports.sendSMS = functions.firestore
   .onCreate((change, context) => {
     return client.messages
       .create({
-        body: 'Hola El tepeyac, llego una orden de comida!',
+        body: 'Hola Andrea, ya estamos preparando tu comida.',
         from: '+12027953374',
-        to: '+13476830875',
+        to: '+3476830875',
       })
       .then((message) => console.log(message.sid));
   });

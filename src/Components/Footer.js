@@ -29,7 +29,7 @@ const Footer = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="fr4nky"
-          href="https://github.com/fr4nkydevelop3r">
+          href="https://www.frankandrade.dev">
           fr4nky
         </a>
       </span>

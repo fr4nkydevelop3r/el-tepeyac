@@ -5,7 +5,6 @@ const SubmitButton = styled.button`
   height: 40px;
   width: 100%;
   border: 0;
-  margin-top: 32px;
   background-color: ${(props) =>
     props.disabled ? colors.grayStrong : colors.red};
   border-radius: 4px;

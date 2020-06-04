@@ -192,6 +192,8 @@ const ViewOrder = () => {
 
   const getTaxes = (total) => ((total * 8.875) / 100).toFixed(2);
 
+  console.log(productsOrdered);
+
   return (
     <>
       <Header />

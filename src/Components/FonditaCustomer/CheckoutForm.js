@@ -2,6 +2,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable object-curly-newline */
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -81,7 +83,7 @@ const ButtonServicePickup = styled.button`
 
 const CheckOutForm = () => {
   let history = useHistory();
-
+  let products = useSelector((state) => state.products);
   const [service, setService] = useState('delivery');
 
   return (
@@ -122,7 +124,15 @@ const CheckOutForm = () => {
           <span>Pickup</span>
         </ServicePickup>
       </Service>
-      {service === 'delivery' ? <DeliveryForm /> : <PickupForm />}
+      {!isEmpty(products) ? (
+        service === 'delivery' ? (
+          <DeliveryForm />
+        ) : (
+          <PickupForm />
+        )
+      ) : (
+        history.push('/menu')
+      )}
     </>
   );
 };
