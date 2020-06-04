@@ -13,7 +13,6 @@ import HeaderOwner from './HeaderOwner';
 import { MessageEmptyDishes } from '../../styled-components';
 
 const ProductsListContainer = styled.div`
-  margin-top: 1rem;
   margin-bottom: 3rem;
 
   h4 {

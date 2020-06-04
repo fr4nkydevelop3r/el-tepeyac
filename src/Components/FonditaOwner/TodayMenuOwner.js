@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,11 +9,14 @@ import { BehindButtonContainer } from '../../styled-components';
 import { colors } from '../../colors';
 import HeaderOwner from './HeaderOwner';
 import { MessageEmptyDishes } from '../../styled-components';
+import useGetCategories from './useGetCategories';
+import PillCategory from './PillCategory';
 
 const TodayMenuContainer = styled.div`
-  margin-top: 2rem;
   margin-bottom: 3rem;
+`;
 
+const TodayMenuTitle = styled.div`
   h4 {
     color: ${colors.grayStrong};
     text-align: center;
@@ -23,6 +26,25 @@ const TodayMenuContainer = styled.div`
     @media (min-width: 1200px) {
       font-size: 24px;
     }
+  }
+`;
+
+const CategoriesContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 1rem;
+  margin-top: 1rem;
+
+  @media (min-width: 768px) {
+    margin: 0 auto;
+    margin-top: 2rem;
+    width: 70%;
+    justify-content: space-evenly;
+  }
+
+  @media (min-width: 1200px) {
+    width: 50%;
   }
 `;
 
@@ -113,7 +135,10 @@ const AddProductButton = styled.button`
 
 const TodayMenuOwner = () => {
   const products = useContext(TodayMenuContext);
+  const categories = useGetCategories();
   let history = useHistory();
+  const [category, setCategory] = useState('');
+  const [flag, setFlag] = useState(false);
 
   const deleteProduct = (id) => {
     firestore
@@ -127,6 +152,17 @@ const TodayMenuOwner = () => {
     history.push('/products-list');
   };
 
+  const handleCategory = (category) => {
+    setCategory(category);
+  };
+
+  useEffect(() => {
+    if (categories[0] && categories[0].length > 0 && !flag) {
+      setCategory('lzxerJ6f8DlC52llreQJ');
+      setFlag(true);
+    }
+  }, [categories, flag]);
+
   return (
     <>
       <HeaderOwner />
@@ -138,35 +174,60 @@ const TodayMenuOwner = () => {
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
       </BehindButtonContainer>{' '}
-      <TodayMenuContainer>
-        <h4>Today&apos;s menu</h4>
-        {products.length > 0 ? (
-          <Products>
-            {products.map((product) => (
-              <Product key={product.id}>
-                <div className="ProductName">
-                  <span>{product.productName}</span>
-                </div>
-                <DeleteButton
-                  type="button"
-                  onClick={() => deleteProduct(product.id)}>
-                  Delete
-                </DeleteButton>
-              </Product>
-            ))}
-          </Products>
-        ) : (
-          <MessageEmptyDishes>
-            <h5>There aren&apos;t products uploaded today</h5>
-          </MessageEmptyDishes>
+      <TodayMenuTitle>
+        <h4 className="TodayMenuTitle">Today&apos;s menu</h4>
+      </TodayMenuTitle>
+      <CategoriesContainer>
+        {' '}
+        {categories && categories[0] && (
+          <>
+            {categories[0]
+              .sort(
+                (a, b) => a.categoryShowInMenuRank - b.categoryShowInMenuRank,
+              )
+              .map((category) => (
+                <PillCategory
+                  key={category.categoryID}
+                  categoryName={category.categoryName}
+                  categoryID={category.categoryID}
+                  handleCategory={handleCategory}
+                />
+              ))}
+          </>
         )}
+      </CategoriesContainer>
+      {categories && categories[0] && (
+        <TodayMenuContainer>
+          {products.length > 0 ? (
+            <Products>
+              {products
+                .filter((product) => product.productCategory === category)
+                .map((product) => (
+                  <Product key={product.id}>
+                    <div className="ProductName">
+                      <span>{product.productName}</span>
+                    </div>
+                    <DeleteButton
+                      type="button"
+                      onClick={() => deleteProduct(product.id)}>
+                      Delete
+                    </DeleteButton>
+                  </Product>
+                ))}
+            </Products>
+          ) : (
+            <MessageEmptyDishes>
+              <h5>There aren&apos;t products uploaded today</h5>
+            </MessageEmptyDishes>
+          )}
 
-        <AddProductContainer>
-          <AddProductButton type="button" onClick={addProduct}>
-            Add product
-          </AddProductButton>
-        </AddProductContainer>
-      </TodayMenuContainer>
+          <AddProductContainer>
+            <AddProductButton type="button" onClick={addProduct}>
+              Add product
+            </AddProductButton>
+          </AddProductContainer>
+        </TodayMenuContainer>
+      )}
     </>
   );
 };

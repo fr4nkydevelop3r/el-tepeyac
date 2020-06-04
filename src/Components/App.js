@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import ProductsList from './FonditaOwner/ProductsList';
-import TodayMenu from './FonditaCustomer/TodayMenu';
 import ViewOrder from './FonditaCustomer/ViewOrder';
 import OrderConfirmation from './FonditaCustomer/OrderConfirmation';
 import CheckoutForm from './FonditaCustomer/CheckoutForm';
@@ -38,11 +37,6 @@ function App() {
           <Route exact path="/order/:id">
             {' '}
             <OrderConfirmation />{' '}
-          </Route>
-
-          <Route exact path="/today-menu">
-            {' '}
-            <TodayMenu />{' '}
           </Route>
 
           <Route exact path="/menu">
