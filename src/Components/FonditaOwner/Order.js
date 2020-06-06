@@ -20,6 +20,12 @@ const OrderContainer = styled.div`
     display: flex;
     justify-content: space-around;
     border: none;
+    .Customer {
+      min-width: 200px;
+    }
+    .Address {
+      min-width: 200px;
+    }
   }
 `;
 
@@ -102,11 +108,11 @@ const Order = ({ order }) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
-  let totalProducts = Object.values(order.products);
+  /*let totalProducts = Object.values(order.products);
   totalProducts = totalProducts.reduce(
     (accum, current) => accum + current.totalOrdered,
     0,
-  );
+  ); */
 
   if (order.infoCustomer.customerAddress) {
     address = order.infoCustomer.customerAddress.slice(
@@ -134,9 +140,13 @@ const Order = ({ order }) => {
           backgroundColor: orderCompleted ? '#3CB371' : colors.red,
         }}
         onClick={toggle}>
-        <span>{address ? address : 'Pickup'}</span>
+        <span className="Customer">{order.infoCustomer.customerName} </span>
 
-        <span>Total products : {totalProducts}</span>
+        <span className="Address">
+          {address
+            ? `${address} - ${order.infoCustomer.customerApt}`
+            : 'Pickup'}
+        </span>
       </Button>
       <Collapse isOpen={isOpen}>
         <Card className="Card">

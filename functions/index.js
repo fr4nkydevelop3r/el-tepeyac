@@ -6,6 +6,14 @@ const stripe = require('stripe')(functions.config().stripe.key);
 
 const cors = require('cors')({ origin: true });
 
+const pdfkit = require('pdfkit');
+
+const nodemailer = require('nodemailer');
+
+const nodemailMailgun = require('nodemailer-mailgun-transport');
+
+const moment = require('moment');
+
 const client = require('twilio')(
   functions.config().twilio.accountsid,
   functions.config().twilio.authtoken,
@@ -80,14 +88,87 @@ exports.getClientSecret = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.sendSMS = functions.firestore
+async function mail(buffers, orderID) {
+  const pdfData = Buffer.concat(buffers);
+
+  const auth = {
+    auth: {
+      api_key: functions.config().mailgun.apikey,
+      domain: functions.config().mailgun.domain,
+    },
+  };
+
+  let transporter = nodemailer.createTransport(nodemailMailgun(auth));
+
+  const mailOptions = {
+    from:
+      'Franky Dev 👻 <postmaster@sandboxc0135ae4ebea47a3ba72cf83f4d8b4e6.mailgun.org>', // sender address
+    to: 'fr4nky.develop3r@gmail.com', // list of receivers
+    subject: 'Hello ✔', // Subject line
+    text: 'Hello world?', // plain text body
+    attachments: [
+      {
+        filename: `${orderID}.pdf`,
+        content: pdfData,
+      },
+    ],
+  };
+
+  transporter.sendMail(mailOptions, (err, data) => {
+    if (err) {
+      console.log('Error: ', err);
+      return false;
+    } else {
+      console.log('message sent', data);
+      return true;
+    }
+  });
+}
+
+function generatePDF(orderID, data) {
+  const doc = new pdfkit();
+  const bucket = admin.storage().bucket(functions.config().storage.bucket);
+  const filename = `/orders/${moment().format(
+    'MM-DD-YYYY',
+  )}/${orderID}/${orderID}.pdf`;
+  const file = bucket.file(filename);
+  const bucketFileStream = file.createWriteStream();
+  var buffers = [];
+  let p = new Promise((resolve, reject) => {
+    doc.on('end', () => {
+      resolve(buffers);
+    });
+    doc.on('error', () => {
+      reject();
+    });
+  });
+  doc.pipe(bucketFileStream);
+  doc.on('data', buffers.push.bind(buffers));
+  //Add Document Text and stuff
+  doc
+    .font('./fonts/Roboto-Medium.ttf')
+    .fontSize(15)
+    .text(`#Order ${data.numOrder}`);
+
+  doc.end();
+  return p.then((buffers) => {
+    return mail(buffers, orderID);
+  });
+}
+
+exports.generatePDF = functions.firestore
   .document('orders/{day}/{idOrder}/{order}')
-  .onCreate((change, context) => {
-    return client.messages
+  .onCreate(async (snapshot, context) => {
+    /*return client.messages
       .create({
-        body: 'Hola Andrea, ya estamos preparando tu comida.',
-        from: '+12027953374',
-        to: '+3476830875',
+        body: 'Hola El Tepeyac, llego una orden de comida',
+        from: '+11 202 795 3374',
+        to: '+13476830875',
       })
-      .then((message) => console.log(message.sid));
+      .then((message) => console.log(message.sid));*/
+    //return mail().catch(console.error);
+    //console.log(snapshot.data());
+    const idOrder = context.params.idOrder;
+    const data = snapshot.data();
+    return generatePDF(idOrder, data);
   });
