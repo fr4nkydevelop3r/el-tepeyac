@@ -125,7 +125,51 @@ async function mail(buffers, orderID) {
   });
 }
 
+function generateTableRow(doc, y, c1, c2, c3) {
+  doc
+    .fontSize(10)
+    .text(c1, 50, y)
+    .text(c2, 70, y, { width: 150, align: 'left' })
+    .text(c3, 220, y);
+}
+
+function generateProductsTable(doc, products, customer) {
+  let invoiceTableTop = 80;
+  let position = 0;
+
+  for (let i = 0; i < products.length; i++) {
+    const item = products[i];
+    position = invoiceTableTop + (i + 1) * 30;
+    generateTableRow(
+      doc,
+      position,
+      item.totalOrdered,
+      item.productName,
+      item.productCategory,
+    );
+  }
+  generateCustomerInfo(doc, customer, position);
+}
+
+function generateCustomerInfo(doc, customer, position) {
+  doc.fontSize(10).text('Customer', 50, position + 30);
+  doc.fontSize(9).text(`Name: ${customer.customerName}`, 50, position + 45);
+  doc
+    .fontSize(9)
+    .text(`Phone Number: ${customer.customerPhoneNumber}`, 50, position + 60);
+  if (customer.customerAddress) {
+    doc
+      .fontSize(9)
+      .text(`Address: ${customer.customerAddress}`, 50, position + 75);
+    doc.fontSize(9).text(`Apt: ${customer.customerApt}`, 50, position + 90);
+  } else {
+    doc.fontSize(9).text(`Pickup`, 50, position + 75);
+  }
+}
+
 function generatePDF(orderID, data) {
+  const products = Object.values(data.products);
+  const customer = data.infoCustomer;
   const doc = new pdfkit();
   const bucket = admin.storage().bucket(functions.config().storage.bucket);
   const filename = `/orders/${moment().format(
@@ -148,7 +192,9 @@ function generatePDF(orderID, data) {
   doc
     .font('./fonts/Roboto-Medium.ttf')
     .fontSize(15)
-    .text(`#Order ${data.numOrder}`);
+    .text(`# ${data.infoCustomer.customerName}`);
+
+  generateProductsTable(doc, products, customer);
 
   doc.end();
   return p.then((buffers) => {
