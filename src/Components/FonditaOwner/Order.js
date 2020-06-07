@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { handleUpdateOrder } from '../../actions/orders';
 import { colors } from '../../colors';
 import { Select } from '../../styled-components';
+import Modal from './Modal';
 
 const OrderContainer = styled.div`
   .Card {
@@ -65,6 +66,7 @@ const OrderCompleted = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 16px;
+  align-items: center;
   .Select {
     font-size: 12px;
     font-family: sans-serif;
@@ -94,11 +96,20 @@ const OrderCompleted = styled.div`
   }
 `;
 
+const PrintButton = styled.button`
+  padding: 0.5rem;
+  background: #28a745;
+  color: #fff;
+  border-radius: 10px;
+`;
+
 const Order = ({ order }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(order.orderCompleted);
   const dispatch = useDispatch();
   let address = '';
+
+  const products = Object.values(order.products);
 
   let categories = Object.values(order.products).map(
     (product) => product.productCategory,
@@ -121,8 +132,6 @@ const Order = ({ order }) => {
     );
   }
 
-  const products = Object.values(order.products);
-
   const handleChange = (event) => {
     if (event.target.value === 'True') {
       setOrderCompleted(true);
@@ -132,34 +141,37 @@ const Order = ({ order }) => {
     dispatch(handleUpdateOrder(order.idOrder));
   };
 
-  return (
-    <OrderContainer ontainer>
-      <Button
-        className="Order"
-        style={{
-          backgroundColor: orderCompleted ? '#3CB371' : colors.red,
-        }}
-        onClick={toggle}>
-        <span className="Customer">{order.infoCustomer.customerName} </span>
+  console.log(order);
 
-        <span className="Address">
-          {address
-            ? `${address} - ${order.infoCustomer.customerApt}`
-            : 'Pickup'}
-        </span>
-      </Button>
-      <Collapse isOpen={isOpen}>
-        <Card className="Card">
-          <CardBody className="CardBody">
-            <OrderInfo>
-              <div className="ProductsInfo">
-                {/*products.map((product) => (
+  return (
+    <>
+      <OrderContainer ontainer>
+        <Button
+          className="Order"
+          style={{
+            backgroundColor: orderCompleted ? '#3CB371' : colors.red,
+          }}
+          onClick={toggle}>
+          <span className="Customer">{order.infoCustomer.customerName} </span>
+
+          <span className="Address">
+            {address
+              ? `${address} - ${order.infoCustomer.customerApt}`
+              : 'Pickup'}
+          </span>
+        </Button>
+        <Collapse isOpen={isOpen}>
+          <Card className="Card">
+            <CardBody className="CardBody">
+              <OrderInfo>
+                <div className="ProductsInfo">
+                  {/*products.map((product) => (
                   <div key={product.productID}>
                     {' '}
                     {product.totalOrdered} {product.productName}
                   </div>
                 ))*/}
-                {/*<OrderCompleted>
+                  {/*<OrderCompleted>
                   <div>
                     <span>Order complete?</span>
                     <Select
@@ -171,47 +183,51 @@ const Order = ({ order }) => {
                     </Select>
                   </div>
                 </OrderCompleted> */}
-                {categories.map((category) => {
-                  return (
-                    <div key={category}>
-                      <div key={category}>{category}</div>
-                      {products
-                        .filter(
-                          (product) => product.productCategory === category,
-                        )
-                        .map((product) => (
-                          <div key={product.productID}>
-                            {product.totalOrdered} - {product.productName}
-                          </div>
-                        ))}
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="CustomerInfo">
-                <div>{order.infoCustomer.customerName} </div>
-                <div>{address && address}</div>
-                <div> {address && order.infoCustomer.customerApt}</div>
-                <div>{order.infoCustomer.customerPhoneNumber}</div>
-                <span>Time: {order.timeOrder}</span>
-              </div>
-            </OrderInfo>
-            <OrderCompleted>
-              <div>
-                <span>Order complete?</span>
-                <Select
-                  value={orderCompleted ? 'True' : 'False'}
-                  onChange={handleChange}
-                  className="Select">
-                  <option>True</option>
-                  <option>False</option>
-                </Select>
-              </div>
-            </OrderCompleted>
-          </CardBody>
-        </Card>
-      </Collapse>
-    </OrderContainer>
+                  {categories.map((category) => {
+                    return (
+                      <div key={category}>
+                        <div key={category}>{category}</div>
+                        {products
+                          .filter(
+                            (product) => product.productCategory === category,
+                          )
+                          .map((product) => (
+                            <div key={product.productID}>
+                              {product.totalOrdered} - {product.productName}
+                            </div>
+                          ))}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="CustomerInfo">
+                  <div>{order.infoCustomer.customerName} </div>
+                  <div>{address && address}</div>
+                  <div> {address && order.infoCustomer.customerApt}</div>
+                  <div>{order.infoCustomer.customerPhoneNumber}</div>
+                  <span>Time: {order.timeOrder}</span>
+                </div>
+              </OrderInfo>
+              <OrderCompleted>
+                <div>
+                  <span>Order complete?</span>
+                  <Select
+                    value={orderCompleted ? 'True' : 'False'}
+                    onChange={handleChange}
+                    className="Select">
+                    <option>True</option>
+                    <option>False</option>
+                  </Select>
+                </div>
+                <div>
+                  <Modal order={order} products={products} />
+                </div>
+              </OrderCompleted>
+            </CardBody>
+          </Card>
+        </Collapse>
+      </OrderContainer>
+    </>
   );
 };
 
