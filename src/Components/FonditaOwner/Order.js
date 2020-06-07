@@ -4,11 +4,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 import { useDispatch } from 'react-redux';
-
 import { handleUpdateOrder } from '../../actions/orders';
 import { colors } from '../../colors';
 import { Select } from '../../styled-components';
-import Modal from './Modal';
+import ModalPDF from './Modal';
 
 const OrderContainer = styled.div`
   .Card {
@@ -32,15 +31,7 @@ const OrderContainer = styled.div`
 
 const OrderInfo = styled.div`
   display: flex;
-  @media (min-width: 768px) {
-    width: 70%;
-    margin: 0 auto;
-  }
 
-  @media (min-width: 992px) {
-  }
-  @media (min-width: 1200px) {
-  }
   .ProductsInfo {
     width: 50%;
     display: flex;
@@ -64,7 +55,7 @@ const OrderInfo = styled.div`
 
 const OrderCompleted = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   margin-top: 16px;
   align-items: center;
   .Select {
@@ -94,13 +85,6 @@ const OrderCompleted = styled.div`
       outline: none;
     }
   }
-`;
-
-const PrintButton = styled.button`
-  padding: 0.5rem;
-  background: #28a745;
-  color: #fff;
-  border-radius: 10px;
 `;
 
 const Order = ({ order }) => {
@@ -141,8 +125,6 @@ const Order = ({ order }) => {
     dispatch(handleUpdateOrder(order.idOrder));
   };
 
-  console.log(order);
-
   return (
     <>
       <OrderContainer ontainer>
@@ -165,24 +147,6 @@ const Order = ({ order }) => {
             <CardBody className="CardBody">
               <OrderInfo>
                 <div className="ProductsInfo">
-                  {/*products.map((product) => (
-                  <div key={product.productID}>
-                    {' '}
-                    {product.totalOrdered} {product.productName}
-                  </div>
-                ))*/}
-                  {/*<OrderCompleted>
-                  <div>
-                    <span>Order complete?</span>
-                    <Select
-                      value={orderCompleted ? 'True' : 'False'}
-                      onChange={handleChange}
-                      className="Select">
-                      <option>True</option>
-                      <option>False</option>
-                    </Select>
-                  </div>
-                </OrderCompleted> */}
                   {categories.map((category) => {
                     return (
                       <div key={category}>
@@ -209,8 +173,8 @@ const Order = ({ order }) => {
                 </div>
               </OrderInfo>
               <OrderCompleted>
-                <div>
-                  <span>Order complete?</span>
+                <div className="CompleteOrder">
+                  <span>Order completed?</span>
                   <Select
                     value={orderCompleted ? 'True' : 'False'}
                     onChange={handleChange}
@@ -219,8 +183,8 @@ const Order = ({ order }) => {
                     <option>False</option>
                   </Select>
                 </div>
-                <div>
-                  <Modal order={order} products={products} />
+                <div className="PrintOrder">
+                  <ModalPDF order={order} products={products} />
                 </div>
               </OrderCompleted>
             </CardBody>

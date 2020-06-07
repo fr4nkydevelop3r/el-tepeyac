@@ -23,6 +23,11 @@ const OrdersContainer = styled.div`
   h5 {
     color: ${colors.red};
   }
+  @media (min-width: 1200px) {
+    width: 500px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+  }
 `;
 
 const OrderStatus = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { v4 as uuidv4 } from 'uuid';
 import Order from './Order';
 import { colors } from '../../colors';
 
@@ -36,7 +36,7 @@ const ListOrders = ({ orders, status }) => {
         )}
         {orders.map((order) => (
           <Order
-            key={order.idOrder}
+            key={uuidv4()}
             order={order}
             completed={order.orderCompleted}
           />

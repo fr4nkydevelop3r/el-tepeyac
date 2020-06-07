@@ -138,27 +138,32 @@ const SignIn = () => {
             }
           });
 
-          firestore.collection('orders').onSnapshot(
-            () => {
-              // eslint-disable-next-line import/no-named-as-default-member
-              const getOrders = firebase.functions().httpsCallable('getOrders');
-              getOrders({ docPath: `orders/${getDay()}` })
-                .then((result) => {
-                  const listOrders = keyBy(result.data, 'idOrder');
-                  dispatch(receiveOrders(listOrders));
-                })
-                .catch((error) => {
-                  // Getting the Error details.
-                  const { code, message, details } = error;
-                  console.log(code);
-                  console.log(message);
-                  console.log(details);
-                  console.log(error);
-                  // ...
-                });
-            },
-            (error) => console.log(error),
-          );
+          firestore
+            .collection(`orders`)
+            .doc(`${getDay()}`)
+            .onSnapshot(
+              () => {
+                // eslint-disable-next-line import/no-named-as-default-member
+                const getOrders = firebase
+                  .functions()
+                  .httpsCallable('getOrders');
+                getOrders({ docPath: `orders/${getDay()}` })
+                  .then((result) => {
+                    const listOrders = keyBy(result.data, 'idOrder');
+                    dispatch(receiveOrders(listOrders));
+                  })
+                  .catch((error) => {
+                    // Getting the Error details.
+                    const { code, message, details } = error;
+                    console.log(code);
+                    console.log(message);
+                    console.log(details);
+                    console.log(error);
+                    // ...
+                  });
+              },
+              (error) => console.log(error),
+            );
         }
       },
     );
