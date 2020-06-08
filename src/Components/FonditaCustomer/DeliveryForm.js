@@ -170,8 +170,15 @@ const DeliveryForm = () => {
 
   //APP
   let history = useHistory();
-  const [totalOrder] = useTotalOrder();
+  let tip = useSelector((state) => state.deliveryTip);
+  let [totalOrder] = useTotalOrder();
+  if (typeof tip === 'number') {
+    totalOrder += tip;
+    totalOrder = totalOrder.toFixed(2);
+  }
   let products = useSelector((state) => state.products);
+  let instructions = useSelector((state) => state.specialInstructions);
+
   let productsOrdered = [];
   // const [errorMessageOrder, setErrorMessageOrder] = useState('error');
   const dispatchRedux = useDispatch();
@@ -308,6 +315,8 @@ const DeliveryForm = () => {
           infoCustomer,
           totalOrder,
           numOrder: numOrder,
+          deliveryTip: tip,
+          specialInstructions: instructions,
         };
 
         const billingDetails = {

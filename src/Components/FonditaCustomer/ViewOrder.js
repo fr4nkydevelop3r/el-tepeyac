@@ -10,12 +10,13 @@ import { faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { restartProduct } from '../../actions/products';
-
+import setInstructions from '../../actions/specialInstructions';
 import useTotalOrder from './useTotalOrder';
 import { colors } from '../../colors';
 import { BehindButtonContainer } from '../../styled-components';
 import { getTotalProductsNoTaxes } from '../../utilities';
 import Header from './Header';
+import Tip from './Tip';
 
 const ViewOrderContainer = styled.div`
   margin-bottom: 4rem;
@@ -67,7 +68,7 @@ const ProductDetail = styled.div`
   }
 
   .ProductName {
-    width: 25%;
+    width: 45%;
     text-align: center;
   }
   .ProductTotalOrdered {
@@ -170,10 +171,39 @@ const PlaceOrder = styled.div`
   }
 `;
 
+const InstructionsContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .InstructionsLabel {
+    width: 30%;
+    color: ${colors.grayStrong};
+    text-align: center;
+  }
+  .InstructionsText {
+    width: 200px;
+    height: 100px;
+    box-shadow: 0 0 0 1px #35dc74b8, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
+    border: 1px solid rgba(67, 41, 163, 0.2);
+    border-radius: 5px;
+    color: ${colors.grayStrong};
+    text-align: center;
+    ::placeholder {
+      font-size: 16px;
+      padding-top: 1.1rem;
+    }
+  }
+`;
+
 const ViewOrder = () => {
   const dispatch = useDispatch();
 
   let products = useSelector((state) => state.products);
+  let tip = useSelector((state) => state.deliveryTip);
+  let instructions = useSelector((state) => state.specialInstructions);
 
   const [totalOrder] = useTotalOrder();
 
@@ -192,7 +222,10 @@ const ViewOrder = () => {
 
   const getTaxes = (total) => ((total * 8.875) / 100).toFixed(2);
 
-  console.log(productsOrdered);
+  const handleInstructions = (e) => {
+    const instructions = e.target.value;
+    dispatch(setInstructions(instructions));
+  };
 
   return (
     <>
@@ -257,13 +290,37 @@ const ViewOrder = () => {
                   </div>
                 </ProductDetail>
               ))}
+            <Tip />
             <TotalOrder>
               <span>Order {getTotalProductsNoTaxes(products).toFixed(2)}</span>
               <span>
                 Taxes ${getTaxes(getTotalProductsNoTaxes(products).toFixed(2))}
               </span>
-              <span className="TotalOrder">Total Order ${totalOrder}</span>
+              {tip > 0 && <span>Delivery Tip ${tip}</span>}
+              <span className="TotalOrder">
+                {tip >= 0 ? (
+                  <span>
+                    Total Order ${(totalOrder + parseInt(tip)).toFixed(2)}
+                  </span>
+                ) : (
+                  <span>Total Order ${totalOrder}</span>
+                )}
+              </span>
             </TotalOrder>
+            <InstructionsContainer>
+              <label htmlFor="instructions" className="InstructionsLabel">
+                Special Instructions
+              </label>
+              <div className="InputAndError">
+                <textarea
+                  name="instructions"
+                  value={instructions}
+                  onChange={handleInstructions}
+                  className="InstructionsText"
+                  placeholder="Your order or delivery instructions here"
+                />
+              </div>
+            </InstructionsContainer>
             <PlaceOrder>
               <button
                 type="button"
