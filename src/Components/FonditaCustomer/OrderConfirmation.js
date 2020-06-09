@@ -93,7 +93,6 @@ const OrderDetails = styled.div`
     }
   }
   span {
-    padding-left: 40px;
     @media (min-width: 768px) {
       padding-left: 0;
     }
@@ -210,6 +209,11 @@ const OrderConfirmation = () => {
             <Row>
               <span>Time order: {getTimeOrder(orderDB.timeOrder)}</span>
             </Row>
+            {orderDB.specialInstructions && (
+              <Row>
+                <span>Special Instructions: {orderDB.specialInstructions}</span>
+              </Row>
+            )}
           </OrderDetails>
         </>
       ) : (

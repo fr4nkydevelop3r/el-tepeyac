@@ -53,26 +53,28 @@ exports.getOrders = functions.https.onCall(async (data, context) => {
   return querysnapshots;
 });
 
-const calculateOrderAmount = (items) => {
-  console.log(items);
-  const amount = items.reduce(
+const calculateOrderAmount = (items, tip) => {
+  let amount = items.reduce(
     (accumulator, currentValue) =>
       accumulator +
-      parseInt(currentValue.totalOrdered) * parseInt(currentValue.productPrice),
+      parseInt(currentValue.totalOrdered) * currentValue.productPrice,
     0,
   );
-  console.log(amount * 100);
-  return amount * 100;
+  amount += (amount * 8.875) / 100;
+  if (typeof tip === 'number') {
+    amount += tip;
+  }
+  return Math.round(amount) * 100;
 };
 
 exports.getClientSecret = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     if (req.method === 'POST') {
       try {
-        const { amount, productsOrdered } = req.body;
+        const { productsOrdered, tip } = req.body;
 
         const paymentIntent = await stripe.paymentIntents.create({
-          amount: calculateOrderAmount(productsOrdered),
+          amount: calculateOrderAmount(productsOrdered, tip),
           currency: 'usd',
         });
 
@@ -152,18 +154,24 @@ function generateProductsTable(doc, products, customer) {
 }
 
 function generateCustomerInfo(doc, customer, position) {
-  doc.fontSize(10).text('Customer', 50, position + 30);
-  doc.fontSize(9).text(`Name: ${customer.customerName}`, 50, position + 45);
+  doc.fontSize(11).text('Customer', 50, position + 30);
+  doc.fontSize(10).text(`Name: ${customer.customerName}`, 50, position + 45);
   doc
-    .fontSize(9)
+    .fontSize(10)
     .text(`Phone Number: ${customer.customerPhoneNumber}`, 50, position + 60);
   if (customer.customerAddress) {
     doc
-      .fontSize(9)
+      .fontSize(10)
       .text(`Address: ${customer.customerAddress}`, 50, position + 75);
-    doc.fontSize(9).text(`Apt: ${customer.customerApt}`, 50, position + 90);
+    doc
+      .fontSize(10)
+      .text(`Apt: ${customer.customerApt}`, 50, position + 90)
+      .moveDown(0.5);
   } else {
-    doc.fontSize(9).text(`Pickup`, 50, position + 75);
+    doc
+      .fontSize(10)
+      .text(`Pickup`, 50, position + 75)
+      .moveDown(0.5);
   }
 }
 
@@ -196,24 +204,46 @@ function generatePDF(orderID, data) {
 
   generateProductsTable(doc, products, customer);
 
+  doc
+    .fontSize(11)
+    .text(`Other info`)
+    .moveDown(0.5);
+  if (data.specialInstructions) {
+    doc
+      .fontSize(10)
+      .text(`Special Instructions: ${data.specialInstructions}`, {
+        width: 200,
+      })
+      .moveDown(0.5);
+  }
+  doc
+    .fontSize(10)
+    .text(`Delivery Tip: $${data.deliveryTip}`)
+    .moveDown(0.5);
+  doc
+    .fontSize(10)
+    .text(`Time Order: ${data.timeOrder}`)
+    .moveDown(0.5);
   doc.end();
   return p.then((buffers) => {
     return mail(buffers, orderID);
   });
 }
 
+function sendSMS() {
+  client.messages
+    .create({
+      body: 'Hola El Tepeyac, llego una orden de comida',
+      from: '+11 202 795 3374',
+      to: '+13476830875',
+    })
+    .then((message) => console.log(message.sid));
+}
+
 exports.generatePDF = functions.firestore
   .document('orders/{day}/{idOrder}/{order}')
   .onCreate(async (snapshot, context) => {
-    /*return client.messages
-      .create({
-        body: 'Hola El Tepeyac, llego una orden de comida',
-        from: '+11 202 795 3374',
-        to: '+13476830875',
-      })
-      .then((message) => console.log(message.sid));*/
-    //return mail().catch(console.error);
-    //console.log(snapshot.data());
+    sendSMS();
     const idOrder = context.params.idOrder;
     const data = snapshot.data();
     return generatePDF(idOrder, data);

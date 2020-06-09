@@ -53,6 +53,8 @@ const Button = styled.div`
   span {
     color: ${colors.grayStrong};
     text-align: center;
+    background: none;
+    border: none;
     @media (min-width: 768px) {
       font-size: 22px;
     }
@@ -61,8 +63,7 @@ const Button = styled.div`
     }
     @media (min-width: 1200px) {
       font-size: 20px;
-      background: none;
-      border: none;
+
       :hover {
         text-decoration: none;
       }

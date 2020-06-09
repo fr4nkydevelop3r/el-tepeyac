@@ -6,7 +6,11 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowLeft,
+  faTrashAlt,
+  faShoppingCart,
+} from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { restartProduct } from '../../actions/products';
@@ -50,7 +54,7 @@ const TitleViewOrderContainer = styled.div`
 const ProductDetail = styled.div`
   width: 80%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   margin: 0 auto;
   margin-top: 1rem;
@@ -60,27 +64,25 @@ const ProductDetail = styled.div`
     width: 60%;
   }
   @media (min-width: 992px) {
-    width: 40%;
+    width: 50%;
     font-size: 26px;
   }
   @media (min-width: 1200px) {
+    width: 600px;
     font-size: 18px;
   }
 
   .ProductName {
-    width: 45%;
+    width: 50%;
     text-align: center;
   }
   .ProductTotalOrdered {
     text-align: center;
-    width: 25%;
   }
   .ProductAmmount {
-    width: 25%;
     text-align: center;
   }
   .DeleteIcon {
-    width: 25%;
     color: ${colors.red};
     text-align: center;
     .DeleteButton {
@@ -106,10 +108,11 @@ const TotalOrder = styled.div`
     font-size: 20px;
   }
   @media (min-width: 992px) {
-    width: 40%;
+    width: 50%;
     font-size: 26px;
   }
   @media (min-width: 1200px) {
+    width: 600px;
     font-size: 18px;
   }
   .TotalOrder {
@@ -178,13 +181,47 @@ const InstructionsContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  @media (min-width: 768px) {
+    width: 60%;
+    justify-content: flex-end;
+  }
+
+  @media (min-width: 992px) {
+    width: 50%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 600px;
+  }
+  .Instructions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    @media (min-width: 768px) {
+      justify-content: space-between;
+    }
+
+    @media (min-width: 1200px) {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
   .InstructionsLabel {
     width: 30%;
     color: ${colors.grayStrong};
     text-align: center;
+    @media (min-width: 768px) {
+      font-size: 20px;
+    }
+    @media (min-width: 992px) {
+      font-size: 24px;
+    }
+    @media (min-width: 1200px) {
+      font-size: 16px;
+    }
   }
   .InstructionsText {
-    width: 200px;
+    width: 170px;
     height: 100px;
     box-shadow: 0 0 0 1px #35dc74b8, 0 1px 5px 0 rgba(163, 41, 41, 0.08);
     border: 1px solid rgba(67, 41, 163, 0.2);
@@ -308,17 +345,19 @@ const ViewOrder = () => {
               </span>
             </TotalOrder>
             <InstructionsContainer>
-              <label htmlFor="instructions" className="InstructionsLabel">
-                Special Instructions
-              </label>
-              <div className="InputAndError">
-                <textarea
-                  name="instructions"
-                  value={instructions}
-                  onChange={handleInstructions}
-                  className="InstructionsText"
-                  placeholder="Your order or delivery instructions here"
-                />
+              <div className="Instructions">
+                <label htmlFor="instructions" className="InstructionsLabel">
+                  Special Instructions
+                </label>
+                <div className="InputAndError">
+                  <textarea
+                    name="instructions"
+                    value={instructions}
+                    onChange={handleInstructions}
+                    className="InstructionsText"
+                    placeholder="Your order or delivery instructions here"
+                  />
+                </div>
               </div>
             </InstructionsContainer>
             <PlaceOrder>
@@ -333,7 +372,10 @@ const ViewOrder = () => {
           </>
         ) : (
           <OrderEmpty>
-            <span>You haven&apos;t selected any product yet!</span>
+            <span>
+              Your shoping cart is empty{' '}
+              <FontAwesomeIcon icon={faShoppingCart} />
+            </span>
           </OrderEmpty>
         )}
       </ViewOrderContainer>

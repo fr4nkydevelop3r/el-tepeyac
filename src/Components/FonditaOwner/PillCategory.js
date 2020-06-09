@@ -15,6 +15,7 @@ const ButtonPill = styled.button`
   background-color: ${colors.green};
   color: #fff;
   margin-bottom: 0.5rem;
+  border: none;
 `;
 
 const PillCategory = ({ categoryName, categoryID, handleCategory }) => {

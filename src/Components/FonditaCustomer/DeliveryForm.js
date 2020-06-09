@@ -8,6 +8,8 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { handleCreateOrder } from '../../actions/orders';
 import { restartProducts } from '../../actions/products';
+import setInstructions from '../../actions/specialInstructions';
+import setTip from '../../actions/deliveryTip';
 import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
 import styled from 'styled-components';
@@ -335,6 +337,7 @@ const DeliveryForm = () => {
             'https://us-central1-el-tepeyac-b5c7a.cloudfunctions.net/getClientSecret',
             {
               productsOrdered: Object.values(productsOrdered),
+              tip: tip,
             },
           )
           .catch((error) => {
@@ -372,11 +375,15 @@ const DeliveryForm = () => {
                     .then((orderCreated) => {
                       history.push(`/order/${orderCreated.idOrder}`);
                       dispatchRedux(restartProducts());
+                      dispatchRedux(setInstructions(''));
+                      dispatchRedux(setTip(3));
                     })
                     .catch((e) => {
                       console.error(e);
                       history.push(`/order-confirmation`);
                       dispatchRedux(restartProducts());
+                      dispatchRedux(setInstructions(''));
+                      dispatchRedux(setTip(3));
                       //setProcessingTo(false);
                       /*setErrorMessageOrder(
                         'Something went wrong with the order, could you try again?',

@@ -8,6 +8,8 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { handleCreateOrder } from '../../actions/orders';
 import { restartProducts } from '../../actions/products';
+import setInstructions from '../../actions/specialInstructions';
+import setTip from '../../actions/deliveryTip';
 import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
 import styled from 'styled-components';
 import { getHour, getNumOrder, isValidHour } from '../../utilities';
@@ -69,7 +71,14 @@ const PickupForm = () => {
   const [postalCode, setPostalCode] = useState('');
 
   //APP
-  const [totalOrder] = useTotalOrder();
+  let [totalOrder] = useTotalOrder();
+  let tip = useSelector((state) => state.deliveryTip);
+  if (typeof tip === 'number') {
+    totalOrder += tip;
+    totalOrder = totalOrder.toFixed(2);
+  }
+  let instructions = useSelector((state) => state.specialInstructions);
+
   let products = useSelector((state) => state.products);
   let productsOrdered = [];
   //const [errorMessageOrder, setErrorMessageOrder] = useState('');
@@ -124,6 +133,8 @@ const PickupForm = () => {
           infoCustomer,
           totalOrder,
           numOrder: numOrder,
+          deliveryTip: 0,
+          specialInstructions: instructions,
         };
 
         const billingDetails = {
@@ -142,6 +153,7 @@ const PickupForm = () => {
             'https://us-central1-el-tepeyac-b5c7a.cloudfunctions.net/getClientSecret',
             {
               productsOrdered: Object.values(productsOrdered),
+              tip: 0,
             },
           )
           .catch((error) => {
@@ -179,11 +191,15 @@ const PickupForm = () => {
                     .then((orderCreated) => {
                       history.push(`/order/${orderCreated.idOrder}`);
                       dispatchRedux(restartProducts());
+                      dispatchRedux(setInstructions(''));
+                      dispatchRedux(setTip(3));
                     })
                     .catch((e) => {
                       console.error(e);
                       history.push(`/order-confirmation`);
                       dispatchRedux(restartProducts());
+                      dispatchRedux(setInstructions(''));
+                      dispatchRedux(setTip(3));
                       // setProcessingTo(false);
                       /* setErrorMessageOrder(
                         'Something went wrong with the order, could you try again?',

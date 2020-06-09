@@ -3,6 +3,7 @@ import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ProductsTable from './ProductsTable';
 import InfoCustomer from './InfoCustomer';
+import OtherInfoOrder from './OtherInfoOrder';
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -29,6 +30,7 @@ const PDFOrder = ({ order, products }) => (
       </View>
       <ProductsTable products={products} />
       <InfoCustomer order={order} />
+      <OtherInfoOrder order={order} />
     </Page>
   </Document>
 );

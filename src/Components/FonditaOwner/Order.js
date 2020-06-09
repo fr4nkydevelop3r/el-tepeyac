@@ -87,6 +87,13 @@ const OrderCompleted = styled.div`
   }
 `;
 
+const SpecialInstructions = styled.span`
+  font-size: 14px;
+`;
+const DeliveryTip = styled.span`
+  font-size: 14px;
+`;
+
 const Order = ({ order }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(order.orderCompleted);
@@ -169,9 +176,20 @@ const Order = ({ order }) => {
                   <div>{address && address}</div>
                   <div> {address && order.infoCustomer.customerApt}</div>
                   <div>{order.infoCustomer.customerPhoneNumber}</div>
-                  <span>Time: {order.timeOrder}</span>
+                  <span>Time Order: {order.timeOrder}</span>
                 </div>
               </OrderInfo>
+              {order.specialInstructions && (
+                <div>
+                  <SpecialInstructions>
+                    Special instructions: {order.specialInstructions}
+                  </SpecialInstructions>
+                </div>
+              )}
+
+              <div>
+                <DeliveryTip>Delivery Tip: ${order.deliveryTip}</DeliveryTip>
+              </div>
               <OrderCompleted>
                 <div className="CompleteOrder">
                   <span>Order completed?</span>

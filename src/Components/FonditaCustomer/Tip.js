@@ -8,6 +8,15 @@ const TipTitle = styled.div`
   margin-top: 1rem;
   text-align: center;
   color: ${colors.grayStrong};
+  @media (min-width: 768px) {
+    font-size: 20px;
+  }
+  @media (min-width: 992px) {
+    font-size: 24px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 16px;
+  }
 `;
 
 const TipContainer = styled.div`
@@ -17,13 +26,12 @@ const TipContainer = styled.div`
   display: flex;
 
   @media (min-width: 768px) {
-    width: 60%;
-  }
-  @media (min-width: 992px) {
     width: 40%;
   }
+
   @media (min-width: 1200px) {
-    font-size: 18px;
+    width: 400px;
+    font-size: 16px;
   }
 `;
 
@@ -31,6 +39,16 @@ const TipsButtonsContainer = styled.div`
   display: flex;
   justify-content: space-around;
   width: 100%;
+
+  @media (min-width: 768px) {
+    font-size: 20px;
+  }
+  @media (min-width: 992px) {
+    font-size: 24px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 18px;
+  }
 `;
 
 const DeliveryThanks = styled.div`
@@ -142,7 +160,15 @@ const Tip = () => {
           <InputOtherAmmount
             type="number"
             placeholder="Other"
-            value={otherTip > 0 ? parseInt(otherTip) : otherTip.toString()}
+            //value={otherTip > 0 ? parseInt(otherTip) : otherTip.toString()}
+            // value={otherTip}
+            value={
+              deliveryTip > 0 &&
+              (deliveryTip !== 0) & (deliveryTip !== 3) &&
+              deliveryTip !== 4
+                ? deliveryTip
+                : otherTip.toString()
+            }
             onChange={handleOtherTip}
           />
         </TipsButtonsContainer>
