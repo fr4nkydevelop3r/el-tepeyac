@@ -200,6 +200,11 @@ const DeliveryForm = () => {
       });
   }, []);
 
+  function getAddressRegex(address) {
+    const re = /.*?(?=,)/;
+    return re.exec(address)[0];
+  }
+
   const handleInput = (e) => {
     // Update the keyword of the input element
     setValue(e.target.value);
@@ -305,7 +310,7 @@ const DeliveryForm = () => {
         productsOrdered = keyBy(productsOrdered, 'productID');
         const infoCustomer = {
           customerName: name,
-          customerAddress: value,
+          customerAddress: getAddressRegex(value),
           customerApt: apt,
           customerPhoneNumber: phoneValue,
         };

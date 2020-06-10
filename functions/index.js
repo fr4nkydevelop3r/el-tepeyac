@@ -230,10 +230,11 @@ function generatePDF(orderID, data) {
   });
 }
 
-function sendSMS() {
-  client.messages
+function sendSMS(data) {
+  console.log(data);
+  return client.messages
     .create({
-      body: 'Hola El Tepeyac, llego una orden de comida',
+      body: `Nueva orden de comida, ${data.infoCustomer.customerName} - ${data.infoCustomer.customerAddress}, ${data.infoCustomer.customerApt}`,
       from: '+11 202 795 3374',
       to: '+13476830875',
     })
@@ -243,8 +244,8 @@ function sendSMS() {
 exports.generatePDF = functions.firestore
   .document('orders/{day}/{idOrder}/{order}')
   .onCreate(async (snapshot, context) => {
-    sendSMS();
-    const idOrder = context.params.idOrder;
     const data = snapshot.data();
+    sendSMS(data);
+    const idOrder = context.params.idOrder;
     return generatePDF(idOrder, data);
   });

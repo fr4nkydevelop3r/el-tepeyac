@@ -98,7 +98,6 @@ const Order = ({ order }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(order.orderCompleted);
   const dispatch = useDispatch();
-  let address = '';
 
   const products = Object.values(order.products);
 
@@ -115,13 +114,6 @@ const Order = ({ order }) => {
     (accum, current) => accum + current.totalOrdered,
     0,
   ); */
-
-  if (order.infoCustomer.customerAddress) {
-    address = order.infoCustomer.customerAddress.slice(
-      order.infoCustomer.customerAddress,
-      order.infoCustomer.customerAddress.indexOf(','),
-    );
-  }
 
   const handleChange = (event) => {
     if (event.target.value === 'True') {
@@ -144,8 +136,8 @@ const Order = ({ order }) => {
           <span className="Customer">{order.infoCustomer.customerName} </span>
 
           <span className="Address">
-            {address
-              ? `${address} - ${order.infoCustomer.customerApt}`
+            {order.infoCustomer.customerAddress
+              ? `${order.infoCustomer.customerAddress} - ${order.infoCustomer.customerApt}`
               : 'Pickup'}
           </span>
         </Button>
@@ -173,8 +165,15 @@ const Order = ({ order }) => {
                 </div>
                 <div className="CustomerInfo">
                   <div>{order.infoCustomer.customerName} </div>
-                  <div>{address && address}</div>
-                  <div> {address && order.infoCustomer.customerApt}</div>
+                  <div>
+                    {order.infoCustomer.customerAddress &&
+                      order.infoCustomer.customerAddress}
+                  </div>
+                  <div>
+                    {' '}
+                    {order.infoCustomer.customerAddress &&
+                      order.infoCustomer.customerApt}
+                  </div>
                   <div>{order.infoCustomer.customerPhoneNumber}</div>
                   <span>Time Order: {order.timeOrder}</span>
                 </div>

@@ -72,6 +72,7 @@ const OrderDetails = styled.div`
   margin: 0 auto;
   color: ${colors.grayStrong};
   margin-top: 2rem;
+  margin-bottom: 3rem;
   @media (min-width: 768px) {
     font-size: 20px;
     width: 60%;
@@ -177,9 +178,9 @@ const OrderConfirmation = () => {
                 <span>Address: {orderDB.infoCustomer.customerAddress}</span>
               </Row>
             )}
-            {orderDB.infoCustomer.customerofficeOrApt && (
+            {orderDB.infoCustomer.customerApt && (
               <Row>
-                <span>Apt: {orderDB.infoCustomer.customerofficeOrApt}</span>
+                <span>Apt: {orderDB.infoCustomer.customerApt}</span>
               </Row>
             )}
             <Row>
