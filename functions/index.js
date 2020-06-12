@@ -106,8 +106,9 @@ async function mail(buffers, orderID) {
     from:
       'Franky Dev 👻 <postmaster@sandboxc0135ae4ebea47a3ba72cf83f4d8b4e6.mailgun.org>', // sender address
     to: 'fr4nky.develop3r@gmail.com', // list of receivers
-    subject: 'Hello ✔', // Subject line
-    text: 'Hello world?', // plain text body
+    subject: 'Nueva orden de comida', // Subject line
+    text:
+      'Hola El tepeyac, puedes encontrar los detalles de la orden en el PDF', // plain text body
     attachments: [
       {
         filename: `${orderID}.pdf`,
@@ -130,9 +131,9 @@ async function mail(buffers, orderID) {
 function generateTableRow(doc, y, c1, c2, c3) {
   doc
     .fontSize(10)
-    .text(c1, 50, y)
-    .text(c2, 70, y, { width: 150, align: 'left' })
-    .text(c3, 220, y);
+    .text(c1, 20, y)
+    .text(c2, 40, y, { width: 80, align: 'left' })
+    .text(c3, 130, y);
 }
 
 function generateProductsTable(doc, products, customer) {
@@ -141,7 +142,7 @@ function generateProductsTable(doc, products, customer) {
 
   for (let i = 0; i < products.length; i++) {
     const item = products[i];
-    position = invoiceTableTop + (i + 1) * 30;
+    position = invoiceTableTop + (i + 1) * 50;
     generateTableRow(
       doc,
       position,
@@ -154,23 +155,27 @@ function generateProductsTable(doc, products, customer) {
 }
 
 function generateCustomerInfo(doc, customer, position) {
-  doc.fontSize(11).text('Customer', 50, position + 30);
-  doc.fontSize(10).text(`Name: ${customer.customerName}`, 50, position + 45);
+  doc
+    .fontSize(11)
+    .text('Customer', 20, position + 30)
+    .moveUp(0.5);
+
+  doc.fontSize(10).text(`Name: ${customer.customerName}`, 20, position + 45);
   doc
     .fontSize(10)
-    .text(`Phone Number: ${customer.customerPhoneNumber}`, 50, position + 60);
+    .text(`Phone Number: ${customer.customerPhoneNumber}`, 20, position + 60);
   if (customer.customerAddress) {
     doc
       .fontSize(10)
-      .text(`Address: ${customer.customerAddress}`, 50, position + 75);
+      .text(`Address: ${customer.customerAddress}`, 20, position + 75);
     doc
       .fontSize(10)
-      .text(`Apt: ${customer.customerApt}`, 50, position + 90)
+      .text(`Apt: ${customer.customerApt}`, 20, position + 90)
       .moveDown(0.5);
   } else {
     doc
       .fontSize(10)
-      .text(`Pickup`, 50, position + 75)
+      .text(`Pickup`, 20, position + 75)
       .moveDown(0.5);
   }
 }
@@ -197,32 +202,42 @@ function generatePDF(orderID, data) {
   doc.pipe(bucketFileStream);
   doc.on('data', buffers.push.bind(buffers));
   //Add Document Text and stuff
+
+  doc
+    .fontSize(8)
+    .text('www.eltepeyacfood.com', 40, 95)
+    .image('./img/logo.jpg', 45, 10, { width: 80 });
+
   doc
     .font('./fonts/Roboto-Medium.ttf')
     .fontSize(15)
-    .text(`# ${data.infoCustomer.customerName}`);
+    .text(`# ${data.infoCustomer.customerName}`, 20, 110);
 
   generateProductsTable(doc, products, customer);
 
   doc
     .fontSize(11)
-    .text(`Other info`)
+    .text(`Other info`, 20)
     .moveDown(0.5);
   if (data.specialInstructions) {
     doc
       .fontSize(10)
       .text(`Special Instructions: ${data.specialInstructions}`, {
-        width: 200,
+        width: 150,
       })
       .moveDown(0.5);
   }
   doc
     .fontSize(10)
-    .text(`Delivery Tip: $${data.deliveryTip}`)
+    .text(`Delivery Tip: $${data.deliveryTip}`, 20)
     .moveDown(0.5);
   doc
     .fontSize(10)
-    .text(`Time Order: ${data.timeOrder}`)
+    .text(`Time Order: ${data.timeOrder}`, 20)
+    .moveDown(0.5);
+  doc
+    .fontSize(10)
+    .text(`Total Order: $${data.totalOrder}`, 20)
     .moveDown(0.5);
   doc.end();
   return p.then((buffers) => {
@@ -231,10 +246,16 @@ function generatePDF(orderID, data) {
 }
 
 function sendSMS(data) {
-  console.log(data);
+  let orderInfo = '';
+
+  if (data.infoCustomer.customerAddress) {
+    orderInfo = `${data.infoCustomer.customerAddress} - ${data.infoCustomer.customerApt} `;
+  } else {
+    orderInfo = 'Pickup';
+  }
   return client.messages
     .create({
-      body: `Nueva orden de comida, ${data.infoCustomer.customerName} - ${data.infoCustomer.customerAddress}, ${data.infoCustomer.customerApt}`,
+      body: `Nueva orden de comida,  ${data.infoCustomer.customerName} - ${orderInfo}`,
       from: '+11 202 795 3374',
       to: '+13476830875',
     })

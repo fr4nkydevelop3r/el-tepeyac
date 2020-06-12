@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
@@ -6,15 +7,15 @@ import React, { useState, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
+import styled from 'styled-components';
+import { keyBy, isEmpty } from 'lodash';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { handleCreateOrder } from '../../actions/orders';
 import { restartProducts } from '../../actions/products';
 import setInstructions from '../../actions/specialInstructions';
 import setTip from '../../actions/deliveryTip';
-import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
-import styled from 'styled-components';
 import { getHour, getNumOrder, isValidHour } from '../../utilities';
-import { keyBy, isEmpty } from 'lodash';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Row from './CheckoutForm/Row';
 import SubmitButton from './CheckoutForm/SubmitButton';
 import useTotalOrder from './useTotalOrder';
@@ -55,14 +56,14 @@ function reducer(state, { field, value }) {
 }
 
 const PickupForm = () => {
-  //FORM
+  // FORM
   const [state, dispatch] = useReducer(reducer, initialState);
   const [validateName, setValidateName] = useState('');
   const [validatePhone, setValidatePhone] = useState('');
   const { name } = state;
   const [phoneValue, setPhoneValue] = useState('');
 
-  //STRIPE
+  // STRIPE
 
   const [isProcessing, setProcessingTo] = useState(false);
   const [checkoutError, setCheckoutError] = useState();
@@ -70,20 +71,15 @@ const PickupForm = () => {
   const elements = useElements();
   const [postalCode, setPostalCode] = useState('');
 
-  //APP
-  let [totalOrder] = useTotalOrder();
-  let tip = useSelector((state) => state.deliveryTip);
-  if (typeof tip === 'number') {
-    totalOrder += tip;
-    totalOrder = totalOrder.toFixed(2);
-  }
-  let instructions = useSelector((state) => state.specialInstructions);
+  // APP
+  const [totalOrder] = useTotalOrder();
+  const instructions = useSelector((state) => state.specialInstructions);
 
   let products = useSelector((state) => state.products);
   let productsOrdered = [];
-  //const [errorMessageOrder, setErrorMessageOrder] = useState('');
+  // const [errorMessageOrder, setErrorMessageOrder] = useState('');
   const dispatchRedux = useDispatch();
-  let history = useHistory();
+  const history = useHistory();
 
   let categories = useSelector((state) => state.categories);
   categories = Object.values(categories);
@@ -116,7 +112,7 @@ const PickupForm = () => {
               productPrice: product.productPrice,
               productCategory: categories.filter(
                 (category) => category.categoryID === product.productCategory,
-              )[0]['categoryName'],
+              )[0].categoryName,
             };
             return newProduct;
           });
@@ -132,7 +128,7 @@ const PickupForm = () => {
           products: productsOrdered,
           infoCustomer,
           totalOrder,
-          numOrder: numOrder,
+          numOrder,
           deliveryTip: 0,
           specialInstructions: instructions,
         };
@@ -196,7 +192,7 @@ const PickupForm = () => {
                     })
                     .catch((e) => {
                       console.error(e);
-                      history.push(`/order-confirmation`);
+                      history.push('/order-confirmation');
                       dispatchRedux(restartProducts());
                       dispatchRedux(setInstructions(''));
                       dispatchRedux(setTip(3));
