@@ -20,6 +20,11 @@ function randomNumber(min, max) {
   ).toString();
 }
 
+export function getTimeOrder(time) {
+  const re = /\d+:\d+/;
+  return re.exec(time)[0];
+}
+
 export function getHour() {
   const today = new Date();
   const time = `${today.getHours()}:${minutesWithZeros(

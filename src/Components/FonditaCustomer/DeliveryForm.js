@@ -13,7 +13,12 @@ import setTip from '../../actions/deliveryTip';
 import Input, { isPossiblePhoneNumber } from 'react-phone-number-input/input';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
 import styled from 'styled-components';
-import { getHour, getNumOrder, isValidHour } from '../../utilities';
+import {
+  getHour,
+  getNumOrder,
+  isValidHour,
+  getTimeOrder,
+} from '../../utilities';
 import { keyBy, isEmpty } from 'lodash';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Row from './CheckoutForm/Row';
@@ -317,7 +322,7 @@ const DeliveryForm = () => {
 
         const order = {
           orderCompleted: false,
-          timeOrder: getHour(),
+          timeOrder: getTimeOrder(getHour()),
           products: productsOrdered,
           infoCustomer,
           totalOrder,

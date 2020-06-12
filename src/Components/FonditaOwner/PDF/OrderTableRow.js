@@ -5,14 +5,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 40,
+    height: 50,
     fontStyle: 'bold',
-    fontSize: 12,
+    fontSize: 10,
   },
   totalOrdered: {
     width: '10%',
     textAlign: 'left',
-    paddingLeft: 8,
   },
   productName: {
     width: '50%',

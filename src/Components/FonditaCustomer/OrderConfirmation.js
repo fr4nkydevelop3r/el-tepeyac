@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
 import { firestore } from '../../firebase';
 import { getDay } from '../../utilities';
 import { useParams } from 'react-router-dom';
+import { getTimeOrder } from '../..//utilities';
 import { colors } from '../../colors';
 
 const HeaderContainerConfirmation = styled.div`
@@ -136,11 +137,6 @@ const OrderConfirmation = () => {
         console.log('Error getting document:', error);
       });
   }, [id]);
-
-  const getTimeOrder = (time) => {
-    const re = /\d+:\d+/;
-    return re.exec(time);
-  };
 
   return (
     <>

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import { handleUpdateOrder } from '../../actions/orders';
+import { getTimeOrder } from '../../utilities';
 import { colors } from '../../colors';
 import { Select } from '../../styled-components';
 import ModalPDF from './Modal';
@@ -109,12 +110,6 @@ const Order = ({ order }) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
-  /*let totalProducts = Object.values(order.products);
-  totalProducts = totalProducts.reduce(
-    (accum, current) => accum + current.totalOrdered,
-    0,
-  ); */
-
   const handleChange = (event) => {
     if (event.target.value === 'True') {
       setOrderCompleted(true);
@@ -134,7 +129,7 @@ const Order = ({ order }) => {
           }}
           onClick={toggle}>
           <span className="Customer">{order.infoCustomer.customerName} </span>
-
+          <span> {getTimeOrder(order.timeOrder)} </span>
           <span className="Address">
             {order.infoCustomer.customerAddress
               ? `${order.infoCustomer.customerAddress} - ${order.infoCustomer.customerApt}`
@@ -175,7 +170,8 @@ const Order = ({ order }) => {
                       order.infoCustomer.customerApt}
                   </div>
                   <div>{order.infoCustomer.customerPhoneNumber}</div>
-                  <span>Time Order: {order.timeOrder}</span>
+                  <span>Time Order: {getTimeOrder(order.timeOrder)}</span>
+                  <span>Total Order: ${order.totalOrder} </span>
                 </div>
               </OrderInfo>
               {order.specialInstructions && (

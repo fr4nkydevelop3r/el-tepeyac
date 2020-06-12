@@ -15,7 +15,12 @@ import { handleCreateOrder } from '../../actions/orders';
 import { restartProducts } from '../../actions/products';
 import setInstructions from '../../actions/specialInstructions';
 import setTip from '../../actions/deliveryTip';
-import { getHour, getNumOrder, isValidHour } from '../../utilities';
+import {
+  getHour,
+  getNumOrder,
+  isValidHour,
+  getTimeOrder,
+} from '../../utilities';
 import Row from './CheckoutForm/Row';
 import SubmitButton from './CheckoutForm/SubmitButton';
 import useTotalOrder from './useTotalOrder';
@@ -124,7 +129,7 @@ const PickupForm = () => {
 
         const order = {
           orderCompleted: false,
-          timeOrder: getHour(),
+          timeOrder: getTimeOrder(getHour()),
           products: productsOrdered,
           infoCustomer,
           totalOrder,

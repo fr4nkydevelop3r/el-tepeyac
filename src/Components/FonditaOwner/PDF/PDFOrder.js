@@ -1,23 +1,39 @@
 import React from 'react';
 
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  Image,
+} from '@react-pdf/renderer';
 import ProductsTable from './ProductsTable';
 import InfoCustomer from './InfoCustomer';
 import OtherInfoOrder from './OtherInfoOrder';
+import logo from '../../../img/logo2.png';
 // Create styles
 const styles = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
-    fontSize: 11,
+    fontSize: 10,
     paddingTop: 30,
     lineHeight: 1.5,
     flexDirection: 'column',
-    paddingLeft: 24,
+    paddingLeft: 15,
+  },
+  logo: {
+    width: 74,
+    height: 66,
+    marginLeft: 20,
   },
   numOrder: {
-    marginLeft: 8,
     fontSize: 16,
     fontWeight: 'bold',
+    marginTop: 8,
+  },
+  site: {
+    fontSize: 10,
   },
 });
 
@@ -25,6 +41,10 @@ const styles = StyleSheet.create({
 const PDFOrder = ({ order, products }) => (
   <Document>
     <Page size="A4" style={styles.page}>
+      <Image style={styles.logo} src={logo} />
+      <View style={styles.site}>
+        <Text>www.eltepeyacfood.com</Text>
+      </View>
       <View style={styles.numOrder}>
         <Text># {order.infoCustomer.customerName}</Text>
       </View>
