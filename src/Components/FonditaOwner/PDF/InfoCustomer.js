@@ -3,8 +3,9 @@ import { Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
   customerContainer: {
-    marginTop: 12,
-    fontSize: 10,
+    marginTop: 8,
+    fontSize: 8,
+    width: 140,
   },
 });
 

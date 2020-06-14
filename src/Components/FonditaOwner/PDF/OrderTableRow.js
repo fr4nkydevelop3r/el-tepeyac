@@ -5,23 +5,21 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 50,
+    height: 30,
     fontStyle: 'bold',
-    fontSize: 10,
+    fontSize: 8,
+    margin: 0,
   },
   totalOrdered: {
-    width: '10%',
-    textAlign: 'left',
+    width: '5%',
   },
   productName: {
-    width: '50%',
+    width: '60%',
     textAlign: 'center',
-    paddingRight: 8,
   },
   productCategory: {
-    width: '30%',
+    width: '23%',
     textAlign: 'center',
-    paddingRight: 8,
   },
 });
 

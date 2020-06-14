@@ -24,7 +24,7 @@ const MenuContainer = styled.div`
   margin-bottom: 2rem;
 
   @media (min-width: 768px) {
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding: 3rem;
   }
   @media (min-width: 992px) {

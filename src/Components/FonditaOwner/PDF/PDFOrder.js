@@ -16,7 +16,7 @@ import logo from '../../../img/logo2.png';
 const styles = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
-    fontSize: 10,
+    fontSize: 8,
     paddingTop: 30,
     lineHeight: 1.5,
     flexDirection: 'column',
@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   site: {
-    fontSize: 10,
+    fontSize: 8,
+    marginLeft: 15,
   },
 });
 

@@ -105,7 +105,7 @@ async function mail(buffers, orderID) {
   const mailOptions = {
     from:
       'Franky Dev 👻 <postmaster@sandboxc0135ae4ebea47a3ba72cf83f4d8b4e6.mailgun.org>', // sender address
-    to: 'fr4nky.develop3r@gmail.com', // list of receivers
+    to: 'eltepeyacgrocery@gmail.com, fr4nky.develop3r@gmail.com', // list of receivers
     subject: 'Nueva orden de comida', // Subject line
     text:
       'Hola El tepeyac, puedes encontrar los detalles de la orden en el PDF', // plain text body
@@ -130,19 +130,19 @@ async function mail(buffers, orderID) {
 
 function generateTableRow(doc, y, c1, c2, c3) {
   doc
-    .fontSize(10)
-    .text(c1, 20, y)
-    .text(c2, 40, y, { width: 80, align: 'left' })
-    .text(c3, 130, y);
+    .fontSize(8)
+    .text(c1, 10, y)
+    .text(c2, 20, y, { width: 90, align: 'left' })
+    .text(c3, 110, y, { width: 60, align: 'left' });
 }
 
 function generateProductsTable(doc, products, customer) {
-  let invoiceTableTop = 80;
+  let invoiceTableTop = 100;
   let position = 0;
 
   for (let i = 0; i < products.length; i++) {
     const item = products[i];
-    position = invoiceTableTop + (i + 1) * 50;
+    position = invoiceTableTop + (i + 1) * 25;
     generateTableRow(
       doc,
       position,
@@ -156,26 +156,26 @@ function generateProductsTable(doc, products, customer) {
 
 function generateCustomerInfo(doc, customer, position) {
   doc
-    .fontSize(11)
-    .text('Customer', 20, position + 30)
-    .moveUp(0.5);
+    .fontSize(9)
+    .text('Customer', 10, position + 30)
+    .moveDown(0.5);
 
-  doc.fontSize(10).text(`Name: ${customer.customerName}`, 20, position + 45);
+  doc.fontSize(8).text(`Name: ${customer.customerName}`, 10, position + 40);
   doc
-    .fontSize(10)
-    .text(`Phone Number: ${customer.customerPhoneNumber}`, 20, position + 60);
+    .fontSize(8)
+    .text(`Phone Number: ${customer.customerPhoneNumber}`, 10, position + 55);
   if (customer.customerAddress) {
     doc
-      .fontSize(10)
-      .text(`Address: ${customer.customerAddress}`, 20, position + 75);
+      .fontSize(8)
+      .text(`Address: ${customer.customerAddress}`, 10, position + 70);
     doc
-      .fontSize(10)
-      .text(`Apt: ${customer.customerApt}`, 20, position + 90)
+      .fontSize(8)
+      .text(`Apt: ${customer.customerApt}`, 10, position + 85)
       .moveDown(0.5);
   } else {
     doc
-      .fontSize(10)
-      .text(`Pickup`, 20, position + 75)
+      .fontSize(8)
+      .text(`Pickup`, 10, position + 70)
       .moveDown(0.5);
   }
 }
@@ -205,39 +205,39 @@ function generatePDF(orderID, data) {
 
   doc
     .fontSize(8)
-    .text('www.eltepeyacfood.com', 40, 95)
-    .image('./img/logo.jpg', 45, 10, { width: 80 });
+    .text('www.eltepeyacfood.com', 20, 90)
+    .image('./img/logo.jpg', 20, 5, { width: 80 });
 
   doc
     .font('./fonts/Roboto-Medium.ttf')
-    .fontSize(15)
-    .text(`# ${data.infoCustomer.customerName}`, 20, 110);
+    .fontSize(12)
+    .text(`# ${data.infoCustomer.customerName}`, 10, 100);
 
   generateProductsTable(doc, products, customer);
 
   doc
-    .fontSize(11)
-    .text(`Other info`, 20)
+    .fontSize(9)
+    .text(`Other info`, 10)
     .moveDown(0.5);
   if (data.specialInstructions) {
     doc
-      .fontSize(10)
+      .fontSize(8)
       .text(`Special Instructions: ${data.specialInstructions}`, {
-        width: 150,
+        width: 130,
       })
       .moveDown(0.5);
   }
   doc
-    .fontSize(10)
-    .text(`Delivery Tip: $${data.deliveryTip}`, 20)
+    .fontSize(8)
+    .text(`Delivery Tip: $${data.deliveryTip}`, 10)
     .moveDown(0.5);
   doc
-    .fontSize(10)
-    .text(`Time Order: ${data.timeOrder}`, 20)
+    .fontSize(8)
+    .text(`Time Order: ${data.timeOrder}`, 10)
     .moveDown(0.5);
   doc
-    .fontSize(10)
-    .text(`Total Order: $${data.totalOrder}`, 20)
+    .fontSize(8)
+    .text(`Total Order: $${data.totalOrder}`, 10)
     .moveDown(0.5);
   doc.end();
   return p.then((buffers) => {
@@ -257,7 +257,7 @@ function sendSMS(data) {
     .create({
       body: `Nueva orden de comida,  ${data.infoCustomer.customerName} - ${orderInfo}`,
       from: '+11 202 795 3374',
-      to: '+13476830875',
+      to: '+13478856523',
     })
     .then((message) => console.log(message.sid));
 }

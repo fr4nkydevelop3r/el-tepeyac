@@ -66,7 +66,7 @@ const InvalidHour = () => {
           Hi there!
         </p>
         <p>
-          We're open 9:00 am - 11:45pm{' '}
+          We're open 12:00pm - 11:45pm{' '}
           <span role="img" aria-label="clock">
             ⏱
           </span>
