@@ -128,12 +128,20 @@ async function mail(buffers, orderID) {
   });
 }
 
+function getCategoryRegex(category) {
+  const re = /.*?(?=\()/;
+  if (re.exec(category)) {
+    return re.exec(category)[0];
+  }
+  return category;
+}
+
 function generateTableRow(doc, y, c1, c2, c3) {
   doc
     .fontSize(8)
     .text(c1, 10, y)
-    .text(c2, 20, y, { width: 90, align: 'left' })
-    .text(c3, 110, y, { width: 60, align: 'left' });
+    .text(c2, 20, y, { width: 110, align: 'left' })
+    .text(c3, 130, y, { width: 60, align: 'left' });
 }
 
 function generateProductsTable(doc, products, customer) {
@@ -142,13 +150,13 @@ function generateProductsTable(doc, products, customer) {
 
   for (let i = 0; i < products.length; i++) {
     const item = products[i];
-    position = invoiceTableTop + (i + 1) * 25;
+    position = invoiceTableTop + (i + 1) * 20;
     generateTableRow(
       doc,
       position,
       item.totalOrdered,
       item.productName,
-      item.productCategory,
+      getCategoryRegex(item.productCategory),
     );
   }
   generateCustomerInfo(doc, customer, position);
